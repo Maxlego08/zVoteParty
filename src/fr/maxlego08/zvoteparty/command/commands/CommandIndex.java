@@ -12,6 +12,7 @@ public class CommandIndex extends VCommand {
 		this.setPermission(Permission.ZVOTEPARTY_USE);
 		this.addSubCommand(new CommandVersion(plugin));
 		this.addSubCommand(new CommandReload(plugin));
+		this.addSubCommand(new CommandHelp(plugin));
 	}
 
 	@Override
