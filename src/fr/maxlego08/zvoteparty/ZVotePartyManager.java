@@ -23,10 +23,20 @@ public class ZVotePartyManager extends ListenerAdapter implements VotePartyManag
 	@Override
 	public void reload(CommandSender sender) {
 
-		this.plugin.reloadConfig();
-		this.loadConfiguration();
+		try {
 
-		message(sender, Message.RELOAD_SUCCESS);
+			this.plugin.reloadConfig();
+			this.plugin.getInventoryManager().loadInventories();
+			this.loadConfiguration();
+			message(sender, Message.RELOAD_SUCCESS);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			message(sender, Message.RELOAD_SUCCESS);
+
+		}
+
 	}
 
 	@Override
