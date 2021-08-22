@@ -1,6 +1,7 @@
 name: zVoteParty
 author: Maxlego08
 main: fr.maxlego08.zvoteparty.ZVotePartyPlugin
+depend: [Votifier]
 version: 1.0.0.0
 website: https://groupez.dev
 api-version: 1.13
