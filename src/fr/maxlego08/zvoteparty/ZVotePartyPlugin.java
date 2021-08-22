@@ -20,7 +20,7 @@ import fr.maxlego08.zvoteparty.zcore.ZPlugin;
  */
 public class ZVotePartyPlugin extends ZPlugin {
 
-	private final VotePartyManager manager = new ZVotePartyManager();
+	private final VotePartyManager manager = new ZVotePartyManager(this);
 
 	@Override
 	public void onEnable() {

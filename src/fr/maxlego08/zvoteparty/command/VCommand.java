@@ -36,7 +36,7 @@ public abstract class VCommand extends Arguments {
 	 * Are all sub commands used
 	 */
 	private List<String> subCommands = new ArrayList<String>();
-	protected List<VCommand> subVCommands = new ArrayList<VCommand>();
+	private List<VCommand> subVCommands = new ArrayList<VCommand>();
 
 	private List<String> requireArgs = new ArrayList<String>();
 	private List<String> optionalArgs = new ArrayList<String>();
@@ -301,7 +301,7 @@ public abstract class VCommand extends Arguments {
 	public VCommand addSubCommand(VCommand command) {
 		command.setParent(this);
 		this.plugin.getCommandManager().registerCommand(command);
-		this.subVCommands.add(command);
+		this.getSubVCommands().add(command);
 		return this;
 	}
 
@@ -375,7 +375,7 @@ public abstract class VCommand extends Arguments {
 		String defaultString = super.argAsString(0);
 
 		if (defaultString != null) {
-			for (VCommand subCommand : subVCommands) {
+			for (VCommand subCommand : getSubVCommands()) {
 				if (subCommand.getSubCommands().contains(defaultString.toLowerCase()))
 					return CommandType.CONTINUE;
 			}
@@ -484,6 +484,20 @@ public abstract class VCommand extends Arguments {
 							: str.toLowerCase().contains(startWith.toLowerCase())))
 				newList.add(str);
 		return newList.size() == 0 ? null : newList;
+	}
+
+	/**
+	 * @return the subVCommands
+	 */
+	public List<VCommand> getSubVCommands() {
+		return subVCommands;
+	}
+
+	/**
+	 * @param subVCommands the subVCommands to set
+	 */
+	public void setSubVCommands(List<VCommand> subVCommands) {
+		this.subVCommands = subVCommands;
 	}
 
 }
