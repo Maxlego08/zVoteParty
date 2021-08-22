@@ -27,6 +27,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.vexsoftware.votifier.model.Vote;
+import com.vexsoftware.votifier.model.VotifierEvent;
+
 import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
 @SuppressWarnings("deprecation")
@@ -102,5 +105,8 @@ public abstract class ListenerAdapter extends ZUtils{
 	}
 
 	public void onPlayerWalk(PlayerMoveEvent event, Player player, int i) {
+	}
+
+	public void onVote(VotifierEvent event, Vote vote, String username, String serviceName) {
 	}
 }

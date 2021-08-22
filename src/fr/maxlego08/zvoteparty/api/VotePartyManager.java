@@ -2,7 +2,7 @@ package fr.maxlego08.zvoteparty.api;
 
 import org.bukkit.command.CommandSender;
 
-public interface VotePartyManager {
+public interface VotePartyManager{
 
 	/**
 	 * Allows to reload configuration files

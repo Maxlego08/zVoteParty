@@ -34,14 +34,14 @@ public class ZVotePartyPlugin extends ZPlugin {
 				ServicePriority.High);
 
 		/* Commands */
-		
+
 		this.registerCommand("zvoteparty", new CommandIndex(this), "voteparty", "vpF");
-		
-		
+
 		/* Add Listener */
 
 		this.addListener(new AdapterListener(this));
-		this.addListener(inventoryManager);
+		this.addListener(this.inventoryManager);
+		this.addListener((ZVotePartyManager) this.manager);
 
 		/* Add Saver */
 		this.addSave(Config.getInstance());
@@ -60,7 +60,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 		this.postDisable();
 	}
-	
+
 	/**
 	 * Return the manager for the voteparty
 	 * 
@@ -69,6 +69,5 @@ public class ZVotePartyPlugin extends ZPlugin {
 	public VotePartyManager getManager() {
 		return manager;
 	}
-	
 
 }
