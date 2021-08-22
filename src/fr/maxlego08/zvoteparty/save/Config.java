@@ -6,10 +6,13 @@ import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
 public class Config implements Saveable {
 
 	public static boolean enableDebug = true;
+	public static boolean enableDebugTime = false;
 	
 	public static boolean enableVoteCommand = true;
 	public static boolean enableVoteInventory = true; 
 	public static boolean enableVoteMessage = true; 
+	public static boolean enableInventoryPreRender = false;
+	public static boolean enableOpenSyncInventory = false;
 	
 	
 	public static long voteCount = 0;
@@ -18,6 +21,8 @@ public class Config implements Saveable {
 	 * static Singleton instance.
 	 */
 	private static volatile Config instance;
+
+
 
 	/**
 	 * Private constructor for singleton.

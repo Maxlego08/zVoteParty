@@ -27,7 +27,7 @@ public class ItemStackLoader extends ZUtils implements Loader<ItemStack> {
 	/**
 	 * Load ItemStack
 	 */
-	public ItemStack load(YamlConfiguration configuration, String path) {
+	public ItemStack load(YamlConfiguration configuration, String path, Object... args) {
 
 		int data = configuration.getInt(path + "data", 0);
 		int amount = configuration.getInt(path + "amount", 1);

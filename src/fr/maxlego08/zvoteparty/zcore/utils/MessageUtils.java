@@ -58,10 +58,10 @@ public abstract class MessageUtils extends LocationUtils {
 				break;
 			case CENTER:
 				if (message.getMessages().size() > 0) {
-					message.getMessages().forEach(msg -> sender
-							.sendMessage(Message.PREFIX.msg() + this.getCenteredMessage(getMessage(msg, args))));
+					message.getMessages()
+							.forEach(msg -> sender.sendMessage(this.getCenteredMessage(getMessage(msg, args))));
 				} else
-					sender.sendMessage(Message.PREFIX.msg() + this.getCenteredMessage(getMessage(message, args)));
+					sender.sendMessage(this.getCenteredMessage(getMessage(message, args)));
 				break;
 			case TITLE:
 				// gestion du title message

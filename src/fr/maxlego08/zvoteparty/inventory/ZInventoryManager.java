@@ -23,7 +23,7 @@ import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.inventory.InventoryResult;
 import fr.maxlego08.zvoteparty.zcore.utils.inventory.ItemButton;
 
-public class InventoryManager extends ListenerAdapter {
+public class ZInventoryManager extends ListenerAdapter {
 
 	private final Map<Integer, VInventory> inventories = new HashMap<>();
 	private final Map<UUID, VInventory> playerInventories = new HashMap<>();
@@ -32,7 +32,7 @@ public class InventoryManager extends ListenerAdapter {
 	/**
 	 * @param plugin
 	 */
-	public InventoryManager(ZVotePartyPlugin plugin) {
+	public ZInventoryManager(ZVotePartyPlugin plugin) {
 		super();
 		this.plugin = plugin;
 	}

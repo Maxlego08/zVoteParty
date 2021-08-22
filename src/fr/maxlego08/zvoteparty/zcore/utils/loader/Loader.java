@@ -10,7 +10,7 @@ public interface Loader<T> {
 	 * @param path
 	 * @return
 	 */
-	T load(YamlConfiguration configuration, String path);
+	T load(YamlConfiguration configuration, String name, Object... args);
 	
 	/**
 	 * Save object to yml

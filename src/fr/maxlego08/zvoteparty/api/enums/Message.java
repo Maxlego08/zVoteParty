@@ -42,8 +42,14 @@ public enum Message {
 	DESCRIPTION_VOTE("Allows you to open the voting inventory"), 
 	
 	RELOAD_SUCCESS("§aYou have just reloaded the configuration."), 
+	RELOAD_ERROR("§cAn error has occurred, go to the console."), 
 	
-	VOTE_INFORMATIONS("", "", "", "", ""),
+	VOTE_INFORMATIONS(MessageType.CENTER,
+			"§8§m-+------------------------------+-",
+			"", 
+			"§7Vote pour le serveur §5Serveur name here§7 !", 
+			"", 
+			"§8§m-+------------------------------+-"),
 	
 	
 	;

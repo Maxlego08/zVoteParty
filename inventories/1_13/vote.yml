@@ -1,0 +1,62 @@
+name: "&7Vote"
+size: 45
+type: VOTE
+items:
+  slots:
+    type: NONE_SLOT
+    item:
+      material: GRAY_STAINED_GLASS_PANE
+      name: "&e"
+    slots:
+      - 0
+      - 1
+      - 2
+      - 3      
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 18
+      - 27
+      - 17
+      - 26
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+  player:
+    type: NONE
+    item:
+      material: PLAYER_HEAD
+      name: "HEAD&a%player_name%"
+    slot: 4
+    lore:
+        - "&7&m-------------------------------------"
+        - ""
+        - "&f&l» &7to do"
+        - ""
+        - "&7&m-------------------------------------"
+  votes1:
+    type: MESSAGE
+    closeInventory: true
+    messages:
+      - "&fHey &b%player% &fclick here to vote"
+      - "&7https://serveur-minecraft-vote.fr/serveurs/onoria.1"
+    slot: 20
+    item:
+      material: HOPPER
+      name: "&eSite &7N°&f1"
+      lore:
+        - "&7&m-------------------------------------"
+        - ""
+        - "&f&l» &7Click to vote on"
+        - "  &bhttps://serveur-minecraft-vote.fr"
+        - ""
+        - "&7&m-------------------------------------"
