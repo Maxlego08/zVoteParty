@@ -29,6 +29,7 @@ import fr.maxlego08.zvoteparty.inventory.VInventory;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.listener.ListenerAdapter;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
+import fr.maxlego08.zvoteparty.zcore.enums.Folder;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.gson.LocationAdapter;
@@ -61,6 +62,12 @@ public abstract class ZPlugin extends JavaPlugin {
 		this.log.log("Plugin Version V<&>c" + getDescription().getVersion(), LogType.INFO);
 
 		this.getDataFolder().mkdirs();
+
+		for (Folder folder : Folder.values()) {
+			File currentFolder = new File(this.getDataFolder(), folder.toFolder());
+			if (!currentFolder.exists())
+				currentFolder.mkdir();
+		}
 
 		this.gson = getGsonBuilder().create();
 		this.persist = new Persist(this);

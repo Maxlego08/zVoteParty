@@ -15,16 +15,18 @@ import fr.maxlego08.zvoteparty.api.sound.SoundOption;
 import fr.maxlego08.zvoteparty.button.buttons.ZBackButton;
 import fr.maxlego08.zvoteparty.button.buttons.ZHomeButton;
 import fr.maxlego08.zvoteparty.button.buttons.ZInventoryButton;
+import fr.maxlego08.zvoteparty.button.buttons.ZMessageButton;
 import fr.maxlego08.zvoteparty.button.buttons.ZPerformButton;
 import fr.maxlego08.zvoteparty.button.buttons.ZPlaceholderButton;
 import fr.maxlego08.zvoteparty.button.buttons.ZSlotButton;
 import fr.maxlego08.zvoteparty.exceptions.ButtonCreateItemStackNullPointerException;
 import fr.maxlego08.zvoteparty.exceptions.ButtonTypeException;
+import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 import fr.maxlego08.zvoteparty.zcore.utils.loader.ItemStackLoader;
 import fr.maxlego08.zvoteparty.zcore.utils.loader.Loader;
 import fr.maxlego08.zvoteparty.zcore.utils.sound.ZSoundOption;
 
-public class ButtonLoader implements Loader<Button> {
+public class ButtonLoader extends ZUtils implements Loader<Button> {
 
 	private final ZVotePartyPlugin plugin;
 
@@ -102,16 +104,23 @@ public class ButtonLoader implements Loader<Button> {
 			String inventory = configuration.getString(path + "inventory");
 			return new ZInventoryButton(type, itemStack, slot, permission, elseMessage, elseButton, isPermanent, action,
 					placeHolder, value, inventory, null, plugin, glowIfCheck, sound);
-		case PERFORM_COMMAND:
+		case PERFORM_COMMAND: {
 			List<String> commands = configuration.getStringList(path + "commands");
 			List<String> consoleCommands = configuration.getStringList(path + "consoleCommands");
 			boolean closeInventory = configuration.getBoolean(path + "closeInventory", false);
 			return new ZPerformButton(type, itemStack, slot, permission, elseMessage, elseButton, isPermanent, action,
 					placeHolder, value, commands, consoleCommands, closeInventory, glowIfCheck, sound);
+		}
 		case NONE_SLOT:
 			List<Integer> list = configuration.getIntegerList(path + "slots");
 			return new ZSlotButton(type, itemStack, slot, permission, elseMessage, elseButton, isPermanent, action,
 					placeHolder, value, list, glowIfCheck, sound);
+		case MESSAGE: {
+			List<String> messages = configuration.getStringList(path + "messages");
+			boolean closeInventory = configuration.getBoolean(path + "closeInventory", true);
+			return new ZMessageButton(type, itemStack, slot, permission, elseMessage, elseButton, isPermanent, action,
+					placeHolder, value, glowIfCheck, sound, color(messages), closeInventory);
+		}
 		case NONE:
 		default:
 			button = new ZPlaceholderButton(type, itemStack, slot, permission, elseMessage, elseButton, isPermanent,

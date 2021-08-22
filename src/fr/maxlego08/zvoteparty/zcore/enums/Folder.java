@@ -2,7 +2,7 @@ package fr.maxlego08.zvoteparty.zcore.enums;
 
 public enum Folder {
 
-	UTILS,
+	PLAYERS,
 
 	;
 	

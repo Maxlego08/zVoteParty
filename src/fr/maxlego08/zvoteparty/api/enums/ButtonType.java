@@ -16,6 +16,8 @@ public enum ButtonType {
 
 	PERFORM_COMMAND,
 	
+	MESSAGE,
+	
 	;
 
 	/**

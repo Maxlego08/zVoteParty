@@ -13,6 +13,7 @@ import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.api.button.buttons.BackButton;
 import fr.maxlego08.zvoteparty.api.button.buttons.HomeButton;
 import fr.maxlego08.zvoteparty.api.button.buttons.InventoryButton;
+import fr.maxlego08.zvoteparty.api.button.buttons.MessageButton;
 import fr.maxlego08.zvoteparty.api.button.buttons.PerformButton;
 import fr.maxlego08.zvoteparty.api.button.buttons.PlaceholderButton;
 import fr.maxlego08.zvoteparty.api.button.buttons.SlotButton;
@@ -288,6 +289,12 @@ public class InventoryDefault extends VInventory {
 				createInventory(plugin, player, EnumInventory.INVENTORY_DEFAULT, newPage, clonedArrays);
 
 				break;
+			}
+			case MESSAGE: {
+				MessageButton messageButton = finalButton.toButton(MessageButton.class);
+				if (messageButton.closeInventory())
+					player.closeInventory();
+				messageButton.send(player);
 			}
 			default:
 				break;
