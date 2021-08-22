@@ -7,6 +7,13 @@ public class Config implements Saveable {
 
 	public static boolean enableDebug = true;
 	
+	public static boolean enableVoteCommand = true;
+	public static boolean enableVoteInventory = true; 
+	public static boolean enableVoteMessage = true; 
+	
+	
+	public static long voteCount = 0;
+	
 	/**
 	 * static Singleton instance.
 	 */

@@ -5,6 +5,7 @@ import org.bukkit.plugin.ServicePriority;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
 import fr.maxlego08.zvoteparty.command.CommandManager;
 import fr.maxlego08.zvoteparty.command.commands.CommandIndex;
+import fr.maxlego08.zvoteparty.command.commands.CommandVote;
 import fr.maxlego08.zvoteparty.inventory.InventoryManager;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.save.Config;
@@ -26,6 +27,8 @@ public class ZVotePartyPlugin extends ZPlugin {
 	public void onEnable() {
 
 		this.preEnable();
+		
+		this.saveDefaultConfig();
 
 		this.commandManager = new CommandManager(this);
 		this.inventoryManager = new InventoryManager(this);
@@ -35,7 +38,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 		/* Commands */
 
-		this.registerCommand("zvoteparty", new CommandIndex(this), "voteparty", "vpF");
+		this.registerCommand("zvoteparty", new CommandIndex(this), "voteparty", "vp");
 
 		/* Add Listener */
 
@@ -49,6 +52,12 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 		this.getSavers().forEach(saver -> saver.load(this.getPersist()));
 
+		if (Config.enableVoteCommand){
+			this.registerCommand("vote", new CommandVote(this));
+		}
+		
+		this.manager.loadConfiguration();
+		
 		this.postEnable();
 	}
 

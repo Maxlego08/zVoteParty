@@ -2,7 +2,8 @@ package fr.maxlego08.zvoteparty.zcore.enums;
 
 public enum EnumInventory {
 
-	INVENTORY_TEST(1),
+	INVENTORY_DEFAULT(1),
+	INVENTORY_CONFIG(2),
 	
 	;
 	

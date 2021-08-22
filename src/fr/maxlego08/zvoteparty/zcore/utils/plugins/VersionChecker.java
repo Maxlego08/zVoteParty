@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.maxlego08.zvoteparty.zcore.enums.Message;
+import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 
 /**

@@ -51,9 +51,9 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
+import fr.maxlego08.zvoteparty.api.enums.Message;
+import fr.maxlego08.zvoteparty.api.enums.Permission;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
-import fr.maxlego08.zvoteparty.zcore.enums.Message;
-import fr.maxlego08.zvoteparty.zcore.enums.Permission;
 import fr.maxlego08.zvoteparty.zcore.utils.builder.CooldownBuilder;
 import fr.maxlego08.zvoteparty.zcore.utils.builder.TimerBuilder;
 import fr.maxlego08.zvoteparty.zcore.utils.nms.ItemStackUtils;
@@ -1118,4 +1118,5 @@ public abstract class ZUtils extends MessageUtils {
 		itemStack.setItemMeta(itemMeta);
 	}
 
+	
 }

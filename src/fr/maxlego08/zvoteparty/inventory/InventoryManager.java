@@ -13,11 +13,11 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
+import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.exceptions.InventoryAlreadyExistException;
 import fr.maxlego08.zvoteparty.exceptions.InventoryOpenException;
 import fr.maxlego08.zvoteparty.listener.ListenerAdapter;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
-import fr.maxlego08.zvoteparty.zcore.enums.Message;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.inventory.InventoryResult;

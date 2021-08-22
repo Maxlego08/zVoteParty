@@ -1,6 +1,6 @@
 package fr.maxlego08.zvoteparty.zcore.utils.builder;
 
-import fr.maxlego08.zvoteparty.zcore.enums.Message;
+import fr.maxlego08.zvoteparty.api.enums.Message;
 
 public class TimerBuilder {
 

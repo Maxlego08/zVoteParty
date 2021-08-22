@@ -6,25 +6,20 @@ import fr.maxlego08.zvoteparty.api.enums.Permission;
 import fr.maxlego08.zvoteparty.command.VCommand;
 import fr.maxlego08.zvoteparty.zcore.utils.commands.CommandType;
 
-public class CommandHelp extends VCommand {
+public class CommandVote extends VCommand {
 
-	public CommandHelp(ZVotePartyPlugin plugin) {
+	public CommandVote(ZVotePartyPlugin plugin) {
 		super(plugin);
 		this.setDescription(Message.DESCRIPTION_HELP);
-		this.addSubCommand("help", "aide", "?");
-		this.setPermission(Permission.ZVOTEPARTY_HELP);
+		this.setPermission(Permission.ZVOTEPARTY_VOTE);
+		this.setConsoleCanUse(false);
 	}
 
 	@Override
 	protected CommandType perform(ZVotePartyPlugin plugin) {
 
-		this.parent.getSubVCommands().forEach(command -> {
-			if (command.getPermission() == null || this.sender.hasPermission(command.getPermission())) {
-				message(this.sender, Message.COMMAND_SYNTAXE_HELP, "%syntax%", command.getSyntax(), "%description%",
-						command.getDescription());
-			}
-		});
-
+		this.manager.vote(this.player);
+		
 		return CommandType.SUCCESS;
 	}
 

@@ -10,8 +10,8 @@ import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.maxlego08.zvoteparty.zcore.enums.Message;
-import fr.maxlego08.zvoteparty.zcore.enums.MessageType;
+import fr.maxlego08.zvoteparty.api.enums.Message;
+import fr.maxlego08.zvoteparty.api.enums.MessageType;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
 import fr.maxlego08.zvoteparty.zcore.utils.yaml.YamlUtils;
