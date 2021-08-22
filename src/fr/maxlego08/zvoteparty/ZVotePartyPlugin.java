@@ -3,10 +3,11 @@ package fr.maxlego08.zvoteparty;
 import org.bukkit.plugin.ServicePriority;
 
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
+import fr.maxlego08.zvoteparty.api.inventory.InventoryManager;
 import fr.maxlego08.zvoteparty.command.CommandManager;
 import fr.maxlego08.zvoteparty.command.commands.CommandIndex;
 import fr.maxlego08.zvoteparty.command.commands.CommandVote;
-import fr.maxlego08.zvoteparty.inventory.InventoryManager;
+import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.save.MessageLoader;
@@ -22,6 +23,7 @@ import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 public class ZVotePartyPlugin extends ZPlugin {
 
 	private final VotePartyManager manager = new ZVotePartyManager(this);
+	private final InventoryManager inventoryManager; 
 
 	@Override
 	public void onEnable() {
@@ -31,7 +33,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 		this.saveDefaultConfig();
 
 		this.commandManager = new CommandManager(this);
-		this.inventoryManager = new InventoryManager(this);
+		this.zInventoryManager = new ZInventoryManager(this);
 
 		this.getServer().getServicesManager().register(VotePartyManager.class, this.manager, this,
 				ServicePriority.High);
@@ -43,7 +45,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 		/* Add Listener */
 
 		this.addListener(new AdapterListener(this));
-		this.addListener(this.inventoryManager);
+		this.addListener(this.zInventoryManager);
 		this.addListener((ZVotePartyManager) this.manager);
 
 		/* Add Saver */
@@ -79,4 +81,8 @@ public class ZVotePartyPlugin extends ZPlugin {
 		return manager;
 	}
 
+	public InventoryManager getInventoryManager() {
+		return inventoryManager;
+	}
+	
 }

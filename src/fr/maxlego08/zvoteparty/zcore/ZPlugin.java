@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder;
 import fr.maxlego08.zvoteparty.command.CommandManager;
 import fr.maxlego08.zvoteparty.command.VCommand;
 import fr.maxlego08.zvoteparty.exceptions.ListenerNullException;
-import fr.maxlego08.zvoteparty.inventory.InventoryManager;
+import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.inventory.VInventory;
 import fr.maxlego08.zvoteparty.listener.ListenerAdapter;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
@@ -41,7 +41,7 @@ public abstract class ZPlugin extends JavaPlugin {
 	private long enableTime;
 
 	protected CommandManager commandManager;
-	protected InventoryManager inventoryManager;
+	protected ZInventoryManager zInventoryManager;
 
 	protected void preEnable() {
 
@@ -58,8 +58,8 @@ public abstract class ZPlugin extends JavaPlugin {
 
 	protected void postEnable() {
 
-		if (this.inventoryManager != null)
-			this.inventoryManager.sendLog();
+		if (this.zInventoryManager != null)
+			this.zInventoryManager.sendLog();
 
 		if (this.commandManager != null)
 			this.commandManager.validCommands();
@@ -188,8 +188,8 @@ public abstract class ZPlugin extends JavaPlugin {
 	/**
 	 * @return the inventoryManager
 	 */
-	public InventoryManager getInventoryManager() {
-		return inventoryManager;
+	public ZInventoryManager getZInventoryManager() {
+		return zInventoryManager;
 	}
 
 	/**
@@ -221,7 +221,7 @@ public abstract class ZPlugin extends JavaPlugin {
 	 * @param aliases
 	 */
 	protected void registerCommand(String command, VCommand vCommand, String... aliases) {
-		commandManager.registerCommand(command, vCommand, aliases);
+		this.commandManager.registerCommand(command, vCommand, aliases);
 	}
 
 	/**
@@ -231,7 +231,7 @@ public abstract class ZPlugin extends JavaPlugin {
 	 * @param vInventory
 	 */
 	protected void registerInventory(EnumInventory inventory, VInventory vInventory) {
-		inventoryManager.registerInventory(inventory, vInventory);
+		this.zInventoryManager.registerInventory(inventory, vInventory);
 	}
 
 }
