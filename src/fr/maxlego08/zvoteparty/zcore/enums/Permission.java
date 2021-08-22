@@ -1,6 +1,11 @@
 package fr.maxlego08.zvoteparty.zcore.enums;
 
 public enum Permission {
+	
+	
+	ZVOTEPARTY_USE,
+	ZVOTEPARTY_RELOAD,
+	ZVOTEPARTY_HELP,
 
 	;
 

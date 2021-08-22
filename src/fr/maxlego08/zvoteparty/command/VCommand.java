@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
+import fr.maxlego08.zvoteparty.api.VotePartyManager;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.zcore.enums.Message;
 import fr.maxlego08.zvoteparty.zcore.enums.Permission;
@@ -18,6 +19,7 @@ import fr.maxlego08.zvoteparty.zcore.utils.commands.Tab;
 public abstract class VCommand extends Arguments {
 
 	protected final ZVotePartyPlugin plugin;
+	protected final VotePartyManager manager;
 
 	/**
 	 * Permission used for the command, if it is a null then everyone can
@@ -73,6 +75,7 @@ public abstract class VCommand extends Arguments {
 	public VCommand(ZVotePartyPlugin plugin) {
 		super();
 		this.plugin = plugin;
+		this.manager = plugin.getManager();
 	}
 
 	//
