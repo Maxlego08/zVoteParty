@@ -10,10 +10,12 @@ import fr.maxlego08.zvoteparty.command.commands.CommandIndex;
 import fr.maxlego08.zvoteparty.command.commands.CommandVote;
 import fr.maxlego08.zvoteparty.inventory.InventoryLoader;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
+import fr.maxlego08.zvoteparty.inventory.inventories.InventoryDefault;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.save.MessageLoader;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
+import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 
 /**
  * System to create your plugins very simply Projet:
@@ -30,12 +32,12 @@ public class ZVotePartyPlugin extends ZPlugin {
 	@Override
 	public void onEnable() {
 
-		this.preEnable();
-		
 		/* Register inventories */
-
+		
 		for (InventoryName inventoryName : InventoryName.values())
 			this.registerFile(inventoryName);
+		
+		this.preEnable();		
 		
 		this.saveDefaultConfig();
 
@@ -49,6 +51,10 @@ public class ZVotePartyPlugin extends ZPlugin {
 		/* Commands */
 
 		this.registerCommand("zvoteparty", new CommandIndex(this), "voteparty", "vp");
+				
+		/* Inventories */
+		
+		this.registerInventory(EnumInventory.INVENTORY_DEFAULT, new InventoryDefault());
 
 		/* Add Listener */
 
