@@ -1,8 +1,14 @@
 package fr.maxlego08.zvoteparty.zcore;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,17 +21,19 @@ import org.bukkit.potion.PotionEffect;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.command.CommandManager;
 import fr.maxlego08.zvoteparty.command.VCommand;
 import fr.maxlego08.zvoteparty.exceptions.ListenerNullException;
-import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.inventory.VInventory;
+import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.listener.ListenerAdapter;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.gson.LocationAdapter;
 import fr.maxlego08.zvoteparty.zcore.utils.gson.PotionEffectAdapter;
+import fr.maxlego08.zvoteparty.zcore.utils.nms.NMSUtils;
 import fr.maxlego08.zvoteparty.zcore.utils.plugins.Plugins;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
@@ -43,6 +51,8 @@ public abstract class ZPlugin extends JavaPlugin {
 	protected CommandManager commandManager;
 	protected ZInventoryManager zInventoryManager;
 
+	private List<String> files = new ArrayList<>();
+
 	protected void preEnable() {
 
 		this.enableTime = System.currentTimeMillis();
@@ -54,6 +64,17 @@ public abstract class ZPlugin extends JavaPlugin {
 
 		this.gson = getGsonBuilder().create();
 		this.persist = new Persist(this);
+
+		boolean isNew = NMSUtils.isNewVersion();
+		for (String file : files) {
+			if (isNew) {
+				if (!new File(getDataFolder() + "/inventories/" + file + ".yml").exists())
+					saveResource("inventories/1_13/" + file + ".yml", "inventories/" + file + ".yml", false);
+			} else {
+				if (!new File(getDataFolder() + "/inventories/" + file + ".yml").exists())
+					saveResource("inventories/" + file + ".yml", false);
+			}
+		}
 	}
 
 	protected void postEnable() {
@@ -234,4 +255,58 @@ public abstract class ZPlugin extends JavaPlugin {
 		this.zInventoryManager.registerInventory(inventory, vInventory);
 	}
 
+	public List<String> getFiles() {
+		return files;
+	}
+
+	/**
+	 * 
+	 * @param resourcePath
+	 * @param toPath
+	 * @param replace
+	 */
+	protected void saveResource(String resourcePath, String toPath, boolean replace) {
+		if (resourcePath != null && !resourcePath.equals("")) {
+			resourcePath = resourcePath.replace('\\', '/');
+			InputStream in = this.getResource(resourcePath);
+			if (in == null) {
+				throw new IllegalArgumentException(
+						"The embedded resource '" + resourcePath + "' cannot be found in " + this.getFile());
+			} else {
+				File outFile = new File(getDataFolder(), toPath);
+				int lastIndex = toPath.lastIndexOf(47);
+				File outDir = new File(getDataFolder(), toPath.substring(0, lastIndex >= 0 ? lastIndex : 0));
+				if (!outDir.exists()) {
+					outDir.mkdirs();
+				}
+
+				try {
+					if (outFile.exists() && !replace) {
+						getLogger().log(Level.WARNING, "Could not save " + outFile.getName() + " to " + outFile
+								+ " because " + outFile.getName() + " already exists.");
+					} else {
+						OutputStream out = new FileOutputStream(outFile);
+						byte[] buf = new byte[1024];
+
+						int len;
+						while ((len = in.read(buf)) > 0) {
+							out.write(buf, 0, len);
+						}
+
+						out.close();
+						in.close();
+					}
+				} catch (IOException var10) {
+					getLogger().log(Level.SEVERE, "Could not save " + outFile.getName() + " to " + outFile, var10);
+				}
+
+			}
+		} else {
+			throw new IllegalArgumentException("ResourcePath cannot be null or empty");
+		}
+	}
+
+	protected void registerFile(InventoryName file) {
+		this.files.add(file.getName());
+	}
 }

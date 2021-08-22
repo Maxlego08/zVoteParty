@@ -13,7 +13,7 @@ import fr.maxlego08.zvoteparty.zcore.utils.inventory.Button;
 public class ButtonLoader extends ZUtils implements Loader<Button> {
 
 	@Override
-	public Button load(YamlConfiguration configuration, String path) {
+	public Button load(YamlConfiguration configuration, String path, Object... args) {
 
 		String name = configuration.getString(path + "name") == null ? null
 				: color(configuration.getString(path + "name"));
