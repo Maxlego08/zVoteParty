@@ -1,4 +1,4 @@
-package fr.maxlego08.zvoteparty.zcore.enums;
+package fr.maxlego08.zvoteparty.api.enums;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,7 +38,12 @@ public enum Message {
 	
 	DESCRIPTION_VERSION("Show plugin version"),
 	DESCRIPTION_RELOAD("Reload configurations"),
-	DESCRIPTION_HELP("Show commands"),
+	DESCRIPTION_HELP("Show commands"), 
+	DESCRIPTION_VOTE("Allows you to open the voting inventory"), 
+	
+	RELOAD_SUCCESS("§aYou have just reloaded the configuration."), 
+	
+	VOTE_INFORMATIONS("", "", "", "", ""),
 	
 	
 	;
