@@ -19,6 +19,8 @@ public class CommandIndex extends VCommand {
 	@Override
 	protected CommandType perform(ZVotePartyPlugin plugin) {
 		
+		this.manager.sendNeedVote(this.sender);
+		
 		return CommandType.SUCCESS;
 	}
 

@@ -57,6 +57,18 @@ public enum Message {
 	VOTE_MESSAGE("§7You have just voted for the server §5Serveur name§7."),
 	VOTE_LATER("§7You have just received §b%amount% §7votes."),
 	VOTE_SEND("§7You just gave a vote to §f%player%§7"),
+	VOTE_NEEDED(
+			"§b%zvoteparty_votes_required_party% §fvotes §7needed for the next party !",
+			"§7Serveur Minecraft Vote§8: §fhttps://serveur-minecraft-vote.fr/"
+			),
+	
+	VOTE_PARTY_START(
+			"§8§m-+------------------------------+-",
+			"", 
+			"§7Launch of the voting party!", 
+			"", 
+			"§8§m-+------------------------------+-"
+			),
 	
 	;
 

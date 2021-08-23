@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.maxlego08.zvoteparty.api.enums.RewardType;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
 
 public interface VotePartyManager extends Saveable {
@@ -62,9 +63,10 @@ public interface VotePartyManager extends Saveable {
 	/**
 	 * Get reward
 	 * 
+	 * @param type
 	 * @return {@link Reward}
 	 */
-	Reward getRandomReward();
+	Reward getRandomReward(RewardType type);
 
 	/**
 	 * Allows you to give rewards for pending votes
@@ -101,5 +103,12 @@ public interface VotePartyManager extends Saveable {
 	 * @return votes
 	 */
 	long getPlayerVoteCount(Player player);
+
+	/**
+	 * Send need vote to sender
+	 * 
+	 * @param sender
+	 */
+	void sendNeedVote(CommandSender sender);
 
 }

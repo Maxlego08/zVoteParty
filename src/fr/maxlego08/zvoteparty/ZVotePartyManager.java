@@ -20,6 +20,7 @@ import fr.maxlego08.zvoteparty.api.VotePartyManager;
 import fr.maxlego08.zvoteparty.api.command.Command;
 import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.api.enums.Message;
+import fr.maxlego08.zvoteparty.api.enums.RewardType;
 import fr.maxlego08.zvoteparty.api.inventory.Inventory;
 import fr.maxlego08.zvoteparty.command.CommandObject;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
@@ -111,6 +112,27 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	public void handleVoteParty() {
 
 		Storage.voteCount++;
+
+		if (Storage.voteCount >= this.needVote) {
+
+			Storage.voteCount = 0;
+
+			for (Player player : Bukkit.getOnlinePlayers()) {
+
+				this.globalCommands.forEach(command -> {
+					command = command.replace("%player%", player.getName());
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
+				});
+
+				Reward reward = this.getRandomReward(RewardType.PARTY);
+				reward.give(player);
+
+			}
+			
+			broadcast(Message.VOTE_PARTY_START);
+
+		}
+
 		Storage.getInstance().save(this.plugin.getPersist());
 
 	}
@@ -124,17 +146,17 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void vote(OfflinePlayer offlinePlayer, String serviceName) {
 		PlayerVote playerVote = this.plugin.get(offlinePlayer);
-		Reward reward = this.getRandomReward();
+		Reward reward = this.getRandomReward(RewardType.VOTE);
 		playerVote.vote(serviceName, reward);
 	}
 
 	@Override
-	public Reward getRandomReward() {
+	public Reward getRandomReward(RewardType type) {
 		double percent = ThreadLocalRandom.current().nextDouble(0, 100);
-		Reward reward = randomElement(this.rewards);
+		Reward reward = randomElement(type == RewardType.VOTE ? this.rewards : this.partyRewards);
 		if (reward.getPercent() <= percent)
 			return reward;
-		return this.getRandomReward();
+		return this.getRandomReward(type);
 	}
 
 	@Override
@@ -210,6 +232,11 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			return playerVote.getVoteCount();
 		}
 		return 0;
+	}
+
+	@Override
+	public void sendNeedVote(CommandSender sender) {
+		message(sender, Message.VOTE_NEEDED);
 	}
 
 }
