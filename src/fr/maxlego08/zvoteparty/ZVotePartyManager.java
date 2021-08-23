@@ -2,6 +2,7 @@ package fr.maxlego08.zvoteparty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import fr.maxlego08.zvoteparty.api.PlayerManager;
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.api.Vote;
@@ -23,6 +25,7 @@ import fr.maxlego08.zvoteparty.command.CommandObject;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.loader.RewardLoader;
 import fr.maxlego08.zvoteparty.save.Config;
+import fr.maxlego08.zvoteparty.save.Storage;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
@@ -34,6 +37,10 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	private final ZVotePartyPlugin plugin;
 	private final List<Reward> rewards = new ArrayList<>();
+
+	private final List<Reward> partyRewards = new ArrayList<>();
+	private List<String> globalCommands = new ArrayList<>();
+	private long needVote = 50;
 
 	/**
 	 * @param plugin
@@ -102,7 +109,9 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void handleVoteParty() {
-		// TODO Auto-generated method stub
+
+		Storage.voteCount++;
+		Storage.getInstance().save(this.plugin.getPersist());
 
 	}
 
@@ -161,6 +170,46 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		}
 
 		Logger.info("Loaded " + this.rewards.size() + " rewards", LogType.SUCCESS);
+
+		// Party loader
+
+		this.needVote = configuration.getLong("party.votes_needed", 50);
+		this.globalCommands = configuration.getStringList("party.global_commands");
+
+		configurationSection = configuration.getConfigurationSection("party.rewards.");
+		this.partyRewards.clear();
+
+		for (String key : configurationSection.getKeys(false)) {
+			String path = "party.rewards." + key + ".";
+			Reward reward = loader.load(configuration, path);
+			this.partyRewards.add(reward);
+		}
+	}
+
+	@Override
+	public List<String> getGlobalCommands() {
+		return this.globalCommands;
+	}
+
+	@Override
+	public List<Reward> getPartyReward() {
+		return this.partyRewards;
+	}
+
+	@Override
+	public long getNeedVotes() {
+		return this.needVote;
+	}
+
+	@Override
+	public long getPlayerVoteCount(Player player) {
+		PlayerManager manager = this.plugin.getPlayerManager();
+		Optional<PlayerVote> optional = manager.getPlayer(player);
+		if (optional.isPresent()) {
+			PlayerVote playerVote = optional.get();
+			return playerVote.getVoteCount();
+		}
+		return 0;
 	}
 
 }

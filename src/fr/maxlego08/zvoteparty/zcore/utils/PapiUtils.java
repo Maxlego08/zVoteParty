@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.maxlego08.zvoteparty.placeholder.ZPlaceholderApi;
 import me.clip.placeholderapi.PlaceholderAPI;
 
 public class PapiUtils {
@@ -35,12 +36,16 @@ public class PapiUtils {
 			if (usePlaceHolder) {
 				if (!itemMeta.getDisplayName().contains("&"))
 					itemMeta.setDisplayName(PlaceholderAPI.setPlaceholders(player, itemMeta.getDisplayName()));
-			}
+			} else
+				itemMeta.setDisplayName(
+						ZPlaceholderApi.getInstance().setPlaceholders(player, itemMeta.getDisplayName()));
 		}
 
 		if (itemMeta.hasLore()) {
 			if (usePlaceHolder)
 				itemMeta.setLore(PlaceholderAPI.setPlaceholders(player, itemMeta.getLore()));
+			else
+				itemMeta.setLore(ZPlaceholderApi.getInstance().setPlaceholders(player, itemMeta.getLore()));
 		}
 
 		itemStack.setItemMeta(itemMeta);
@@ -55,14 +60,14 @@ public class PapiUtils {
 	 * @return string
 	 */
 	public String papi(String placeHolder, Player player) {
-		
+
 		if (placeHolder == null)
 			return null;
-		
+
 		if (usePlaceHolder && !placeHolder.contains("&"))
 			return PlaceholderAPI.setPlaceholders(player, placeHolder);
-		
-		return placeHolder;
+		else
+			return ZPlaceholderApi.getInstance().setPlaceholders(player, placeHolder);
 	}
 
 	/**

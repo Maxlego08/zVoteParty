@@ -22,3 +22,20 @@ rewards:
     needToBeOnline: true # Player must be online to receive the reward
     commands:
       - "cr give %player% diamand"
+      
+party:
+  # The amount of votes needed
+  votes_needed: 50
+  # The command that will be executed when the number of votes is reached
+  global_commands:
+    - "eco give * 100"
+  # Rewards that players can earn  
+  rewards:
+    1:
+      percent: 50
+      commands:
+        - "give %player% minecraft:diamond 1"
+    2:
+      percent: 50
+      commands:
+        - "cr give %player% test"  

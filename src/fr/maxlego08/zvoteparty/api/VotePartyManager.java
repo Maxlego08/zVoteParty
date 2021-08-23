@@ -1,5 +1,7 @@
 package fr.maxlego08.zvoteparty.api;
 
+import java.util.List;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -70,5 +72,34 @@ public interface VotePartyManager extends Saveable {
 	 * @param player
 	 */
 	void giveVotes(Player player);
+	
+	/**
+	 * Returns the list of commands for the party vote
+	 * 
+	 * @return commands
+	 */
+	List<String> getGlobalCommands();
+	
+	/**
+	 * Return the list of rewards for the voting party
+	 * 
+	 * @return rewards
+	 */
+	List<Reward> getPartyReward();
+	
+	/**
+	 * Returns the number of votes needed for the party vote
+	 * 
+	 * @return needs
+	 */
+	long getNeedVotes();
+
+	/**
+	 * Returns the number of votes of a player
+	 * 
+	 * @param player
+	 * @return votes
+	 */
+	long getPlayerVoteCount(Player player);
 
 }

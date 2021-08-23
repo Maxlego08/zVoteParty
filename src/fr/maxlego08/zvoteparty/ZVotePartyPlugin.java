@@ -21,8 +21,10 @@ import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.inventory.inventories.InventoryDefault;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.listener.listeners.VoteListener;
+import fr.maxlego08.zvoteparty.placeholder.ZPlaceholderApi;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.save.MessageLoader;
+import fr.maxlego08.zvoteparty.save.Storage;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.utils.plugins.Metrics;
@@ -44,6 +46,9 @@ public class ZVotePartyPlugin extends ZPlugin {
 	@Override
 	public void onEnable() {
 
+		
+		ZPlaceholderApi.getInstance().setPlugin(this);
+		
 		/* Register inventories */
 
 		for (InventoryName inventoryName : InventoryName.values())
@@ -75,6 +80,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 		/* Add Saver */
 		this.addSave(Config.getInstance());
+		this.addSave(Storage.getInstance());
 		this.addSave(new MessageLoader(this));
 		this.addSave(this.playerManager);
 		this.addSave(this.manager);
@@ -137,6 +143,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 		@Override
 		public void run() {
 			playerManager.save(getPersist());
+			Storage.getInstance().save(getPersist());
 		}
 
 	}
