@@ -1,0 +1,41 @@
+# Serveur Minecraft Vote
+# https://serveur-minecraft-vote.fr/
+
+rewards:
+  1:
+    percent: 10
+    needToBeOnline: false # Player must not be online to receive the reward
+    commands:
+      - "bc %player% has just voted"
+  2:
+    percent: 30
+    needToBeOnline: true # Player must be online to receive the reward
+    commands:
+      - "give %player% minecraft:stone 10"
+  3:
+    percent: 30
+    needToBeOnline: false # Player must not be online to receive the reward
+    commands:
+      - "eco give %player% 100"
+  4:
+    percent: 30
+    needToBeOnline: true # Player must be online to receive the reward
+    commands:
+      - "cr give %player% diamand"
+      
+party:
+  # The amount of votes needed
+  votes_needed: 50
+  # The command that will be executed when the number of votes is reached
+  global_commands:
+    - "eco give * 100"
+  # Rewards that players can earn  
+  rewards:
+    1:
+      percent: 50
+      commands:
+        - "give %player% minecraft:diamond 1"
+    2:
+      percent: 50
+      commands:
+        - "cr give %player% test"  
