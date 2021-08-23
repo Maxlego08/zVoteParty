@@ -39,12 +39,14 @@ public class PlayerAdapter extends TypeAdapter<PlayerVote> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public PlayerVote read(JsonReader reader) throws IOException {
+
 		if (reader.peek() == JsonToken.NULL) {
 			reader.nextNull();
 			return null;
 		}
 
 		String raw = reader.nextString();
+
 		Map<String, Object> keys = this.plugin.getGson().fromJson(raw, this.seriType);
 
 		UUID uuid = UUID.fromString((String) keys.get(this.UNIQUEID));

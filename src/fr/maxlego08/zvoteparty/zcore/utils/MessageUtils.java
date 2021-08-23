@@ -41,7 +41,7 @@ public abstract class MessageUtils extends LocationUtils {
 	protected void message(CommandSender sender, Message message, Object... args) {
 
 		if (sender instanceof ConsoleCommandSender)
-			sender.sendMessage(Message.PREFIX.msg() + getMessage(message, args));
+			sender.sendMessage(Message.PREFIX.msg() + this.papi(getMessage(message, args), null));
 		else {
 
 			Player player = (Player) sender;

@@ -239,6 +239,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	public long getPlayerVoteCount(Player player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
 		Optional<PlayerVote> optional = manager.getPlayer(player);
+		System.out.println(optional);
 		if (optional.isPresent()) {
 			PlayerVote playerVote = optional.get();
 			return playerVote.getVoteCount();

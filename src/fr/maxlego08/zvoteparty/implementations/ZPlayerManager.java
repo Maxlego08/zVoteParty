@@ -10,6 +10,7 @@ import org.bukkit.OfflinePlayer;
 
 import fr.maxlego08.zvoteparty.api.PlayerManager;
 import fr.maxlego08.zvoteparty.api.PlayerVote;
+import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.Folder;
 import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
@@ -27,7 +28,8 @@ public class ZPlayerManager extends ZUtils implements PlayerManager {
 	@Override
 	public void save(Persist persist) {
 		this.players.forEach((uuid, player) -> {
-			persist.save(player, Folder.PLAYERS, player.getFileName());
+			if (player != null)
+				persist.save(player, Folder.PLAYERS, player.getFileName());
 		});
 	}
 
@@ -39,15 +41,24 @@ public class ZPlayerManager extends ZUtils implements PlayerManager {
 
 	@Override
 	public Optional<PlayerVote> getPlayer(OfflinePlayer offlinePlayer) {
-		if (this.players.containsKey(offlinePlayer.getUniqueId()))
-			return Optional.of(this.players.get(offlinePlayer.getUniqueId()));
-		String userFile = Folder.PLAYERS.toFolder() + "/" + offlinePlayer.getName() + ".json";
+
+		UUID uniqueId = offlinePlayer.getUniqueId();
+
+		if (this.players.containsKey(uniqueId))
+			return Optional.of(this.players.get(uniqueId));
+
+		String userFile = Folder.PLAYERS.toFolder() + "/" + uniqueId + ".json";
 		File file = new File(plugin.getDataFolder(), userFile);
 		if (file.exists()) {
-			PlayerVote playerVote = this.plugin.getPersist().loadOrSaveDefault(null, PlayerVote.class, Folder.PLAYERS,
-					offlinePlayer.getName());
-			players.put(offlinePlayer.getUniqueId(), playerVote);
-			return Optional.of(playerVote);
+			try {
+				PlayerVote playerVote = this.plugin.getPersist().loadOrSaveDefault(null, ZPlayerVote.class,
+						Folder.PLAYERS, uniqueId.toString());
+				players.put(uniqueId, playerVote);
+				return Optional.of(playerVote);
+			} catch (Exception e) {
+				if (Config.enableDebug)
+					e.printStackTrace();
+			}
 		}
 		return Optional.empty();
 	}

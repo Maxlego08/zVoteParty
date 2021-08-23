@@ -123,7 +123,7 @@ public class ZPlaceholderApi {
 			return String.valueOf(manager.getNeedVotes() - Storage.voteCount);
 		case "votes_required_total":
 			return String.valueOf(manager.getNeedVotes());
-		case "player_votes:":
+		case "player_votes":
 			return String.valueOf(manager.getPlayerVoteCount(player));
 
 		}

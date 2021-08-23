@@ -43,6 +43,7 @@ public class RewardAdapter extends TypeAdapter<Reward> {
 		}
 
 		String raw = reader.nextString();
+		
 		Map<String, Object> keys = this.plugin.getGson().fromJson(raw, this.seriType);
 
 		Number percent = (Number) keys.get(this.PERCENT);

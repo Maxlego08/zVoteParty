@@ -157,6 +157,8 @@ public class Persist extends ZUtils {
 		} catch (Exception ex) { // output the error message rather than full
 									// stack trace; error parsing the file, most
 									// likely
+			if (Config.enableDebug)
+				ex.printStackTrace();
 			p.getLog().log(ex.getMessage(), LogType.ERROR);
 		}
 
