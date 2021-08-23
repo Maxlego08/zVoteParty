@@ -4,15 +4,18 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public interface VotePartyManager{
+import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
+
+public interface VotePartyManager extends Saveable {
 
 	/**
 	 * Allows to reload configuration files
 	 * 
-	 * @param sender - Person who will execute the command
+	 * @param sender
+	 *            - Person who will execute the command
 	 */
 	void reload(CommandSender sender);
-	
+
 	/*
 	 * Allows to load the configuration of the plugin
 	 */
@@ -24,7 +27,7 @@ public interface VotePartyManager{
 	 * @param player
 	 */
 	void openVote(Player player);
-	
+
 	/**
 	 * Allows you to perform the voting action on a user
 	 * 
@@ -32,7 +35,7 @@ public interface VotePartyManager{
 	 * @param serviceName
 	 */
 	void vote(String username, String serviceName);
-	
+
 	/**
 	 * Allows you to add one to the voteparty
 	 */
@@ -45,7 +48,7 @@ public interface VotePartyManager{
 	 * @param player
 	 */
 	void vote(CommandSender sender, OfflinePlayer player);
-	
+
 	/**
 	 * Add vote to user
 	 * 
@@ -53,7 +56,7 @@ public interface VotePartyManager{
 	 * @param serviceName
 	 */
 	void vote(OfflinePlayer offlinePlayer, String serviceName);
-	
+
 	/**
 	 * Get reward
 	 * 

@@ -2,10 +2,10 @@ package fr.maxlego08.zvoteparty.zcore.utils.yaml;
 
 import java.io.File;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.maxlego08.zvoteparty.exceptions.InventoryFileNotFoundException;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
@@ -26,8 +26,8 @@ public abstract class YamlUtils extends ZUtils {
 	 * 
 	 * @return file confirguration
 	 */
-	protected FileConfiguration getConfig() {
-		return plugin.getConfig();
+	protected YamlConfiguration getConfig() {
+		return (YamlConfiguration) plugin.getConfig();
 	}
 
 	/**

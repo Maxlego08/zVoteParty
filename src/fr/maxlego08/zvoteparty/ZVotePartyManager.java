@@ -1,12 +1,14 @@
 package fr.maxlego08.zvoteparty;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.zvoteparty.api.PlayerVote;
@@ -18,23 +20,26 @@ import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.api.inventory.Inventory;
 import fr.maxlego08.zvoteparty.command.CommandObject;
-import fr.maxlego08.zvoteparty.implementations.ZReward;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
+import fr.maxlego08.zvoteparty.loader.RewardLoader;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
-import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
+import fr.maxlego08.zvoteparty.zcore.utils.loader.Loader;
+import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
+import fr.maxlego08.zvoteparty.zcore.utils.yaml.YamlUtils;
 
-public class ZVotePartyManager extends ZUtils implements VotePartyManager {
+public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	private final ZVotePartyPlugin plugin;
+	private final List<Reward> rewards = new ArrayList<>();
 
 	/**
 	 * @param plugin
 	 */
 	public ZVotePartyManager(ZVotePartyPlugin plugin) {
-		super();
+		super(plugin);
 		this.plugin = plugin;
 	}
 
@@ -46,6 +51,8 @@ public class ZVotePartyManager extends ZUtils implements VotePartyManager {
 			this.plugin.reloadConfig();
 			this.plugin.getInventoryManager().loadInventories();
 			this.loadConfiguration();
+			this.load(null);
+
 			message(sender, Message.RELOAD_SUCCESS);
 
 		} catch (Exception e) {
@@ -111,8 +118,13 @@ public class ZVotePartyManager extends ZUtils implements VotePartyManager {
 		playerVote.vote(serviceName, reward);
 	}
 
+	@Override
 	public Reward getRandomReward() {
-		return new ZReward(100, Arrays.asList("bc %player% vient de voter"), false);
+		double percent = ThreadLocalRandom.current().nextDouble(0, 100);
+		Reward reward = randomElement(this.rewards);
+		if (reward.getPercent() <= percent)
+			return reward;
+		return this.getRandomReward();
 	}
 
 	@Override
@@ -123,6 +135,29 @@ public class ZVotePartyManager extends ZUtils implements VotePartyManager {
 			message(player, Message.VOTE_LATER, "%amount%", votes.size());
 			votes.forEach(e -> e.giveReward(player));
 		}
+	}
+
+	@Override
+	public void save(Persist persist) {
+
+	}
+
+	@Override
+	public void load(Persist persist) {
+
+		YamlConfiguration configuration = this.getConfig();
+		ConfigurationSection configurationSection = configuration.getConfigurationSection("rewards.");
+		Loader<Reward> loader = new RewardLoader();
+
+		this.rewards.clear();
+
+		for (String key : configurationSection.getKeys(false)) {
+			String path = "rewards." + key + ".";
+			Reward reward = loader.load(configuration, path);
+			this.rewards.add(reward);
+		}
+
+		Logger.info("Loaded " + this.rewards.size() + " rewards", LogType.SUCCESS);
 	}
 
 }
