@@ -13,11 +13,6 @@ public enum Message {
 
 	PREFIX("§8(§6zVoteParty§8) "),
 	
-	TELEPORT_MOVE("§cVous ne devez pas bouger !"),
-	TELEPORT_MESSAGE("§7Téléportatio dans §3%s §7secondes !"),
-	TELEPORT_ERROR("§cVous avez déjà une téléportation en cours !"),
-	TELEPORT_SUCCESS("§7Téléportation effectué !"),
-	
 	INVENTORY_NULL("§cImpossible to find the inventory with the id §6%id%§c."),
 	INVENTORY_CLONE_NULL("§cThe inventory clone is null!"),
 	INVENTORY_OPEN_ERROR("§cAn error occurred with the opening of the inventory §6%id%§c."),
