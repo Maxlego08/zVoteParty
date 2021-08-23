@@ -49,8 +49,9 @@ public interface VotePartyManager extends Saveable {
 	 * 
 	 * @param sender
 	 * @param player
+	 * @param updateVoteParty 
 	 */
-	void vote(CommandSender sender, OfflinePlayer player);
+	void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty);
 
 	/**
 	 * Add vote to user

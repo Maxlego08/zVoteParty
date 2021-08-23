@@ -16,13 +16,15 @@ public class CommandAdd extends VCommand {
 		this.addSubCommand("add");
 		this.setPermission(Permission.ZVOTEPARTY_ADD);
 		this.addRequireArg("player");
+		this.addOptionalArg("party (true/false)");
 	}
 
 	@Override
 	protected CommandType perform(ZVotePartyPlugin plugin) {
 		
 		OfflinePlayer player = this.argAsOfflinePlayer(0);
-		this.plugin.getManager().vote(this.sender, player);
+		boolean updateVoteParty = this.argAsBoolean(1, false);
+		this.plugin.getManager().vote(this.sender, player, updateVoteParty);
 		
 		return CommandType.SUCCESS;
 	}

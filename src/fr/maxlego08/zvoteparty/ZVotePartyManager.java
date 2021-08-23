@@ -80,6 +80,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void openVote(Player player) {
+		
 		if (Config.enableVoteMessage)
 			message(player, Message.VOTE_INFORMATIONS);
 
@@ -138,29 +139,39 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	}
 
 	@Override
-	public void vote(CommandSender sender, OfflinePlayer player) {
+	public void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty) {
+		
 		this.vote(player, "Serveur Minecraft Vote");
 		message(sender, Message.VOTE_SEND, "%player%", player.getName());
+		
+		if (updateVoteParty)
+			this.handleVoteParty();
+		
 	}
 
 	@Override
 	public void vote(OfflinePlayer offlinePlayer, String serviceName) {
+		
 		PlayerVote playerVote = this.plugin.get(offlinePlayer);
 		Reward reward = this.getRandomReward(RewardType.VOTE);
 		playerVote.vote(serviceName, reward);
+		
 	}
 
 	@Override
 	public Reward getRandomReward(RewardType type) {
+		
 		double percent = ThreadLocalRandom.current().nextDouble(0, 100);
 		Reward reward = randomElement(type == RewardType.VOTE ? this.rewards : this.partyRewards);
 		if (reward.getPercent() <= percent)
 			return reward;
 		return this.getRandomReward(type);
+		
 	}
 
 	@Override
 	public void giveVotes(Player player) {
+		
 		PlayerVote playerVote = this.plugin.get(player);
 		List<Vote> votes = playerVote.getNeedRewardVotes();
 		if (votes.size() > 0) {
@@ -169,6 +180,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 				votes.forEach(e -> e.giveReward(player));
 			});
 		}
+		
 	}
 
 	@Override
