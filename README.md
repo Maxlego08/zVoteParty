@@ -1,27 +1,7 @@
-# Template Plugin
+# zVoteParty
 
-Here is a simple project for the quick creation of minecraft plugin.
-Works from version 1.8 to version 1.17.1
+Download here: https://groupez.dev/resources/zvoteparty.124<br>
+Serveur Minecraft Vote: https://serveur-minecraft-vote.fr/
 
-Documentation: https://template.groupez.dev/
-
-# GroupeZ 
-
-https://groupez.dev is a marketplace that allows you to sell your plugins without any charge !
-
-## Features
-
-* Commands
-* TabCompleter
-* Inventories
-* Json file
-* Useful function (in the class ZUtils)
-* ItemBuilder
-* CooldownBuilder
-* TimerBuilder
-* Pagination
-* Inventory button
-* Custom Event
-* YML Loader (itemstack and button)
-* Scoreboard (https://github.com/MrMicky-FR/FastBoard)
+Reward your players with the VoteParty system. zVoteParty will encourage your players to vote for your server, which will help your community grow.
 
