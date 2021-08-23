@@ -21,6 +21,12 @@ import org.bukkit.potion.PotionEffect;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import fr.maxlego08.zvoteparty.adapter.PlayerAdapter;
+import fr.maxlego08.zvoteparty.adapter.RewardAdapter;
+import fr.maxlego08.zvoteparty.adapter.VoteAdapter;
+import fr.maxlego08.zvoteparty.api.PlayerVote;
+import fr.maxlego08.zvoteparty.api.Reward;
+import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.command.CommandManager;
 import fr.maxlego08.zvoteparty.command.VCommand;
@@ -117,6 +123,9 @@ public abstract class ZPlugin extends JavaPlugin {
 		return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls()
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
 				.registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter(this))
+				.registerTypeAdapter(PlayerVote.class, new PlayerAdapter(this))
+				.registerTypeAdapter(Vote.class, new VoteAdapter(this))
+				.registerTypeAdapter(Reward.class, new RewardAdapter(this))
 				.registerTypeAdapter(Location.class, new LocationAdapter(this));
 	}
 

@@ -20,7 +20,7 @@ public class CommandHelp extends VCommand {
 
 		this.parent.getSubVCommands().forEach(command -> {
 			if (command.getPermission() == null || this.sender.hasPermission(command.getPermission())) {
-				message(this.sender, Message.COMMAND_SYNTAXE_HELP, "%syntax%", command.getSyntax(), "%description%",
+				messageWO(this.sender, Message.COMMAND_SYNTAXE_HELP, "%syntax%", command.getSyntax(), "%description%",
 						command.getDescription());
 			}
 		});

@@ -98,6 +98,16 @@ public abstract class MessageUtils extends LocationUtils {
 	 * @param message
 	 * @param args
 	 */
+	protected void broadcastTchat(Message message, Object... args) {
+		Bukkit.broadcastMessage(getMessage(message, args));
+	}
+
+	/**
+	 * 
+	 * @param player
+	 * @param message
+	 * @param args
+	 */
 	protected void actionMessage(Player player, Message message, Object... args) {
 		ActionBar.sendActionBar(player, getMessage(message, args));
 	}

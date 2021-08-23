@@ -28,6 +28,13 @@ public interface PlayerVote {
 	 */
 	List<Vote> getVotes();
 	
+	
+	/**
+	 * Returns the list of votes or the player needs to collect the rewards
+	 * 
+	 * @return votes
+	 */
+	List<Vote> getNeedRewardVotes();
 
 	/**
 	 * Returns the number of votes of the player
@@ -41,6 +48,13 @@ public interface PlayerVote {
 	 * 
 	 * @param link - Website link
 	 */
-	void vote(String link, Reward reward);
+	void vote(String serviceName, Reward reward);
+
+	/**
+	 * Return file name
+	 * 
+	 * @return name
+	 */
+	String getFileName();
 	
 }

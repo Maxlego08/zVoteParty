@@ -3,6 +3,7 @@ package fr.maxlego08.zvoteparty.zcore.utils.storage;
 import java.io.File;
 import java.lang.reflect.Type;
 
+import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.Folder;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
@@ -68,7 +69,8 @@ public class Persist extends ZUtils {
 
 	public <T> T loadOrSaveDefault(T def, Class<T> clazz, File file) {
 		if (!file.exists()) {
-			p.getLog().log("Creating default: " + file, LogType.SUCCESS);
+			if (Config.enableLogMessage)
+				p.getLog().log("Creating default: " + file, LogType.SUCCESS);
 			this.save(def, file);
 			return def;
 		}
@@ -92,7 +94,8 @@ public class Persist extends ZUtils {
 			return def;
 		} else {
 
-			p.getLog().log(file.getAbsolutePath() + " loaded successfully !", LogType.SUCCESS);
+			if (Config.enableLogMessage)
+				p.getLog().log(file.getAbsolutePath() + " loaded successfully !", LogType.SUCCESS);
 
 		}
 
@@ -118,12 +121,14 @@ public class Persist extends ZUtils {
 		try {
 
 			boolean b = DiscUtils.writeCatch(file, p.getGson().toJson(instance));
-			p.getLog().log(file.getAbsolutePath() + " successfully saved !", LogType.SUCCESS);
+			if (Config.enableLogMessage)
+				p.getLog().log(file.getAbsolutePath() + " successfully saved !", LogType.SUCCESS);
 			return b;
 
 		} catch (Exception e) {
 
-			p.getLog().log("cannot save file " + file.getAbsolutePath(), LogType.ERROR);
+			if (Config.enableLogMessage)
+				p.getLog().log("cannot save file " + file.getAbsolutePath(), LogType.ERROR);
 			e.printStackTrace();
 
 			return false;

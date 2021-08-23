@@ -5,23 +5,35 @@ import fr.maxlego08.zvoteparty.api.Vote;
 
 public class ZVote implements Vote {
 
-	private final String link;
+	private final String serviceName;
 	private final long createdAt;
 	private final Reward reward;
-	
+	private boolean rewardIsGive;
+
+	/**
+	 * @param serviceName
+	 * @param createdAt
+	 * @param reward
+	 * @param rewardIsGive
+	 */
+	public ZVote(String serviceName, long createdAt, Reward reward, boolean rewardIsGive) {
+		super();
+		this.serviceName = serviceName;
+		this.createdAt = createdAt;
+		this.reward = reward;
+		this.rewardIsGive = rewardIsGive;
+	}
+
 	/**
 	 * @param link
 	 */
-	public ZVote(String link, Reward reward) {
-		super();
-		this.link = link;
-		this.createdAt = System.currentTimeMillis();
-		this.reward = reward;
+	public ZVote(String serviceName, Reward reward, boolean rewardIsGive) {
+		this(serviceName, System.currentTimeMillis(), reward, rewardIsGive);
 	}
 
 	@Override
-	public String getLink() {
-		return this.link;
+	public String getServiceName() {
+		return this.serviceName;
 	}
 
 	@Override
@@ -32,6 +44,11 @@ public class ZVote implements Vote {
 	@Override
 	public Reward getReward() {
 		return this.reward;
+	}
+
+	@Override
+	public boolean rewardIsGive() {
+		return this.rewardIsGive;
 	}
 
 }

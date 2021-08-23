@@ -5,8 +5,10 @@ import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
 
 public class Config implements Saveable {
 
-	public static boolean enableDebug = true;
+	public static boolean enableDebug = false;
 	public static boolean enableDebugTime = false;
+	public static boolean enableAutoUpdate = true;
+	public static boolean enableLogMessage = false;
 	
 	public static boolean enableVoteCommand = true;
 	public static boolean enableVoteInventory = true; 
@@ -14,7 +16,11 @@ public class Config implements Saveable {
 	public static boolean enableInventoryPreRender = false;
 	public static boolean enableOpenSyncInventory = false;
 	
+	public static boolean enableActionBarVoteAnnonce = true;
+	public static boolean enableTchatVoteAnnonce = false;
 	
+	
+	public static long autoSaveSecond = 60 * 15;
 	public static long voteCount = 0;
 	
 	/**

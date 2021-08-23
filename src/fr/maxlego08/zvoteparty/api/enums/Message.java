@@ -18,11 +18,11 @@ public enum Message {
 	TELEPORT_ERROR("§cVous avez déjà une téléportation en cours !"),
 	TELEPORT_SUCCESS("§7Téléportation effectué !"),
 	
-	INVENTORY_NULL("§cImpossible de trouver l'inventaire avec l'id §6%s§c."),
-	INVENTORY_CLONE_NULL("§cLe clone de l'inventaire est null !"),
-	INVENTORY_OPEN_ERROR("§cUne erreur est survenu avec l'ouverture de l'inventaire §6%s§c."),
-	INVENTORY_BUTTON_PREVIOUS("§f» §7Page précédente"),
-	INVENTORY_BUTTON_NEXT("§f» §7Page suivante"),
+	INVENTORY_NULL("§cImpossible to find the inventory with the id §6%id%§c."),
+	INVENTORY_CLONE_NULL("§cThe inventory clone is null!"),
+	INVENTORY_OPEN_ERROR("§cAn error occurred with the opening of the inventory §6%id%§c."),
+	INVENTORY_BUTTON_PREVIOUS("§f» §7Previous page"),
+	INVENTORY_BUTTON_NEXT("§f» §7Next page"),
 	
 	TIME_DAY("%02d jour(s) %02d heure(s) %02d minute(s) %02d seconde(s)"),
 	TIME_HOUR("%02d heure(s) %02d minute(s) %02d seconde(s)"),
@@ -30,14 +30,15 @@ public enum Message {
 	TIME_MINUTE("%02d minute(s) %02d seconde(s)"),
 	TIME_SECOND("%02d seconde(s)"),
 	
-	COMMAND_SYNTAXE_ERROR("§cVous devez exécuter la commande comme ceci§7: §a%s"),
-	COMMAND_NO_PERMISSION("§cVous n'avez pas la permission d'exécuter cette commande."),
-	COMMAND_NO_CONSOLE("§cSeul un joueur peut exécuter cette commande."),
-	COMMAND_NO_ARG("§cImpossible de trouver la commande avec ses arguments."),
-	COMMAND_SYNTAXE_HELP("§a%s §b» §7%s"), 
+	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §a%syntax%"),
+	COMMAND_NO_PERMISSION("§cYou do not have permission to run this command."),
+	COMMAND_NO_CONSOLE("§cOnly one player can execute this command."),
+	COMMAND_NO_ARG("§cImpossible to find the command with its arguments."),
+	COMMAND_SYNTAXE_HELP("§a%syntax% §b» §7%description%"), 
 	
 	DESCRIPTION_VERSION("Show plugin version"),
 	DESCRIPTION_RELOAD("Reload configurations"),
+	DESCRIPTION_ADD("Add a vote to a player."),
 	DESCRIPTION_HELP("Show commands"), 
 	DESCRIPTION_VOTE("Allows you to open the voting inventory"), 
 	
@@ -51,6 +52,10 @@ public enum Message {
 			"", 
 			"§8§m-+------------------------------+-"),
 	
+	VOTE_BROADCAST_ACTION(MessageType.ACTION, "§f%player% has just voted"),
+	VOTE_BROADCAST_TCHAT("§f%player% has just voted"),
+	VOTE_MESSAGE("§7You have just voted for the server §5Serveur name§7."),
+	VOTE_LATER("§7You have just received §b%amount% §7votes."),
 	
 	;
 

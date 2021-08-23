@@ -75,7 +75,7 @@ public class ZInventoryManager extends ListenerAdapter {
 	public void createInventory(int id, Player player, int page, Object... objects) {
 		VInventory inventory = getInventory(id);
 		if (inventory == null) {
-			message(player, Message.INVENTORY_CLONE_NULL, id);
+			message(player, Message.INVENTORY_CLONE_NULL, "%id%", id);
 			return;
 		}
 		VInventory clonedInventory = inventory.clone();
@@ -92,9 +92,9 @@ public class ZInventoryManager extends ListenerAdapter {
 				player.openInventory(clonedInventory.getInventory());
 				playerInventories.put(player.getUniqueId(), clonedInventory);
 			} else if (result.equals(InventoryResult.ERROR))
-				message(player, Message.INVENTORY_OPEN_ERROR, id);
+				message(player, Message.INVENTORY_OPEN_ERROR, "%id%", id);
 		} catch (InventoryOpenException e) {
-			message(player, Message.INVENTORY_OPEN_ERROR, id);
+			message(player, Message.INVENTORY_OPEN_ERROR, "%id%", id);
 			e.printStackTrace();
 		}
 	}

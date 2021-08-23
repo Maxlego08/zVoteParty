@@ -2,21 +2,26 @@ package fr.maxlego08.zvoteparty.implementations;
 
 import java.util.List;
 
+import org.bukkit.entity.Player;
+
 import fr.maxlego08.zvoteparty.api.Reward;
 
 public class ZReward implements Reward {
 
 	private final double percent;
 	private final List<String> commands;
+	private final boolean needToBeOnline;
 
 	/**
 	 * @param percent
 	 * @param commands
+	 * @param needToBeOnline
 	 */
-	public ZReward(double percent, List<String> commands) {
+	public ZReward(double percent, List<String> commands, boolean needToBeOnline) {
 		super();
 		this.percent = percent;
 		this.commands = commands;
+		this.needToBeOnline = needToBeOnline;
 	}
 
 	@Override
@@ -27,6 +32,16 @@ public class ZReward implements Reward {
 	@Override
 	public List<String> getCommands() {
 		return this.commands;
+	}
+
+	@Override
+	public boolean needToBeOnline() {
+		return this.needToBeOnline;
+	}
+
+	@Override
+	public void give(Player player) {
+		
 	}
 
 }
