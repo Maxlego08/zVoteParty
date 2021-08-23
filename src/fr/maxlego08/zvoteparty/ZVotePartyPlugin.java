@@ -18,6 +18,7 @@ import fr.maxlego08.zvoteparty.command.commands.CommandVote;
 import fr.maxlego08.zvoteparty.implementations.ZPlayerManager;
 import fr.maxlego08.zvoteparty.inventory.InventoryLoader;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
+import fr.maxlego08.zvoteparty.inventory.inventories.InventoryConfig;
 import fr.maxlego08.zvoteparty.inventory.inventories.InventoryDefault;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.listener.listeners.VoteListener;
@@ -72,6 +73,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 		/* Inventories */
 
 		this.registerInventory(EnumInventory.INVENTORY_DEFAULT, new InventoryDefault());
+		this.registerInventory(EnumInventory.INVENTORY_CONFIG, new InventoryConfig());
 
 		/* Add Listener */
 

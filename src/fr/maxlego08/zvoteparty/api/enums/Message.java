@@ -33,6 +33,7 @@ public enum Message {
 	
 	DESCRIPTION_VERSION("Show plugin version"),
 	DESCRIPTION_RELOAD("Reload configurations"),
+	DESCRIPTION_CONFIG("Change configuration"),
 	DESCRIPTION_ADD("Add a vote to a player."),
 	DESCRIPTION_HELP("Show commands"), 
 	DESCRIPTION_VOTE("Allows you to open the voting inventory"), 

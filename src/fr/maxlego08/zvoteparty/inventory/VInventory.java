@@ -108,7 +108,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 		// Pour éviter les erreurs, on crée un inventaire
 		createDefaultInventory();
 
-		ItemButton button = new ItemButton(item);
+		ItemButton button = new ItemButton(item, slot);
 		this.items.put(slot, button);
 
 		if (this.openAsync)

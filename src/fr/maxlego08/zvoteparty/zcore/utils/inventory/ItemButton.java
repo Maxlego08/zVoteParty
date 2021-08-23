@@ -17,26 +17,28 @@ public class ItemButton {
 	private Consumer<InventoryClickEvent> onMiddleClick;
 	private Consumer<InventoryClickEvent> onLeftClick;
 	private Consumer<InventoryClickEvent> onRightClick;
+	private final int slot;
 
-	public ItemButton(ItemStack displayItem) {
+	public ItemButton(ItemStack displayItem, int slot) {
 		super();
 		this.displayItem = displayItem;
+		this.slot = slot;
 	}
 
-	public ItemButton(Material material, int id, String name, String... lore) {
-		this(new ItemBuilder(material, id, 1, name, Arrays.asList(lore), null, null).build());
+	public ItemButton(Material material, int id, String name, int slot, String... lore) {
+		this(new ItemBuilder(material, id, 1, name, Arrays.asList(lore), null, null).build(), slot);
 	}
 
-	public ItemButton(Material material, String name, String... lore) {
-		this(new ItemBuilder(material, name).setLore(lore).build());
+	public ItemButton(Material material, String name, int slot, String... lore) {
+		this(new ItemBuilder(material, name).setLore(lore).build(), slot);
 	}
 
-	public ItemButton(Material material) {
-		this(new ItemBuilder(material).build());
+	public ItemButton(Material material, int slot) {
+		this(new ItemBuilder(material).build(), slot);
 	}
 
-	public ItemButton(Material material, String name) {
-		this(new ItemBuilder(material, name).build());
+	public ItemButton(Material material, String name, int slot) {
+		this(new ItemBuilder(material, name).build(), slot);
 	}
 
 	public ItemButton setClick(Consumer<InventoryClickEvent> onClick) {
@@ -73,6 +75,7 @@ public class ItemButton {
 
 	/**
 	 * Permet de gérer le click du joueur
+	 * 
 	 * @param event
 	 */
 	public void onClick(InventoryClickEvent event) {
@@ -84,6 +87,10 @@ public class ItemButton {
 			onRightClick.accept(event);
 		else if (event.getClick().equals(ClickType.LEFT) && onLeftClick != null)
 			onLeftClick.accept(event);
+	}
+
+	public int getSlot() {
+		return this.slot;
 	}
 
 }
