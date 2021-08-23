@@ -47,8 +47,8 @@ public enum Message {
 			"", 
 			"§8§m-+------------------------------+-"),
 	
-	VOTE_BROADCAST_ACTION(MessageType.ACTION, "§f%player% has just voted"),
-	VOTE_BROADCAST_TCHAT("§f%player% has just voted"),
+	VOTE_BROADCAST_ACTION(MessageType.ACTION, "§f%player% §7has just voted §8(§b%zvoteparty_votes_recorded%§7/§a%zvoteparty_votes_required_total%§8)"),
+	VOTE_BROADCAST_TCHAT("§f%player% §7has just voted §8(§b%zvoteparty_votes_recorded%§7/§a%zvoteparty_votes_required_total%§8)"),
 	VOTE_MESSAGE("§7You have just voted for the server §5Serveur name§7."),
 	VOTE_LATER("§7You have just received §b%amount% §7votes."),
 	VOTE_SEND("§7You just gave a vote to §f%player%§7"),
@@ -57,7 +57,7 @@ public enum Message {
 			"§7Serveur Minecraft Vote§8: §fhttps://serveur-minecraft-vote.fr/"
 			),
 	
-	VOTE_PARTY_START(
+	VOTE_PARTY_START(MessageType.CENTER,
 			"§8§m-+------------------------------+-",
 			"", 
 			"§7Launch of the voting party!", 

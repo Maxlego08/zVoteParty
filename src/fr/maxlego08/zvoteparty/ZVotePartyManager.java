@@ -101,12 +101,12 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		if (offlinePlayer != null) {
 
+			this.handleVoteParty();
 			this.vote(offlinePlayer, serviceName);
 
 		} else
 			Logger.info("Impossible to find the player " + username, LogType.WARNING);
 
-		this.handleVoteParty();
 	}
 
 	@Override
@@ -141,11 +141,11 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty) {
 		
-		this.vote(player, "Serveur Minecraft Vote");
-		message(sender, Message.VOTE_SEND, "%player%", player.getName());
-		
 		if (updateVoteParty)
 			this.handleVoteParty();
+		
+		this.vote(player, "Serveur Minecraft Vote");
+		message(sender, Message.VOTE_SEND, "%player%", player.getName());
 		
 	}
 
