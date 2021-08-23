@@ -34,8 +34,7 @@ public class PapiUtils {
 
 		if (itemMeta.hasDisplayName()) {
 			if (usePlaceHolder) {
-				if (!itemMeta.getDisplayName().contains("&"))
-					itemMeta.setDisplayName(PlaceholderAPI.setPlaceholders(player, itemMeta.getDisplayName()));
+				itemMeta.setDisplayName(PlaceholderAPI.setPlaceholders(player, itemMeta.getDisplayName()));
 			} else
 				itemMeta.setDisplayName(
 						ZPlaceholderApi.getInstance().setPlaceholders(player, itemMeta.getDisplayName()));
@@ -64,9 +63,9 @@ public class PapiUtils {
 		if (placeHolder == null)
 			return null;
 
-		if (usePlaceHolder && !placeHolder.contains("&"))
+		if (usePlaceHolder) {
 			return PlaceholderAPI.setPlaceholders(player, placeHolder);
-		else
+		} else
 			return ZPlaceholderApi.getInstance().setPlaceholders(player, placeHolder);
 	}
 

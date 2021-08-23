@@ -21,6 +21,7 @@ import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.inventory.inventories.InventoryDefault;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.listener.listeners.VoteListener;
+import fr.maxlego08.zvoteparty.placeholder.VotePartyExpansion;
 import fr.maxlego08.zvoteparty.placeholder.ZPlaceholderApi;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.save.MessageLoader;
@@ -28,6 +29,7 @@ import fr.maxlego08.zvoteparty.save.Storage;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.utils.plugins.Metrics;
+import fr.maxlego08.zvoteparty.zcore.utils.plugins.Plugins;
 import fr.maxlego08.zvoteparty.zcore.utils.plugins.VersionChecker;
 
 /**
@@ -46,9 +48,8 @@ public class ZVotePartyPlugin extends ZPlugin {
 	@Override
 	public void onEnable() {
 
-		
 		ZPlaceholderApi.getInstance().setPlugin(this);
-		
+
 		/* Register inventories */
 
 		for (InventoryName inventoryName : InventoryName.values())
@@ -102,6 +103,11 @@ public class ZVotePartyPlugin extends ZPlugin {
 		if (Config.enableAutoUpdate) {
 			Timer timer = new Timer();
 			timer.schedule(new UpdateTimer(), Config.autoSaveSecond);
+		}
+
+		if (this.isEnable(Plugins.PLACEHOLDER)) {
+			VotePartyExpansion expansion = new VotePartyExpansion(this);
+			expansion.register();
 		}
 
 		VersionChecker checker = new VersionChecker(this, 124);

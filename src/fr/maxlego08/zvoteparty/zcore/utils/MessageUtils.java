@@ -51,17 +51,19 @@ public abstract class MessageUtils extends LocationUtils {
 				break;
 			case TCHAT:
 				if (message.getMessages().size() > 0) {
-					message.getMessages()
-							.forEach(msg -> sender.sendMessage(Message.PREFIX.msg() + getMessage(msg, args)));
+					message.getMessages().forEach(msg -> {
+						sender.sendMessage(Message.PREFIX.msg() + this.papi(getMessage(msg, args), player));
+					});
 				} else
-					sender.sendMessage(Message.PREFIX.msg() + getMessage(message, args));
+					sender.sendMessage(Message.PREFIX.msg() + this.papi(getMessage(message, args), player));
 				break;
 			case CENTER:
 				if (message.getMessages().size() > 0) {
-					message.getMessages()
-							.forEach(msg -> sender.sendMessage(this.getCenteredMessage(getMessage(msg, args))));
+					message.getMessages().forEach(msg -> {
+						sender.sendMessage(this.papi(this.getCenteredMessage(getMessage(msg, args)), player));
+					});
 				} else
-					sender.sendMessage(this.getCenteredMessage(getMessage(message, args)));
+					sender.sendMessage(this.papi(this.getCenteredMessage(getMessage(message, args)), player));
 				break;
 			case TITLE:
 				// gestion du title message
@@ -70,7 +72,8 @@ public abstract class MessageUtils extends LocationUtils {
 				int fadeInTime = message.getStart();
 				int showTime = message.getTime();
 				int fadeOutTime = message.getEnd();
-				this.title(player, title, subTitle, fadeInTime, showTime, fadeOutTime);
+				this.title(player, this.papi(title, player), this.papi(subTitle, player), fadeInTime, showTime,
+						fadeOutTime);
 				break;
 			default:
 				break;
@@ -78,6 +81,7 @@ public abstract class MessageUtils extends LocationUtils {
 			}
 
 		}
+
 	}
 
 	/**
@@ -109,7 +113,7 @@ public abstract class MessageUtils extends LocationUtils {
 	 * @param args
 	 */
 	protected void actionMessage(Player player, Message message, Object... args) {
-		ActionBar.sendActionBar(player, getMessage(message, args));
+		ActionBar.sendActionBar(player, this.papi(getMessage(message, args), player));
 	}
 
 	protected String getMessage(Message message, Object... args) {
