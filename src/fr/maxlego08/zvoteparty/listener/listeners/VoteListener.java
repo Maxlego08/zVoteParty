@@ -1,5 +1,8 @@
 package fr.maxlego08.zvoteparty.listener.listeners;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.model.VotifierEvent;
 
@@ -25,4 +28,10 @@ public class VoteListener extends ListenerAdapter {
 		manager.vote(username, serviceName);
 	}
 
+	@Override
+	protected void onConnect(PlayerJoinEvent event, Player player) {
+		VotePartyManager manager = this.plugin.getManager();
+		manager.giveVotes(player);
+	}
+	
 }

@@ -61,4 +61,11 @@ public interface VotePartyManager{
 	 */
 	Reward getRandomReward();
 
+	/**
+	 * Allows you to give rewards for pending votes
+	 * 
+	 * @param player
+	 */
+	void giveVotes(Player player);
+
 }

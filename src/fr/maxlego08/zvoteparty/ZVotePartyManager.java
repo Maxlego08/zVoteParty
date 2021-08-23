@@ -2,6 +2,7 @@ package fr.maxlego08.zvoteparty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
+import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
 import fr.maxlego08.zvoteparty.api.command.Command;
 import fr.maxlego08.zvoteparty.api.enums.InventoryName;
@@ -68,37 +70,38 @@ public class ZVotePartyManager extends ZUtils implements VotePartyManager {
 
 		Inventory inventory = this.plugin.getInventoryManager().getInventory(InventoryName.VOTE);
 		Command command = CommandObject.of(inventory);
-		
+
 		ZInventoryManager inventoryManager = this.plugin.getZInventoryManager();
-		inventoryManager.createInventory(EnumInventory.INVENTORY_DEFAULT, player, 1, inventory, new ArrayList<>(), command);
+		inventoryManager.createInventory(EnumInventory.INVENTORY_DEFAULT, player, 1, inventory, new ArrayList<>(),
+				command);
 
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void vote(String username, String serviceName) {
-		
+
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
-		
-		if (offlinePlayer != null){
-			
+
+		if (offlinePlayer != null) {
+
 			this.vote(offlinePlayer, serviceName);
-			
+
 		} else
 			Logger.info("Impossible to find the player " + username, LogType.WARNING);
-		
+
 		this.handleVoteParty();
 	}
 
 	@Override
 	public void handleVoteParty() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void vote(CommandSender sender, OfflinePlayer player) {
-		
+
 	}
 
 	@Override
@@ -110,6 +113,16 @@ public class ZVotePartyManager extends ZUtils implements VotePartyManager {
 
 	public Reward getRandomReward() {
 		return new ZReward(100, Arrays.asList("bc %player% vient de voter"), false);
+	}
+
+	@Override
+	public void giveVotes(Player player) {
+		PlayerVote playerVote = this.plugin.get(player);
+		List<Vote> votes = playerVote.getNeedRewardVotes();
+		if (votes.size() > 0) {
+			message(player, Message.VOTE_LATER, "%amount%", votes.size());
+			votes.forEach(e -> e.giveReward(player));
+		}
 	}
 
 }

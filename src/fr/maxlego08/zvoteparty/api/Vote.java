@@ -1,5 +1,7 @@
 package fr.maxlego08.zvoteparty.api;
 
+import org.bukkit.entity.Player;
+
 public interface Vote {
 
 	/**
@@ -29,5 +31,12 @@ public interface Vote {
 	 * @return boolean
 	 */
 	boolean rewardIsGive();
+
+	/**
+	 * Gives the reward to the player
+	 * 
+	 * @param player
+	 */
+	void giveReward(Player player);
 
 }
