@@ -79,11 +79,11 @@ public class ZPlayerVote extends ZUtils implements PlayerVote {
 		if (reward.needToBeOnline()) {
 			if (offlinePlayer.isOnline()) {
 				give = true;
-				reward.give(offlinePlayer.getPlayer());
+				reward.give(offlinePlayer);
 			}
 		} else {
 			give = true;
-			reward.give(offlinePlayer.getPlayer());
+			reward.give(offlinePlayer);
 		}
 
 		Vote vote = new ZVote(serviceName, reward, give);

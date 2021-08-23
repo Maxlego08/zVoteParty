@@ -77,6 +77,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 		this.addSave(Config.getInstance());
 		this.addSave(new MessageLoader(this));
 		this.addSave(this.playerManager);
+		this.addSave(this.manager);
 
 		this.getSavers().forEach(saver -> saver.load(this.getPersist()));
 

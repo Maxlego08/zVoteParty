@@ -2,7 +2,7 @@ package fr.maxlego08.zvoteparty.api;
 
 import java.util.List;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 public interface Reward {
 
@@ -32,6 +32,6 @@ public interface Reward {
 	 * 
 	 * @param player
 	 */
-	void give(Player player);
+	void give(OfflinePlayer player);
 	
 }

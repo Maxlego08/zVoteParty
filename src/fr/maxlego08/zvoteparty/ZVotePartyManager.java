@@ -51,7 +51,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			this.plugin.reloadConfig();
 			this.plugin.getInventoryManager().loadInventories();
 			this.loadConfiguration();
-			this.load(null);
+			this.plugin.getSavers().forEach(e -> e.load(this.plugin.getPersist()));
 
 			message(sender, Message.RELOAD_SUCCESS);
 
@@ -108,7 +108,8 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void vote(CommandSender sender, OfflinePlayer player) {
-
+		this.vote(player, "Serveur Minecraft Vote");
+		message(sender, Message.VOTE_SEND, "%player%", player.getName());
 	}
 
 	@Override
@@ -132,8 +133,10 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		PlayerVote playerVote = this.plugin.get(player);
 		List<Vote> votes = playerVote.getNeedRewardVotes();
 		if (votes.size() > 0) {
-			message(player, Message.VOTE_LATER, "%amount%", votes.size());
-			votes.forEach(e -> e.giveReward(player));
+			schedule(Config.joinGiveVoteMilliSecond, () -> {
+				message(player, Message.VOTE_LATER, "%amount%", votes.size());
+				votes.forEach(e -> e.giveReward(player));
+			});
 		}
 	}
 

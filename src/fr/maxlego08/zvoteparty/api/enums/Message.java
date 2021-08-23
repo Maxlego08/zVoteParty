@@ -56,6 +56,7 @@ public enum Message {
 	VOTE_BROADCAST_TCHAT("§f%player% has just voted"),
 	VOTE_MESSAGE("§7You have just voted for the server §5Serveur name§7."),
 	VOTE_LATER("§7You have just received §b%amount% §7votes."),
+	VOTE_SEND("§7You just gave a vote to §f%player%§7"),
 	
 	;
 
