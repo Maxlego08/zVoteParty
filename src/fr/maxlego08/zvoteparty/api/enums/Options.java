@@ -12,11 +12,27 @@ import fr.maxlego08.zvoteparty.save.Config;
 
 public enum Options {
 
-	ENABLE_DEBUG_MODE("enableDebugMode", "Enables the debug mode of the plugin.", "You will thus be able to obtain information", "in your console."),
+	ENABLE_DEBUG("enableDebug", "Enables the debug mode of the plugin.", "You will thus be able to obtain information", "in your console."),
 	
-	ENABLE_VERSION_CHECKER("enableVersionChecker", "Enable plugin version checker"),
+	ENABLE_DEBUG_TIME("enableDebugTime", "Enable debug time of the plugin", "This is a debugging tool."),
+	
+	ENABLE_LOG_MESSAGE("enableLogMessage", "Enable log message in console", "This is a debugging tool."),
+	
+	ENABLE_VERSION_CHECKER("enableAutoUpdate", "Enable plugin version checker."),
 	
 	ENABLE_INVENTORY_PRE_RENDER("enableInventoryPreRender", "Allows you to make items that are permanent."),
+	
+	ENABLE_OPEN_SYNC_INVENTORY("enableOpenSyncInventory", "Allows to open the inventory with the items in a synchronized way."),
+	
+	ENABLE_VOTE_COMMAND("enableVoteCommand", "Allows you to activate the /vote command."),
+	
+	ENABLE_VOTE_INVENTORY("enableVoteInventory", "Allows you to open the inventory with the /vote command."),
+	
+	ENABLE_VOTE_MESSAGE("enableVoteMessage", "Allows you to display the message in the /vote command."),
+	
+	ENABLE_ACTION_BAR_BROADCAST("enableActionBarVoteAnnonce", "Allows you to activate the bar action when a player votes."),
+	
+	ENABLE_TCHAT_BROADCAST("enableTchatVoteAnnonce", "Allows you to activate the broadcast message when a player votes."),
 
 	;
 

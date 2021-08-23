@@ -39,7 +39,7 @@ public class InventoryConfig extends PaginateInventory<Options> {
 
 	@Override
 	public void onClick(Options object, ItemButton button) {
-		
+			
 		object.toggle(this.plugin);
 
 		int slot = button.getSlot();
