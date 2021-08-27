@@ -35,6 +35,7 @@ public enum Message {
 	DESCRIPTION_RELOAD("Reload configurations"),
 	DESCRIPTION_CONFIG("Change configuration"),
 	DESCRIPTION_ADD("Add a vote to a player."),
+	DESCRIPTION_STARTPARTY("Force launch a Vote Party"),
 	DESCRIPTION_HELP("Show commands"), 
 	DESCRIPTION_VOTE("Allows you to open the voting inventory"), 
 	
@@ -64,7 +65,9 @@ public enum Message {
 			"§7Launch of the voting party!", 
 			"", 
 			"§8§m-+------------------------------+-"
-			),
+			), 
+	
+	VOTE_STARTPARTY("§aYou just launched the voting party."),
 	
 	;
 

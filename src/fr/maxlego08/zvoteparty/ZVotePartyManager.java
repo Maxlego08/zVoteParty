@@ -114,25 +114,8 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		Storage.voteCount++;
 
-		if (Storage.voteCount >= this.needVote) {
-
-			Storage.voteCount = 0;
-
-			for (Player player : Bukkit.getOnlinePlayers()) {
-
-				this.globalCommands.forEach(command -> {
-					command = command.replace("%player%", player.getName());
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
-				});
-
-				Reward reward = this.getRandomReward(RewardType.PARTY);
-				reward.give(player);
-
-			}
-			
-			broadcast(Message.VOTE_PARTY_START);
-
-		}
+		if (Storage.voteCount >= this.needVote)
+			this.start();
 
 		Storage.getInstance().save(this.plugin.getPersist());
 
@@ -250,6 +233,31 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void sendNeedVote(CommandSender sender) {
 		message(sender, Message.VOTE_NEEDED);
+	}
+
+	@Override
+	public void forceStart(CommandSender sender) {
+		message(sender, Message.VOTE_STARTPARTY);
+		this.start();
+	}
+
+	@Override
+	public void start() {
+		Storage.voteCount = 0;
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+
+			this.globalCommands.forEach(command -> {
+				command = command.replace("%player%", player.getName());
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
+			});
+
+			Reward reward = this.getRandomReward(RewardType.PARTY);
+			reward.give(player);
+
+		}
+		
+		broadcast(Message.VOTE_PARTY_START);		
 	}
 
 }

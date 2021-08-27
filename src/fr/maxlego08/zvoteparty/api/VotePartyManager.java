@@ -111,5 +111,17 @@ public interface VotePartyManager extends Saveable {
 	 * @param sender
 	 */
 	void sendNeedVote(CommandSender sender);
+	
+	/**
+	 * Force start vote party
+	 * 
+	 * @param sender
+	 */
+	void forceStart(CommandSender sender);
+	
+	/**
+	 * Start vote party
+	 */
+	void start();
 
 }

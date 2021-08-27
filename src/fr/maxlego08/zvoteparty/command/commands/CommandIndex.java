@@ -15,6 +15,7 @@ public class CommandIndex extends VCommand {
 		this.addSubCommand(new CommandHelp(plugin));
 		this.addSubCommand(new CommandAdd(plugin));
 		this.addSubCommand(new CommandConfig(plugin));
+		this.addSubCommand(new CommandStartParty(plugin));
 	}
 
 	@Override
