@@ -37,4 +37,9 @@ public class VotePartyExpansion extends PlaceholderExpansion {
 		return ZPlaceholderApi.getInstance().onRequest(player, params);
 	}
 
+	@Override
+	public boolean persist() {
+		return true;
+	}
+	
 }
