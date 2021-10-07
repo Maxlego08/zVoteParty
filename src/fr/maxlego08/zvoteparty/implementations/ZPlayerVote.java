@@ -37,7 +37,6 @@ public class ZPlayerVote extends ZUtils implements PlayerVote {
 		super();
 		this.uniqueId = uniqueId;
 		this.votes = votes;
-		System.out.println(this.votes);
 	}
 
 	@Override
