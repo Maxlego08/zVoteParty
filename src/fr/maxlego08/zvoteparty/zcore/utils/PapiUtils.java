@@ -13,7 +13,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 
 public class PapiUtils {
 
-	private final transient boolean usePlaceHolder;
+	private transient boolean usePlaceHolder;
 
 	public PapiUtils() {
 		usePlaceHolder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
@@ -30,6 +30,9 @@ public class PapiUtils {
 		if (itemStack == null)
 			return itemStack;
 
+		if (!usePlaceHolder)
+			usePlaceHolder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+		
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
 		if (itemMeta.hasDisplayName()) {
@@ -63,6 +66,9 @@ public class PapiUtils {
 		if (placeHolder == null)
 			return null;
 
+		if (!usePlaceHolder)
+			usePlaceHolder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+		
 		if (usePlaceHolder) {
 			return PlaceholderAPI.setPlaceholders(player, placeHolder);
 		} else

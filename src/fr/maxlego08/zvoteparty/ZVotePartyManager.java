@@ -98,10 +98,9 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			return;
 		}
 
-		if (!Config.enableVoteMessage){			
+		if (!Config.enableVoteMessage) {
 			message(player, "§cError in configuration, please contact an administrator.");
 		}
-		
 
 	}
 
@@ -269,6 +268,25 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		}
 
 		broadcast(Message.VOTE_PARTY_START);
+	}
+
+	@Override
+	public void removeVote(CommandSender sender, OfflinePlayer player) {
+		PlayerManager manager = this.plugin.getPlayerManager();
+		Optional<PlayerVote> optional = manager.getPlayer(player);
+		if (!optional.isPresent()) {
+			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+			return;
+		}
+		PlayerVote playerVote = optional.get();
+
+		if (playerVote.getVoteCount() == 0) {
+			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+			return;
+		}
+		
+		playerVote.removeVote();
+		message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
 	}
 
 }

@@ -61,17 +61,17 @@ public class ZPlayerVote extends ZUtils implements PlayerVote {
 
 	@Override
 	public void vote(String serviceName, Reward reward) {
-		
+
 		OfflinePlayer offlinePlayer = this.getPlayer();
-		
+
 		if (offlinePlayer.isOnline()) {
 			Player player = offlinePlayer.getPlayer();
 			message(player, Message.VOTE_MESSAGE, "%player%", player.getName());
 		}
-		
+
 		if (Config.enableActionBarVoteAnnonce)
 			broadcast(Message.VOTE_BROADCAST_ACTION, "%player%", offlinePlayer.getName());
-		
+
 		if (Config.enableTchatVoteAnnonce)
 			broadcastTchat(Message.VOTE_BROADCAST_TCHAT, "%player%", offlinePlayer.getName());
 
@@ -98,6 +98,13 @@ public class ZPlayerVote extends ZUtils implements PlayerVote {
 	@Override
 	public List<Vote> getNeedRewardVotes() {
 		return this.votes.stream().filter(v -> !v.rewardIsGive()).collect(Collectors.toList());
+	}
+
+	@Override
+	public void removeVote() {
+		if (votes.size() != 0) {
+			votes.remove(0);
+		}
 	}
 
 }
