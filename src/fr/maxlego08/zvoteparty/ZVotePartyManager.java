@@ -157,7 +157,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		double percent = ThreadLocalRandom.current().nextDouble(0, 100);
 		Reward reward = randomElement(type == RewardType.VOTE ? this.rewards : this.partyRewards);
-		if (reward.getPercent() <= percent)
+		if (reward.getPercent() <= percent || reward.getPercent() >= 100)
 			return reward;
 		return this.getRandomReward(type);
 
