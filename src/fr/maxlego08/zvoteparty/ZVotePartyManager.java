@@ -80,16 +80,27 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void openVote(Player player) {
-		
-		if (Config.enableVoteMessage)
+
+		if (Config.enableVoteMessage) {
+
 			message(player, Message.VOTE_INFORMATIONS);
 
-		Inventory inventory = this.plugin.getInventoryManager().getInventory(InventoryName.VOTE);
-		Command command = CommandObject.of(inventory);
+		}
 
-		ZInventoryManager inventoryManager = this.plugin.getZInventoryManager();
-		inventoryManager.createInventory(EnumInventory.INVENTORY_DEFAULT, player, 1, inventory, new ArrayList<>(),
-				command);
+		if (Config.enableVoteInventory) {
+
+			Inventory inventory = this.plugin.getInventoryManager().getInventory(InventoryName.VOTE);
+			Command command = CommandObject.of(inventory);
+
+			ZInventoryManager inventoryManager = this.plugin.getZInventoryManager();
+			inventoryManager.createInventory(EnumInventory.INVENTORY_DEFAULT, player, 1, inventory, new ArrayList<>(),
+					command);
+			return;
+		}
+
+		if (!Config.enableVoteMessage) {
+			message(player, "§cError in configuration, please contact an administrator.");
+		}
 
 	}
 
@@ -123,38 +134,38 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty) {
-		
+
 		if (updateVoteParty)
 			this.handleVoteParty();
-		
+
 		this.vote(player, "Serveur Minecraft Vote");
 		message(sender, Message.VOTE_SEND, "%player%", player.getName());
-		
+
 	}
 
 	@Override
 	public void vote(OfflinePlayer offlinePlayer, String serviceName) {
-		
+
 		PlayerVote playerVote = this.plugin.get(offlinePlayer);
 		Reward reward = this.getRandomReward(RewardType.VOTE);
 		playerVote.vote(serviceName, reward);
-		
+
 	}
 
 	@Override
 	public Reward getRandomReward(RewardType type) {
-		
+
 		double percent = ThreadLocalRandom.current().nextDouble(0, 100);
 		Reward reward = randomElement(type == RewardType.VOTE ? this.rewards : this.partyRewards);
-		if (reward.getPercent() <= percent)
+		if (reward.getPercent() <= percent || reward.getPercent() >= 100)
 			return reward;
 		return this.getRandomReward(type);
-		
+
 	}
 
 	@Override
 	public void giveVotes(Player player) {
-		
+
 		PlayerVote playerVote = this.plugin.get(player);
 		List<Vote> votes = playerVote.getNeedRewardVotes();
 		if (votes.size() > 0) {
@@ -163,7 +174,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 				votes.forEach(e -> e.giveReward(player));
 			});
 		}
-		
+
 	}
 
 	@Override
@@ -222,7 +233,6 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	public long getPlayerVoteCount(Player player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
 		Optional<PlayerVote> optional = manager.getPlayer(player);
-		System.out.println(optional);
 		if (optional.isPresent()) {
 			PlayerVote playerVote = optional.get();
 			return playerVote.getVoteCount();
@@ -256,8 +266,27 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			reward.give(player);
 
 		}
+
+		broadcast(Message.VOTE_PARTY_START);
+	}
+
+	@Override
+	public void removeVote(CommandSender sender, OfflinePlayer player) {
+		PlayerManager manager = this.plugin.getPlayerManager();
+		Optional<PlayerVote> optional = manager.getPlayer(player);
+		if (!optional.isPresent()) {
+			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+			return;
+		}
+		PlayerVote playerVote = optional.get();
+
+		if (playerVote.getVoteCount() == 0) {
+			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+			return;
+		}
 		
-		broadcast(Message.VOTE_PARTY_START);		
+		playerVote.removeVote();
+		message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
 	}
 
 }

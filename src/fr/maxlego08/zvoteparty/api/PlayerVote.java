@@ -56,5 +56,7 @@ public interface PlayerVote {
 	 * @return name
 	 */
 	String getFileName();
+
+	void removeVote();
 	
 }

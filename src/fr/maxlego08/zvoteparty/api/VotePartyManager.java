@@ -124,4 +124,6 @@ public interface VotePartyManager extends Saveable {
 	 */
 	void start();
 
+	void removeVote(CommandSender sender, OfflinePlayer player);
+
 }

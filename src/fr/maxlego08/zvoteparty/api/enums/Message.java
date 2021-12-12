@@ -35,6 +35,7 @@ public enum Message {
 	DESCRIPTION_RELOAD("Reload configurations"),
 	DESCRIPTION_CONFIG("Change configuration"),
 	DESCRIPTION_ADD("Add a vote to a player."),
+	DESCRIPTION_REMOVE("Remove a vote to a player."),
 	DESCRIPTION_STARTPARTY("Force launch a Vote Party"),
 	DESCRIPTION_HELP("Show commands"), 
 	DESCRIPTION_VOTE("Allows you to open the voting inventory"), 
@@ -54,6 +55,8 @@ public enum Message {
 	VOTE_MESSAGE("§7You have just voted for the server §5Serveur name§7."),
 	VOTE_LATER("§7You have just received §b%amount% §7votes."),
 	VOTE_SEND("§7You just gave a vote to §f%player%§7"),
+	VOTE_REMOVE_SUCCESS("§aYou have just removed a yours from the §f%player%§a."),
+	VOTE_REMOVE_ERROR("§cImpossible to remove a vote from the §f%player%§c, the player has no vote."),
 	VOTE_NEEDED(
 			"§b%zvoteparty_votes_required_party% §fvotes §7needed for the next party !",
 			"§7Serveur Minecraft Vote§8: §fhttps://serveur-minecraft-vote.fr/"

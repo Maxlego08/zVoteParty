@@ -114,7 +114,7 @@ public class ZPlaceholderApi {
 	public String onRequest(Player player, String string) {
 
 		VotePartyManager manager = this.plugin.getManager();
-		
+
 		switch (string) {
 
 		case "votes_recorded":
