@@ -41,6 +41,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	private final List<Reward> partyRewards = new ArrayList<>();
 	private List<String> globalCommands = new ArrayList<>();
+	private List<String> commands = new ArrayList<>();
 	private long needVote = 50;
 
 	/**
@@ -148,7 +149,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		PlayerVote playerVote = this.plugin.get(offlinePlayer);
 		Reward reward = this.getRandomReward(RewardType.VOTE);
-		playerVote.vote(serviceName, reward);
+		playerVote.vote(this.plugin, serviceName, reward);
 
 	}
 
@@ -171,7 +172,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		if (votes.size() > 0) {
 			schedule(Config.joinGiveVoteMilliSecond, () -> {
 				message(player, Message.VOTE_LATER, "%amount%", votes.size());
-				votes.forEach(e -> e.giveReward(player));
+				votes.forEach(e -> e.giveReward(this.plugin, player));
 			});
 		}
 
@@ -203,6 +204,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		this.needVote = configuration.getLong("party.votes_needed", 50);
 		this.globalCommands = configuration.getStringList("party.global_commands");
+		this.commands = configuration.getStringList("party.commands");
 
 		configurationSection = configuration.getConfigurationSection("party.rewards.");
 		this.partyRewards.clear();
@@ -263,9 +265,11 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			});
 
 			Reward reward = this.getRandomReward(RewardType.PARTY);
-			reward.give(player);
+			reward.give(this.plugin, player);
 
 		}
+
+		this.commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
 
 		broadcast(Message.VOTE_PARTY_START);
 	}
@@ -284,7 +288,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
 			return;
 		}
-		
+
 		playerVote.removeVote();
 		message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
 	}

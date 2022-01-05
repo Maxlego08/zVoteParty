@@ -26,9 +26,14 @@ rewards:
 party:
   # The amount of votes needed
   votes_needed: 50
-  # The command that will be executed when the number of votes is reached
+  
+  # The command that will be executed when the number of votes is reached for each online players
   global_commands:
-    - "eco give * 100"
+    - "eco give %player% 100"
+    
+  commands:
+    - "eco give * 0.0000000009"  
+    
   # Rewards that players can earn  
   rewards:
     1:

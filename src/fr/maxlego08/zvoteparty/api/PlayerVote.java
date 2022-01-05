@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 
 public interface PlayerVote {
 
@@ -48,7 +49,7 @@ public interface PlayerVote {
 	 * 
 	 * @param link - Website link
 	 */
-	void vote(String serviceName, Reward reward);
+	void vote(Plugin pluin,String serviceName, Reward reward);
 
 	/**
 	 * Return file name

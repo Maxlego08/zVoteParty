@@ -1,6 +1,7 @@
 package fr.maxlego08.zvoteparty.api;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public interface Vote {
 
@@ -37,6 +38,6 @@ public interface Vote {
 	 * 
 	 * @param player
 	 */
-	void giveReward(Player player);
+	void giveReward(Plugin plugin, Player player);
 
 }

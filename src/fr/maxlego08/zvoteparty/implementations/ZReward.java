@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 
 import fr.maxlego08.zvoteparty.api.Reward;
 
@@ -41,10 +42,12 @@ public class ZReward implements Reward {
 	}
 
 	@Override
-	public void give(OfflinePlayer player) {
-		this.commands.forEach(command -> {
-			command = command.replace("%player%", player.getName());
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+	public void give(Plugin plugin, OfflinePlayer player) {
+		Bukkit.getScheduler().runTask(plugin, () -> {
+			this.commands.forEach(command -> {
+				command = command.replace("%player%", player.getName());
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+			});
 		});
 	}
 

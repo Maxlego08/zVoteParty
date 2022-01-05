@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
@@ -60,7 +61,7 @@ public class ZPlayerVote extends ZUtils implements PlayerVote {
 	}
 
 	@Override
-	public void vote(String serviceName, Reward reward) {
+	public void vote(Plugin plugin, String serviceName, Reward reward) {
 
 		OfflinePlayer offlinePlayer = this.getPlayer();
 
@@ -79,11 +80,11 @@ public class ZPlayerVote extends ZUtils implements PlayerVote {
 		if (reward.needToBeOnline()) {
 			if (offlinePlayer.isOnline()) {
 				give = true;
-				reward.give(offlinePlayer);
+				reward.give(plugin, offlinePlayer);
 			}
 		} else {
 			give = true;
-			reward.give(offlinePlayer);
+			reward.give(plugin, offlinePlayer);
 		}
 
 		Vote vote = new ZVote(serviceName, reward, give);

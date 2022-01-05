@@ -1,6 +1,7 @@
 package fr.maxlego08.zvoteparty.implementations;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.api.Vote;
@@ -54,9 +55,9 @@ public class ZVote implements Vote {
 	}
 
 	@Override
-	public void giveReward(Player player) {
+	public void giveReward(Plugin plugin, Player player) {
 		this.rewardIsGive = true;
-		this.reward.give(player);
+		this.reward.give(plugin, player);
 	}
 
 }
