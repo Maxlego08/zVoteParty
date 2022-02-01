@@ -5,8 +5,11 @@ import java.util.UUID;
 
 import fr.maxlego08.zvoteparty.api.PlayerManager;
 import fr.maxlego08.zvoteparty.api.PlayerVote;
+import fr.maxlego08.zvoteparty.api.Reward;
+import fr.maxlego08.zvoteparty.api.Vote;
+import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
 
-public interface IStorage extends PlayerManager {
+public interface IStorage extends PlayerManager, Saveable {
 
 	/**
 	 * Get players
@@ -38,5 +41,7 @@ public interface IStorage extends PlayerManager {
 	 * @param amount
 	 */
 	void setVoteCount(long amount);
+
+	void insertVote(PlayerVote playerVote, Vote vote, Reward reward);
 
 }

@@ -5,22 +5,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import fr.maxlego08.zvoteparty.api.PlayerVote;
+import fr.maxlego08.zvoteparty.api.Reward;
+import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.storage.IStorage;
 import fr.maxlego08.zvoteparty.implementations.ZPlayerVote;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.Folder;
+import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
 
 public class JsonStorage implements IStorage {
 
 	private transient final ZPlugin plugin;
 	private transient final Map<UUID, PlayerVote> players = new HashMap<UUID, PlayerVote>();
 
-	private long voteCount;
+	private long voteCount = 1;
 
 	/**
 	 * @param plugin
@@ -30,8 +35,7 @@ public class JsonStorage implements IStorage {
 		this.plugin = plugin;
 	}
 
-	@Override
-	public Optional<PlayerVote> getPlayer(OfflinePlayer offlinePlayer) {
+	private Optional<PlayerVote> getPlayer(OfflinePlayer offlinePlayer) {
 
 		UUID uniqueId = offlinePlayer.getUniqueId();
 
@@ -91,6 +95,31 @@ public class JsonStorage implements IStorage {
 	@Override
 	public void setVoteCount(long amount) {
 		this.voteCount = amount;
+	}
+
+	@Override
+	public void save(Persist persist) {
+
+	}
+
+	@Override
+	public void load(Persist persist) {
+
+	}
+
+	@Override
+	public void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer) {
+		consumer.accept(this.getPlayer(offlinePlayer));
+	}
+
+	@Override
+	public Optional<PlayerVote> getSyncPlayer(Player player) {
+		return this.getPlayer(player);
+	}
+
+	@Override
+	public void insertVote(PlayerVote playerVote, Vote vote, Reward reward) {
+		
 	}
 
 }

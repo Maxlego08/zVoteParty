@@ -44,3 +44,11 @@ party:
       percent: 50
       commands:
         - "cr give %player% test"  
+        
+#Database informations
+sql:
+  user: "homestead"
+  password: "secret"
+  port: 3306
+  host: "192.168.10.10"
+  database: "zvoteparty"         

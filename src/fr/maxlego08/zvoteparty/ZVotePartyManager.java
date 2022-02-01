@@ -27,7 +27,6 @@ import fr.maxlego08.zvoteparty.command.CommandObject;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.loader.RewardLoader;
 import fr.maxlego08.zvoteparty.save.Config;
-import fr.maxlego08.zvoteparty.save.VoteStorage;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
@@ -133,8 +132,6 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			this.start();
 		}
 
-		VoteStorage.getInstance().save(this.plugin.getPersist());
-
 	}
 
 	@Override
@@ -151,10 +148,12 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void vote(OfflinePlayer offlinePlayer, String serviceName) {
-
-		PlayerVote playerVote = this.plugin.get(offlinePlayer);
-		Reward reward = this.getRandomReward(RewardType.VOTE);
-		playerVote.vote(this.plugin, serviceName, reward);
+		this.plugin.get(offlinePlayer, playerVote -> {
+			Reward reward = this.getRandomReward(RewardType.VOTE);
+			Vote vote = playerVote.vote(this.plugin, serviceName, reward);
+			IStorage iStorage = this.plugin.getIStorage();
+			iStorage.insertVote(playerVote, vote, reward);
+		});
 
 	}
 
@@ -163,23 +162,25 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		double percent = ThreadLocalRandom.current().nextDouble(0, 100);
 		Reward reward = randomElement(type == RewardType.VOTE ? this.rewards : this.partyRewards);
-		if (reward.getPercent() <= percent || reward.getPercent() >= 100)
+		if (reward.getPercent() <= percent || reward.getPercent() >= 100) {
 			return reward;
+		}
+
 		return this.getRandomReward(type);
 
 	}
 
 	@Override
 	public void giveVotes(Player player) {
-
-		PlayerVote playerVote = this.plugin.get(player);
-		List<Vote> votes = playerVote.getNeedRewardVotes();
-		if (votes.size() > 0) {
-			schedule(Config.joinGiveVoteMilliSecond, () -> {
-				message(player, Message.VOTE_LATER, "%amount%", votes.size());
-				votes.forEach(e -> e.giveReward(this.plugin, player));
-			});
-		}
+		this.plugin.get(player, playerVote -> {
+			List<Vote> votes = playerVote.getNeedRewardVotes();
+			if (votes.size() > 0) {
+				schedule(Config.joinGiveVoteMilliSecond, () -> {
+					message(player, Message.VOTE_LATER, "%amount%", votes.size());
+					votes.forEach(e -> e.giveReward(this.plugin, player));
+				});
+			}
+		});
 
 	}
 
@@ -239,7 +240,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public long getPlayerVoteCount(Player player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
-		Optional<PlayerVote> optional = manager.getPlayer(player);
+		Optional<PlayerVote> optional = manager.getSyncPlayer(player);
 		if (optional.isPresent()) {
 			PlayerVote playerVote = optional.get();
 			return playerVote.getVoteCount();
@@ -284,20 +285,22 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void removeVote(CommandSender sender, OfflinePlayer player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
-		Optional<PlayerVote> optional = manager.getPlayer(player);
-		if (!optional.isPresent()) {
-			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
-			return;
-		}
-		PlayerVote playerVote = optional.get();
+		manager.getPlayer(player, optional -> {
 
-		if (playerVote.getVoteCount() == 0) {
-			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
-			return;
-		}
+			if (!optional.isPresent()) {
+				message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+				return;
+			}
+			PlayerVote playerVote = optional.get();
 
-		playerVote.removeVote();
-		message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
+			if (playerVote.getVoteCount() == 0) {
+				message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+				return;
+			}
+
+			playerVote.removeVote();
+			message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
+		});
 	}
 
 }

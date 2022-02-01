@@ -28,6 +28,7 @@ import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.enums.InventoryName;
+import fr.maxlego08.zvoteparty.api.storage.Script;
 import fr.maxlego08.zvoteparty.command.CommandManager;
 import fr.maxlego08.zvoteparty.command.VCommand;
 import fr.maxlego08.zvoteparty.exceptions.ListenerNullException;
@@ -86,6 +87,12 @@ public abstract class ZPlugin extends JavaPlugin {
 			} else {
 				if (!new File(getDataFolder() + "/inventories/" + file + ".yml").exists())
 					saveResource("inventories/" + file + ".yml", false);
+			}
+		}
+
+		for (Script script : Script.values()) {
+			if (!new File(getDataFolder() + "/scripts/" + script.name().toLowerCase() + ".sql").exists()) {
+				this.saveResource("scripts/" + script.name().toLowerCase() + ".sql", false);
 			}
 		}
 	}

@@ -1,8 +1,6 @@
 package fr.maxlego08.zvoteparty;
 
-import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.function.Consumer;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.ServicePriority;
@@ -27,7 +25,6 @@ import fr.maxlego08.zvoteparty.placeholder.VotePartyExpansion;
 import fr.maxlego08.zvoteparty.placeholder.ZPlaceholderApi;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.save.MessageLoader;
-import fr.maxlego08.zvoteparty.save.VoteStorage;
 import fr.maxlego08.zvoteparty.storage.ZStorageManager;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
@@ -109,8 +106,8 @@ public class ZVotePartyPlugin extends ZPlugin {
 		this.manager.loadConfiguration();
 
 		if (Config.enableAutoUpdate) {
-			Timer timer = new Timer();
-			timer.schedule(new UpdateTimer(), Config.autoSaveSecond);
+			// Timer timer = new Timer();
+			// timer.schedule(new UpdateTimer(), Config.autoSaveSecond);
 		}
 
 		if (this.isEnable(Plugins.PLACEHOLDER)) {
@@ -157,26 +154,17 @@ public class ZVotePartyPlugin extends ZPlugin {
 		return this.storageManager.getIStorage();
 	}
 
-	public class UpdateTimer extends TimerTask {
-
-		@Override
-		public void run() {
-			// playerManager.save(getPersist());
-			VoteStorage.getInstance().save(getPersist());
-		}
-
-	}
-
 	/**
 	 * Get player vote
 	 * 
 	 * @param offlinePlayer
 	 * @return {@link PlayerVote}
 	 */
-	public PlayerVote get(OfflinePlayer offlinePlayer) {
+	public void get(OfflinePlayer offlinePlayer, Consumer<PlayerVote> consumer) {
 		PlayerManager manager = this.getPlayerManager();
-		Optional<PlayerVote> optional = manager.getPlayer(offlinePlayer);
-		return optional.isPresent() ? optional.get() : manager.createPlayer(offlinePlayer);
+		manager.getPlayer(offlinePlayer, optional -> {
+			consumer.accept(optional.isPresent() ? optional.get() : manager.createPlayer(offlinePlayer));
+		});
 	}
 
 }

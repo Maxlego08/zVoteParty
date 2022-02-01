@@ -49,7 +49,7 @@ public interface PlayerVote {
 	 * 
 	 * @param link - Website link
 	 */
-	void vote(Plugin pluin,String serviceName, Reward reward);
+	Vote vote(Plugin pluin,String serviceName, Reward reward);
 
 	/**
 	 * Return file name
@@ -58,6 +58,9 @@ public interface PlayerVote {
 	 */
 	String getFileName();
 
+	/**
+	 * 
+	 */
 	void removeVote();
 	
 }

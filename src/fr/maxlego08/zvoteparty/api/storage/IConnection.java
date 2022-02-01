@@ -2,6 +2,14 @@ package fr.maxlego08.zvoteparty.api.storage;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import org.bukkit.OfflinePlayer;
+
+import fr.maxlego08.zvoteparty.api.PlayerVote;
+import fr.maxlego08.zvoteparty.api.Reward;
+import fr.maxlego08.zvoteparty.api.Vote;
 
 public interface IConnection {
 
@@ -9,29 +17,49 @@ public interface IConnection {
 	 * 
 	 * @return
 	 */
-	public Connection getConnection();
+	Connection getConnection();
 
 	/*
 	 * 
-	 */
-	public void asyncConnect();
+	 */ void asyncConnect();
 
 	/**
 	 * 
 	 * @throws SQLException
 	 */
-	public void connect() throws SQLException;
+	void connect() throws SQLException;
 
 	/**
 	 * 
 	 */
-	public void disconnect();
+	void disconnect();
 
 	/**
 	 * 
 	 * @param runnable
 	 * @return
 	 */
-	public void getAndRefreshConnection(Runnable runnable);
+	void getAndRefreshConnection(Runnable runnable);
+
+	/**
+	 * 
+	 * @param amount
+	 */
+	void updateVoteCount(long amount);
+
+	/**
+	 * 
+	 * @param offlinePlayer
+	 * @param consumer
+	 */
+	void asyncFetchPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer);
+
+	/**
+	 * 
+	 * @param playerVote
+	 * @param vote
+	 * @param reward
+	 */
+	void asyncInsert(PlayerVote playerVote, Vote vote, Reward reward);
 
 }
