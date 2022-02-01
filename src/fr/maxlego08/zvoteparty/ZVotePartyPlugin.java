@@ -12,10 +12,11 @@ import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
 import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.api.inventory.InventoryManager;
+import fr.maxlego08.zvoteparty.api.storage.IStorage;
+import fr.maxlego08.zvoteparty.api.storage.StorageManager;
 import fr.maxlego08.zvoteparty.command.CommandManager;
 import fr.maxlego08.zvoteparty.command.commands.CommandIndex;
 import fr.maxlego08.zvoteparty.command.commands.CommandVote;
-import fr.maxlego08.zvoteparty.implementations.ZPlayerManager;
 import fr.maxlego08.zvoteparty.inventory.InventoryLoader;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.inventory.inventories.InventoryConfig;
@@ -26,7 +27,8 @@ import fr.maxlego08.zvoteparty.placeholder.VotePartyExpansion;
 import fr.maxlego08.zvoteparty.placeholder.ZPlaceholderApi;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.save.MessageLoader;
-import fr.maxlego08.zvoteparty.save.Storage;
+import fr.maxlego08.zvoteparty.save.VoteStorage;
+import fr.maxlego08.zvoteparty.storage.ZStorageManager;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.utils.plugins.Metrics;
@@ -44,7 +46,8 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 	private final VotePartyManager manager = new ZVotePartyManager(this);
 	private final InventoryManager inventoryManager = new InventoryLoader(this);
-	private final PlayerManager playerManager = new ZPlayerManager(this);
+
+	private StorageManager storageManager;
 
 	@Override
 	public void onEnable() {
@@ -83,12 +86,15 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 		/* Add Saver */
 		this.addSave(Config.getInstance());
-		this.addSave(Storage.getInstance());
 		this.addSave(new MessageLoader(this));
-		this.addSave(this.playerManager);
 		this.addSave(this.manager);
 
 		this.getSavers().forEach(saver -> saver.load(this.getPersist()));
+
+		// Load storage
+
+		this.storageManager = new ZStorageManager(Config.storage, this);
+		this.storageManager.load(this.getPersist());
 
 		try {
 			this.inventoryManager.loadInventories();
@@ -125,6 +131,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 		this.preDisable();
 
 		this.getSavers().forEach(saver -> saver.save(this.getPersist()));
+		this.storageManager.save(this.getPersist());
 
 		this.postDisable();
 	}
@@ -143,15 +150,19 @@ public class ZVotePartyPlugin extends ZPlugin {
 	}
 
 	public PlayerManager getPlayerManager() {
-		return playerManager;
+		return this.storageManager.getIStorage();
+	}
+
+	public IStorage getIStorage() {
+		return this.storageManager.getIStorage();
 	}
 
 	public class UpdateTimer extends TimerTask {
 
 		@Override
 		public void run() {
-			playerManager.save(getPersist());
-			Storage.getInstance().save(getPersist());
+			// playerManager.save(getPersist());
+			VoteStorage.getInstance().save(getPersist());
 		}
 
 	}
@@ -163,10 +174,9 @@ public class ZVotePartyPlugin extends ZPlugin {
 	 * @return {@link PlayerVote}
 	 */
 	public PlayerVote get(OfflinePlayer offlinePlayer) {
-		Optional<PlayerVote> optional = this.playerManager.getPlayer(offlinePlayer);
-		if (optional.isPresent())
-			return optional.get();
-		return this.playerManager.createPlayer(offlinePlayer);
+		PlayerManager manager = this.getPlayerManager();
+		Optional<PlayerVote> optional = manager.getPlayer(offlinePlayer);
+		return optional.isPresent() ? optional.get() : manager.createPlayer(offlinePlayer);
 	}
 
 }

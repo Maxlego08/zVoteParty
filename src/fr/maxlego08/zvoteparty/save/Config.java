@@ -1,10 +1,13 @@
 package fr.maxlego08.zvoteparty.save;
 
+import fr.maxlego08.zvoteparty.api.storage.Storage;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
 
 public class Config implements Saveable {
 
+	public static Storage storage = Storage.JSON;
+	
 	public static boolean enableDebug = false;
 	public static boolean enableDebugTime = false;
 	public static boolean enableAutoUpdate = true;

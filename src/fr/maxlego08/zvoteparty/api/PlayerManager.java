@@ -5,9 +5,7 @@ import java.util.Optional;
 
 import org.bukkit.OfflinePlayer;
 
-import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
-
-public interface PlayerManager extends Saveable{
+public interface PlayerManager{
 
 	/**
 	 * Return {@link PlayerVote} using {@link OfflinePlayer}

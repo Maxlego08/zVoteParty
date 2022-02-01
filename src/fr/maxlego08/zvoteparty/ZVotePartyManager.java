@@ -22,11 +22,12 @@ import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.api.enums.RewardType;
 import fr.maxlego08.zvoteparty.api.inventory.Inventory;
+import fr.maxlego08.zvoteparty.api.storage.IStorage;
 import fr.maxlego08.zvoteparty.command.CommandObject;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.loader.RewardLoader;
 import fr.maxlego08.zvoteparty.save.Config;
-import fr.maxlego08.zvoteparty.save.Storage;
+import fr.maxlego08.zvoteparty.save.VoteStorage;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
@@ -116,28 +117,32 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			this.handleVoteParty();
 			this.vote(offlinePlayer, serviceName);
 
-		} else
+		} else {
 			Logger.info("Impossible to find the player " + username, LogType.WARNING);
+		}
 
 	}
 
 	@Override
 	public void handleVoteParty() {
 
-		Storage.voteCount++;
+		IStorage iStorage = this.plugin.getIStorage();
+		iStorage.addVoteCount(1);
 
-		if (Storage.voteCount >= this.needVote)
+		if (iStorage.getVoteCount() >= this.needVote) {
 			this.start();
+		}
 
-		Storage.getInstance().save(this.plugin.getPersist());
+		VoteStorage.getInstance().save(this.plugin.getPersist());
 
 	}
 
 	@Override
 	public void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty) {
 
-		if (updateVoteParty)
+		if (updateVoteParty) {
 			this.handleVoteParty();
+		}
 
 		this.vote(player, "Serveur Minecraft Vote");
 		message(sender, Message.VOTE_SEND, "%player%", player.getName());
@@ -255,7 +260,9 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void start() {
-		Storage.voteCount = 0;
+
+		IStorage iStorage = this.plugin.getIStorage();
+		iStorage.setVoteCount(0);
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
 

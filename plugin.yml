@@ -3,7 +3,7 @@ author: Maxlego08
 main: fr.maxlego08.zvoteparty.ZVotePartyPlugin
 depend: [Votifier]
 softdepend: [PlaceholderAPI]
-version: 1.0.0.9
+version: 1.0.1.0
 website: https://groupez.dev/resources/zvoteparty.124
 api-version: 1.13
 commands:

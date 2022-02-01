@@ -1,4 +1,4 @@
-package fr.maxlego08.zvoteparty.implementations;
+package fr.maxlego08.zvoteparty.storage.storages;
 
 import java.io.File;
 import java.util.HashMap;
@@ -8,35 +8,26 @@ import java.util.UUID;
 
 import org.bukkit.OfflinePlayer;
 
-import fr.maxlego08.zvoteparty.api.PlayerManager;
 import fr.maxlego08.zvoteparty.api.PlayerVote;
+import fr.maxlego08.zvoteparty.api.storage.IStorage;
+import fr.maxlego08.zvoteparty.implementations.ZPlayerVote;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.Folder;
-import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
-import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
 
-public class ZPlayerManager extends ZUtils implements PlayerManager {
+public class JsonStorage implements IStorage {
 
-	private final ZPlugin plugin;
-	private final Map<UUID, PlayerVote> players = new HashMap<UUID, PlayerVote>();
+	private transient final ZPlugin plugin;
+	private transient final Map<UUID, PlayerVote> players = new HashMap<UUID, PlayerVote>();
 
-	public ZPlayerManager(ZPlugin plugin) {
+	private long voteCount;
+
+	/**
+	 * @param plugin
+	 */
+	public JsonStorage(ZPlugin plugin) {
+		super();
 		this.plugin = plugin;
-	}
-
-	@Override
-	public void save(Persist persist) {
-		this.players.forEach((uuid, player) -> {
-			if (player != null)
-				persist.save(player, Folder.PLAYERS, player.getFileName());
-		});
-	}
-
-	@Override
-	public void load(Persist persist) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -56,8 +47,9 @@ public class ZPlayerManager extends ZUtils implements PlayerManager {
 				players.put(uniqueId, playerVote);
 				return Optional.of(playerVote);
 			} catch (Exception e) {
-				if (Config.enableDebug)
+				if (Config.enableDebug) {
 					e.printStackTrace();
+				}
 			}
 		}
 		return Optional.empty();
@@ -74,6 +66,31 @@ public class ZPlayerManager extends ZUtils implements PlayerManager {
 	@Override
 	public File getFolder() {
 		return new File(this.plugin.getDataFolder(), Folder.PLAYERS.toFolder());
+	}
+
+	@Override
+	public Map<UUID, PlayerVote> getPlayers() {
+		return this.players;
+	}
+
+	@Override
+	public long getVoteCount() {
+		return this.voteCount;
+	}
+
+	@Override
+	public void addVoteCount(long amount) {
+		this.voteCount += amount;
+	}
+
+	@Override
+	public void removeVoteCount(long amount) {
+		this.voteCount -= amount;
+	}
+
+	@Override
+	public void setVoteCount(long amount) {
+		this.voteCount = amount;
 	}
 
 }
