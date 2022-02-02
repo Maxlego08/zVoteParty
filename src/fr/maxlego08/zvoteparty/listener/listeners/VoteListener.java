@@ -25,7 +25,7 @@ public class VoteListener extends ListenerAdapter {
 	@Override
 	public void onVote(VotifierEvent event, Vote vote, String username, String serviceName) {
 		VotePartyManager manager = this.plugin.getManager();
-		manager.vote(username, serviceName);
+		manager.vote(username, serviceName, true);
 	}
 
 	@Override

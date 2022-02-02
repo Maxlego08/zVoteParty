@@ -23,6 +23,7 @@ import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.api.enums.RewardType;
 import fr.maxlego08.zvoteparty.api.inventory.Inventory;
 import fr.maxlego08.zvoteparty.api.storage.IStorage;
+import fr.maxlego08.zvoteparty.api.storage.Storage;
 import fr.maxlego08.zvoteparty.command.CommandObject;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.loader.RewardLoader;
@@ -107,17 +108,19 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void vote(String username, String serviceName) {
+	public void vote(String username, String serviceName, boolean updateVoteParty) {
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
 
+		this.handleVoteParty();
+		
 		if (offlinePlayer != null) {
 
-			this.handleVoteParty();
 			this.vote(offlinePlayer, serviceName);
 
 		} else {
-			Logger.info("Impossible to find the player " + username, LogType.WARNING);
+			IStorage iStorage = this.plugin.getIStorage();
+			iStorage.performCustomVoteAction(username, serviceName);
 		}
 
 	}
@@ -135,23 +138,26 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	}
 
 	@Override
-	public void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty) {
-
-		if (updateVoteParty) {
-			this.handleVoteParty();
-		}
-
-		this.vote(player, "Serveur Minecraft Vote");
-		message(sender, Message.VOTE_SEND, "%player%", player.getName());
-
+	public void vote(CommandSender sender, String username, boolean updateVoteParty) {
+		
+		this.vote(username, "Serveur Minecraft Vote", updateVoteParty);
+		message(sender, Message.VOTE_SEND, "%player%", username);
+		
 	}
 
 	@Override
 	public void vote(OfflinePlayer offlinePlayer, String serviceName) {
+		
+		Reward reward = this.getRandomReward(RewardType.VOTE);
+		IStorage iStorage = this.plugin.getIStorage();
+		
+		if (reward.needToBeOnline() && Config.storage.equals(Storage.REDIS) && !offlinePlayer.isOnline()){
+			iStorage.performCustomVoteAction(offlinePlayer.getName(), serviceName);
+			return;
+		}
+		
 		this.plugin.get(offlinePlayer, playerVote -> {
-			Reward reward = this.getRandomReward(RewardType.VOTE);
 			Vote vote = playerVote.vote(this.plugin, serviceName, reward);
-			IStorage iStorage = this.plugin.getIStorage();
 			iStorage.insertVote(playerVote, vote, reward);
 		});
 

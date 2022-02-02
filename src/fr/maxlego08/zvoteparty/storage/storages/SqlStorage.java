@@ -36,13 +36,13 @@ import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
 
 public class SqlStorage extends ZUtils implements IStorage {
 
-	private final ZVotePartyPlugin plugin;
-	private final Storage storage;
+	protected final ZVotePartyPlugin plugin;
+	protected final Storage storage;
 
-	private IConnection iConnection;
+	protected IConnection iConnection;
 
-	private transient final Map<UUID, PlayerVote> players = new HashMap<UUID, PlayerVote>();
-	private long voteCount = 1;
+	protected transient final Map<UUID, PlayerVote> players = new HashMap<UUID, PlayerVote>();
+	protected long voteCount = 1;
 
 	/**
 	 * @param plugin
@@ -166,6 +166,11 @@ public class SqlStorage extends ZUtils implements IStorage {
 	@Override
 	public void insertVote(PlayerVote playerVote, Vote vote, Reward reward) {
 		this.iConnection.asyncInsert(playerVote, vote, reward);
+	}
+
+	@Override
+	public void performCustomVoteAction(String username, String serviceName) {
+		Logger.info("Impossible to find the player " + username, LogType.WARNING);
 	}
 
 }

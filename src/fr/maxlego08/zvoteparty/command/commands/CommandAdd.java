@@ -1,7 +1,5 @@
 package fr.maxlego08.zvoteparty.command.commands;
 
-import org.bukkit.OfflinePlayer;
-
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.api.enums.Permission;
@@ -22,7 +20,7 @@ public class CommandAdd extends VCommand {
 	@Override
 	protected CommandType perform(ZVotePartyPlugin plugin) {
 		
-		OfflinePlayer player = this.argAsOfflinePlayer(0);
+		String player = this.argAsString(0);
 		boolean updateVoteParty = this.argAsBoolean(1, false);
 		this.plugin.getManager().vote(this.sender, player, updateVoteParty);
 		

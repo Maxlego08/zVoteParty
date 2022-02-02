@@ -37,7 +37,7 @@ public interface VotePartyManager extends Saveable {
 	 * @param username
 	 * @param serviceName
 	 */
-	void vote(String username, String serviceName);
+	void vote(String username, String serviceName, boolean updateVoteParty);
 
 	/**
 	 * Allows you to add one to the voteparty
@@ -48,10 +48,10 @@ public interface VotePartyManager extends Saveable {
 	 * Add vote to user
 	 * 
 	 * @param sender
-	 * @param player
+	 * @param username
 	 * @param updateVoteParty 
 	 */
-	void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty);
+	void vote(CommandSender sender, String username, boolean updateVoteParty);
 
 	/**
 	 * Add vote to user

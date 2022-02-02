@@ -18,6 +18,8 @@ import fr.maxlego08.zvoteparty.implementations.ZPlayerVote;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 import fr.maxlego08.zvoteparty.zcore.enums.Folder;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
 
 public class JsonStorage implements IStorage {
@@ -120,6 +122,11 @@ public class JsonStorage implements IStorage {
 	@Override
 	public void insertVote(PlayerVote playerVote, Vote vote, Reward reward) {
 		
+	}
+
+	@Override
+	public void performCustomVoteAction(String username, String serviceName) {
+		Logger.info("Impossible to find the player " + username, LogType.WARNING);		
 	}
 
 }

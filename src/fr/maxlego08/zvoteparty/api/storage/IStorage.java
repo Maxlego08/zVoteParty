@@ -42,6 +42,21 @@ public interface IStorage extends PlayerManager, Saveable {
 	 */
 	void setVoteCount(long amount);
 
+	/**
+	 * Add vote to datebase
+	 * 
+	 * @param playerVote
+	 * @param vote
+	 * @param reward
+	 */
 	void insertVote(PlayerVote playerVote, Vote vote, Reward reward);
+
+	/**
+	 * Usefull for redis
+	 * 
+	 * @param username
+	 * @param serviceName
+	 */
+	void performCustomVoteAction(String username, String serviceName);
 
 }
