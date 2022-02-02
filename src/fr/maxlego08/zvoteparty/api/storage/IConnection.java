@@ -62,4 +62,10 @@ public interface IConnection {
 	 */
 	void asyncInsert(PlayerVote playerVote, Vote vote, Reward reward);
 
+	/**
+	 * 
+	 * @param sqlStorage
+	 */
+	void fetchVotes(IStorage sqlStorage);
+
 }

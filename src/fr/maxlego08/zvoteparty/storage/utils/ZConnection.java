@@ -12,8 +12,10 @@ import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.storage.IConnection;
+import fr.maxlego08.zvoteparty.api.storage.IStorage;
 import fr.maxlego08.zvoteparty.api.storage.Storage;
 import fr.maxlego08.zvoteparty.storage.requets.InsertRunnable;
+import fr.maxlego08.zvoteparty.storage.requets.SelectVoteCountRunnable;
 import fr.maxlego08.zvoteparty.storage.requets.SelectVotesRunnable;
 import fr.maxlego08.zvoteparty.storage.requets.UpdateCountRunnable;
 
@@ -133,6 +135,14 @@ public class ZConnection implements IConnection {
 		this.getAndRefreshConnection(() -> {
 			Thread thread = new Thread(new InsertRunnable(playerVote, vote, reward, this));
 			thread.start();
+		});
+	}
+
+	@Override
+	public void fetchVotes(IStorage sqlStorage) {
+		this.getAndRefreshConnection(() -> {
+			Runnable runnable = new SelectVoteCountRunnable(this, sqlStorage);
+			runnable.run();
 		});
 	}
 

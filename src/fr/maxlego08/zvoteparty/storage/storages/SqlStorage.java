@@ -68,7 +68,7 @@ public class SqlStorage extends ZUtils implements IStorage {
 		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 
 			try {
-				iConnection.connect();
+				this.iConnection.connect();
 				Logger.info("Database connect to " + host);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -86,14 +86,15 @@ public class SqlStorage extends ZUtils implements IStorage {
 					reader.close();
 				}
 
-				// Chargement des données
-
+				this.iConnection.fetchVotes(this);
+				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
+			
 		});
 
 	}
