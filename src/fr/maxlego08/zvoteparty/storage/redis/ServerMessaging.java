@@ -178,6 +178,7 @@ public class ServerMessaging extends JedisPubSub {
 		UUID messageId = this.sendMessage(RedisSubChannel.ADD_VOTE, message);
 
 		// Allows to give the reward if the player is not connected
+		System.out.println("> " + uuid);
 		RedisVoteResponse redisVoteResponse = new RedisVoteResponse(messageId, username, serviceName, 1, uuid);
 		this.voteResponses.put(messageId, redisVoteResponse);
 
@@ -227,6 +228,8 @@ public class ServerMessaging extends JedisPubSub {
 
 		RedisVoteResponse redisVoteResponse = this.voteResponses.getOrDefault(messageId, null);
 
+		System.out.println(userId + " > < ");
+
 		// If the redis vote response is null, then the messageID is incorrect
 		// or the value is delete
 		if (redisVoteResponse == null) {
@@ -253,6 +256,7 @@ public class ServerMessaging extends JedisPubSub {
 				// If the player cannot be found, then nothing can be done and
 				// the vote will be lost
 
+				System.out.println(">> " + redisVoteResponse.getUserId());
 				if (redisVoteResponse.getUserId() != null) {
 
 					this.plugin.getManager().voteOffline(redisVoteResponse.getUserId(),

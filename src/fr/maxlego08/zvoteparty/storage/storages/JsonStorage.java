@@ -147,4 +147,19 @@ public class JsonStorage implements IStorage {
 		this.setVoteCount(0);
 	}
 
+	@Override
+	public void createPlayer(PlayerVote playerVote) {
+		this.players.put(playerVote.getUniqueId(), playerVote);
+	}
+
+	@Override
+	public void updateRewards(UUID uniqueId) {
+		this.getPlayer(uniqueId, optional -> {
+			if (optional.isPresent()) {
+				PlayerVote playerVote = optional.get();
+				this.plugin.getPersist().save(playerVote, Folder.PLAYERS, playerVote.getFileName());
+			}
+		});
+	}
+
 }

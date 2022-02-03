@@ -17,6 +17,7 @@ import fr.maxlego08.zvoteparty.storage.requets.InsertRunnable;
 import fr.maxlego08.zvoteparty.storage.requets.SelectVoteCountRunnable;
 import fr.maxlego08.zvoteparty.storage.requets.SelectVotesRunnable;
 import fr.maxlego08.zvoteparty.storage.requets.UpdateCountRunnable;
+import fr.maxlego08.zvoteparty.storage.requets.UpdatePlayerRunnable;
 
 public class ZConnection implements IConnection {
 
@@ -100,7 +101,7 @@ public class ZConnection implements IConnection {
 							connect();
 							runnable.run();
 						} catch (SQLException e) {
-							e.printStackTrace();
+							// e.printStackTrace();
 						}
 					}
 				};
@@ -109,7 +110,7 @@ public class ZConnection implements IConnection {
 				runnable.run();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -122,9 +123,9 @@ public class ZConnection implements IConnection {
 	}
 
 	@Override
-	public void asyncFetchPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer) {
+	public void asyncFetchPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer, IStorage iStorage) {
 		this.getAndRefreshConnection(() -> {
-			Thread thread = new Thread(new SelectVotesRunnable(this, uuid, consumer));
+			Thread thread = new Thread(new SelectVotesRunnable(this, uuid, consumer, iStorage));
 			thread.start();
 		});
 	}
@@ -142,6 +143,14 @@ public class ZConnection implements IConnection {
 		this.getAndRefreshConnection(() -> {
 			Runnable runnable = new SelectVoteCountRunnable(this, sqlStorage);
 			runnable.run();
+		});
+	}
+
+	@Override
+	public void updateRewards(UUID uniqueId) {
+		this.getAndRefreshConnection(() -> {
+			Thread thread = new Thread(new UpdatePlayerRunnable(this, uniqueId));
+			thread.start();
 		});
 	}
 

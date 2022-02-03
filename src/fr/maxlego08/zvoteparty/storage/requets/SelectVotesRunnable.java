@@ -15,6 +15,7 @@ import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.storage.IConnection;
+import fr.maxlego08.zvoteparty.api.storage.IStorage;
 import fr.maxlego08.zvoteparty.implementations.ZPlayerVote;
 import fr.maxlego08.zvoteparty.implementations.ZReward;
 import fr.maxlego08.zvoteparty.implementations.ZVote;
@@ -25,18 +26,21 @@ public class SelectVotesRunnable extends ZUtils implements Runnable {
 	private final IConnection iConnection;
 	private final UUID uniqueId;
 	private final Consumer<Optional<PlayerVote>> consumer;
+	private final IStorage iStorage;
 
 	/**
 	 * @param storage
 	 * @param iConnection
 	 * @param uniqueId
 	 * @param consumer
+	 * @param iStorage 
 	 */
-	public SelectVotesRunnable(IConnection iConnection, UUID uniqueId, Consumer<Optional<PlayerVote>> consumer) {
+	public SelectVotesRunnable(IConnection iConnection, UUID uniqueId, Consumer<Optional<PlayerVote>> consumer, IStorage iStorage) {
 		super();
 		this.iConnection = iConnection;
 		this.uniqueId = uniqueId;
 		this.consumer = consumer;
+		this.iStorage = iStorage;
 	}
 
 	@Override
@@ -70,6 +74,7 @@ public class SelectVotesRunnable extends ZUtils implements Runnable {
 
 			statement.close();
 			PlayerVote playerVote = new ZPlayerVote(this.uniqueId, votes);
+			this.iStorage.createPlayer(playerVote);
 			this.consumer.accept(Optional.of(playerVote));
 
 		} catch (SQLException e) {

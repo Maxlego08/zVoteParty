@@ -50,8 +50,9 @@ public interface IConnection {
 	 * 
 	 * @param uuid
 	 * @param consumer
+	 * @param iStorage 
 	 */
-	void asyncFetchPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer);
+	void asyncFetchPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer, IStorage iStorage);
 
 	/**
 	 * 
@@ -66,5 +67,11 @@ public interface IConnection {
 	 * @param sqlStorage
 	 */
 	void fetchVotes(IStorage sqlStorage);
+
+	/**
+	 * 
+	 * @param uniqueId
+	 */
+	void updateRewards(UUID uniqueId);
 
 }

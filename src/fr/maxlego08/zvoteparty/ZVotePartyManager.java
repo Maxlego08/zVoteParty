@@ -220,6 +220,8 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 					message(player, Message.VOTE_LATER, "%amount%", votes.size());
 					votes.forEach(e -> e.giveReward(this.plugin, player));
 				});
+				IStorage iStorage = this.plugin.getIStorage();
+				iStorage.updateRewards(player.getUniqueId());
 			}
 		});
 

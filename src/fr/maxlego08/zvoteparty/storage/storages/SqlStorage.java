@@ -176,7 +176,7 @@ public class SqlStorage extends ZUtils implements IStorage {
 		if (this.players.containsKey(uuid)) {
 			consumer.accept(Optional.of(this.players.get(uuid)));
 		} else {
-			this.iConnection.asyncFetchPlayer(uuid, consumer);
+			this.iConnection.asyncFetchPlayer(uuid, consumer, this);
 		}
 	}
 
@@ -185,6 +185,16 @@ public class SqlStorage extends ZUtils implements IStorage {
 		PlayerVote playerVote = new ZPlayerVote(uuid);
 		players.put(uuid, playerVote);
 		return playerVote;
+	}
+
+	@Override
+	public void updateRewards(UUID uniqueId) {
+		this.iConnection.updateRewards(uniqueId);
+	}
+
+	@Override
+	public void createPlayer(PlayerVote playerVote) {
+		this.players.put(playerVote.getUniqueId(), playerVote);
 	}
 
 }

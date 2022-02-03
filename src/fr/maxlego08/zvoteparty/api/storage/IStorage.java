@@ -65,4 +65,17 @@ public interface IStorage extends PlayerManager, Saveable {
 	 */
 	void startVoteParty();
 
+	/**
+	 * Update reward in datebase
+	 * 
+	 * @param uniqueId
+	 */
+	void updateRewards(UUID uniqueId);
+
+	/**
+	 * 
+	 * @param playerVote
+	 */
+	void createPlayer(PlayerVote playerVote);
+
 }
