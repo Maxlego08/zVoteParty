@@ -2,7 +2,9 @@ package fr.maxlego08.zvoteparty.storage.redis;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -23,6 +25,8 @@ public class ServerMessaging extends JedisPubSub {
 	private Thread threadMessaging1;
 
 	private List<UUID> sendingUUID = new ArrayList<UUID>();
+
+	private Map<UUID, RedisVoteResponse> voteResponses = new HashMap<UUID, RedisVoteResponse>();
 
 	/**
 	 * @param plugin
@@ -64,7 +68,10 @@ public class ServerMessaging extends JedisPubSub {
 				String uuidAsString = values[1];
 				UUID uuid = UUID.fromString(uuidAsString);
 
+				// Allows to verify that the server sending the information does
+				// not receive it.
 				if (this.sendingUUID.contains(uuid)) {
+					this.sendingUUID.remove(uuid);
 					return;
 				}
 
@@ -92,15 +99,15 @@ public class ServerMessaging extends JedisPubSub {
 	}
 
 	/**
-	 * Permet d'envoyer un message
+	 * Allows you to send a message
 	 * 
 	 * @param subChannel
 	 * @param message
 	 */
-	private void sendMessage(RedisSubChannel channel, String message) {
+	private UUID sendMessage(RedisSubChannel channel, String message) {
+		final UUID uuid = UUID.randomUUID();
 		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
 			try (Jedis jedis = this.client.getPool()) {
-				UUID uuid = UUID.randomUUID();
 				this.sendingUUID.add(uuid);
 
 				String jMessage = channel.name() + ";;" + uuid.toString();
@@ -113,10 +120,11 @@ public class ServerMessaging extends JedisPubSub {
 				e.printStackTrace();
 			}
 		});
+		return uuid;
 	}
 
 	/**
-	 * Permet d'arrêter le thread
+	 * Allows to stop the thread
 	 */
 	public void stop() {
 		this.threadMessaging1.interrupt();
@@ -124,32 +132,43 @@ public class ServerMessaging extends JedisPubSub {
 	}
 
 	/**
-	 * Permet d'envoyer un message
+	 * Allows you to send a message
 	 * 
 	 * @param subChannel
 	 */
-	private void sendMessage(RedisSubChannel channel) {
-		this.sendMessage(channel, null);
+	private UUID sendMessage(RedisSubChannel channel) {
+		return this.sendMessage(channel, null);
 	}
 
 	/**
-	 * Permet d'ajouter un vote
+	 * Allows you to add a vote to the voteparty
 	 */
 	public void sendAddVoteCount() {
 		this.sendMessage(RedisSubChannel.ADD_VOTEPARTY);
 	}
 
 	/**
-	 * Permet d'envoyer l'information pour lancer le vote party
+	 * Allows you to send the information to start the voting party
 	 */
 	public void sendHandleVoteParty() {
 		this.sendMessage(RedisSubChannel.HANDLE_VOTEPARTY);
 	}
 
-	public void sendVoteAction(String username, String serviceName) {
+	/**
+	 * Allows you to send the voting action
+	 * 
+	 * @param username
+	 * @param serviceName
+	 * @param uuid
+	 */
+	public void sendVoteAction(String username, String serviceName, UUID uuid) {
 
 		String message = username + ";;" + serviceName;
-		this.sendMessage(RedisSubChannel.ADD_VOTE, message);
+		UUID messageId = this.sendMessage(RedisSubChannel.ADD_VOTE, message);
+
+		// Allows to give the reward if the player is not connected
+		RedisVoteResponse redisVoteResponse = new RedisVoteResponse(messageId, username, serviceName, 1, uuid);
+		this.voteResponses.put(messageId, redisVoteResponse);
 
 	}
 

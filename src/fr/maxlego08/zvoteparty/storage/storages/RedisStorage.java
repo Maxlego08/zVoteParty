@@ -1,5 +1,7 @@
 package fr.maxlego08.zvoteparty.storage.storages;
 
+import java.util.UUID;
+
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.api.storage.IStorage;
 import fr.maxlego08.zvoteparty.api.storage.Storage;
@@ -35,8 +37,8 @@ public class RedisStorage extends SqlStorage implements IStorage {
 	}
 
 	@Override
-	public void performCustomVoteAction(String username, String serviceName) {
-		this.messaging.sendVoteAction(username, serviceName);
+	public void performCustomVoteAction(String username, String serviceName, UUID uuid) {
+		this.messaging.sendVoteAction(username, serviceName, uuid);
 	}
 
 	/**

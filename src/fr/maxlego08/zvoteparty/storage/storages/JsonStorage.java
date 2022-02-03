@@ -125,7 +125,7 @@ public class JsonStorage implements IStorage {
 	}
 
 	@Override
-	public void performCustomVoteAction(String username, String serviceName) {
+	public void performCustomVoteAction(String username, String serviceName, UUID uuid) {
 		Logger.info("Impossible to find the player " + username, LogType.WARNING);		
 	}
 

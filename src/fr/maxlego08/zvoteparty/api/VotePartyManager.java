@@ -142,6 +142,6 @@ public interface VotePartyManager extends Saveable {
 	 * @param username
 	 * @param serviceName
 	 */
-	void secretVote(String username, String serviceName);
+	boolean secretVote(String username, String serviceName);
 
 }

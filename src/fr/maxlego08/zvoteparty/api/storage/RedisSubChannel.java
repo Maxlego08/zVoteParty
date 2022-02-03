@@ -2,7 +2,7 @@ package fr.maxlego08.zvoteparty.api.storage;
 
 public enum RedisSubChannel {
 
-	HANDLE_VOTEPARTY, ADD_VOTEPARTY, ADD_VOTE, OTHER,
+	HANDLE_VOTEPARTY, ADD_VOTEPARTY, ADD_VOTE, VOTE_RESPONSE, OTHER,
 
 	;
 

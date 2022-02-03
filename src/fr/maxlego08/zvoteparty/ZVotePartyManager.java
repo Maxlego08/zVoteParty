@@ -113,14 +113,15 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
 
 		this.handleVoteParty();
-		
+
 		if (offlinePlayer != null) {
 
 			this.vote(offlinePlayer, serviceName);
 
 		} else {
+			// If the player cannot be found we will call redis
 			IStorage iStorage = this.plugin.getIStorage();
-			iStorage.performCustomVoteAction(username, serviceName);
+			iStorage.performCustomVoteAction(username, serviceName, null);
 		}
 
 	}
@@ -139,52 +140,61 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void vote(CommandSender sender, String username, boolean updateVoteParty) {
-		
+
 		this.vote(username, "Serveur Minecraft Vote", updateVoteParty);
 		message(sender, Message.VOTE_SEND, "%player%", username);
-		
+
 	}
 
 	@Override
 	public void vote(OfflinePlayer offlinePlayer, String serviceName) {
-		
+
 		Reward reward = this.getRandomReward(RewardType.VOTE);
 		IStorage iStorage = this.plugin.getIStorage();
-		
-		if (reward.needToBeOnline() && Config.storage.equals(Storage.REDIS) && !offlinePlayer.isOnline()){
-			iStorage.performCustomVoteAction(offlinePlayer.getName(), serviceName);
+
+		// If the redis configuration is active, the reward is online and the user is not connected then we will call redis
+		if (reward.needToBeOnline() && Config.storage.equals(Storage.REDIS) && !offlinePlayer.isOnline()) {
+			iStorage.performCustomVoteAction(offlinePlayer.getName(), serviceName, offlinePlayer.getUniqueId());
 			return;
 		}
-		
+
+		// We will retrieve the PlayerVote object in asymmetric in the database
+		// and execute the vote
 		this.plugin.get(offlinePlayer, playerVote -> {
 			Vote vote = playerVote.vote(this.plugin, serviceName, reward);
 			iStorage.insertVote(playerVote, vote, reward);
 		});
 
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
-	public void secretVote(String username, String serviceName) {
-		
+	public boolean secretVote(String username, String serviceName) {
+
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
-		
-		// On va récupérer le offline player et vérifier qu'il soit en ligne
-		if (offlinePlayer == null || !offlinePlayer.isOnline()){
-			return;
+
+		// We will get the offline player and check that it is online
+		if (offlinePlayer == null || !offlinePlayer.isOnline()) {
+			return false;
 		}
-		
-		// On va récupérer le reward
+
+		// We'll get the reward
 		Reward reward = this.getRandomReward(RewardType.VOTE);
-		
-		// Si le reward est bien en online
-		if (reward.needToBeOnline()){
+
+		// If the reward is online
+		if (reward.needToBeOnline()) {
+
+			// We will retrieve the PlayerVote object in asymmetric in the
+			// database and execute the vote
 			this.plugin.get(offlinePlayer, playerVote -> {
 				IStorage iStorage = this.plugin.getIStorage();
 				Vote vote = playerVote.vote(this.plugin, serviceName, reward);
 				iStorage.insertVote(playerVote, vote, reward);
 			});
+			return true;
 		}
+
+		return false;
 	}
 
 	@Override
@@ -270,6 +280,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public long getPlayerVoteCount(Player player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
+		// We will retrieve the player in a symmetrical way, we will not search in the database
 		Optional<PlayerVote> optional = manager.getSyncPlayer(player);
 		if (optional.isPresent()) {
 			PlayerVote playerVote = optional.get();
@@ -299,24 +310,24 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	}
 
 	@Override
-	public void secretStart(){
+	public void secretStart() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			
+
 			this.globalCommands.forEach(command -> {
 				command = command.replace("%player%", player.getName());
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
 			});
-			
+
 			Reward reward = this.getRandomReward(RewardType.PARTY);
 			reward.give(this.plugin, player);
-			
+
 		}
-		
+
 		this.commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
-		
-		broadcast(Message.VOTE_PARTY_START);	
+
+		broadcast(Message.VOTE_PARTY_START);
 	}
-	
+
 	@Override
 	public void removeVote(CommandSender sender, OfflinePlayer player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
