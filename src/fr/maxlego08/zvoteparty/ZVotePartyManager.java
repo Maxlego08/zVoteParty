@@ -162,7 +162,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		// We will retrieve the PlayerVote object in asymmetric in the database
 		// and execute the vote
 		this.plugin.get(offlinePlayer, playerVote -> {
-			Vote vote = playerVote.vote(this.plugin, serviceName, reward);
+			Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
 			iStorage.insertVote(playerVote, vote, reward);
 		});
 
@@ -189,7 +189,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			// database and execute the vote
 			this.plugin.get(offlinePlayer, playerVote -> {
 				IStorage iStorage = this.plugin.getIStorage();
-				Vote vote = playerVote.vote(this.plugin, serviceName, reward);
+				Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
 				iStorage.insertVote(playerVote, vote, reward);
 			});
 			return true;
@@ -351,8 +351,17 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	}
 
 	@Override
-	public void voteOffline(UUID userId, String serviceName) {
-		// TODO Auto-generated method stub
+	public void voteOffline(UUID uniqueId, String serviceName) {
+		
+		Reward reward = this.getRandomReward(RewardType.VOTE);
+		IStorage iStorage = this.plugin.getIStorage();
+
+		// We will retrieve the PlayerVote object in asymmetric in the database
+		// and execute the vote
+		this.plugin.get(uniqueId, playerVote -> {
+			Vote vote = playerVote.vote(this.plugin, serviceName, reward, true);
+			iStorage.insertVote(playerVote, vote, reward);
+		});
 		
 	}
 

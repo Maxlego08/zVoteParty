@@ -14,22 +14,21 @@ public interface PlayerVote {
 	 * @return {@link UUID}
 	 */
 	UUID getUniqueId();
-	
+
 	/**
 	 * Returns the player as an offline player
 	 * 
 	 * @return {@link OfflinePlayer}
 	 */
 	OfflinePlayer getPlayer();
-	
+
 	/**
 	 * Returns the player's vote list
 	 * 
 	 * @return votes
 	 */
 	List<Vote> getVotes();
-	
-	
+
 	/**
 	 * Returns the list of votes or the player needs to collect the rewards
 	 * 
@@ -43,13 +42,17 @@ public interface PlayerVote {
 	 * @return votes amount
 	 */
 	int getVoteCount();
-	
+
 	/**
-	 * Allows the player to vote
+	 * Proccess player vote
 	 * 
-	 * @param link - Website link
+	 * @param plugin
+	 * @param serviceName
+	 * @param reward
+	 * @param forceStorage
+	 * @return {@link Vote}
 	 */
-	Vote vote(Plugin pluin,String serviceName, Reward reward);
+	Vote vote(Plugin plugin, String serviceName, Reward reward, boolean forceStorage);
 
 	/**
 	 * Return file name
@@ -62,5 +65,5 @@ public interface PlayerVote {
 	 * 
 	 */
 	void removeVote();
-	
+
 }
