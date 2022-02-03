@@ -87,14 +87,13 @@ public class SqlStorage extends ZUtils implements IStorage {
 				}
 
 				this.iConnection.fetchVotes(this);
-				
+
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
-			
 		});
 
 	}
@@ -171,6 +170,11 @@ public class SqlStorage extends ZUtils implements IStorage {
 	@Override
 	public void performCustomVoteAction(String username, String serviceName) {
 		Logger.info("Impossible to find the player " + username, LogType.WARNING);
+	}
+
+	@Override
+	public void startVoteParty() {
+		this.setVoteCount(0);
 	}
 
 }

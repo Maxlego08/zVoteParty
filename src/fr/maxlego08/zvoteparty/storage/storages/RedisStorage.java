@@ -36,8 +36,7 @@ public class RedisStorage extends SqlStorage implements IStorage {
 
 	@Override
 	public void performCustomVoteAction(String username, String serviceName) {
-		// TODO Auto-generated method stub
-
+		this.messaging.sendVoteAction(username, serviceName);
 	}
 
 	/**
@@ -52,11 +51,16 @@ public class RedisStorage extends SqlStorage implements IStorage {
 	@Override
 	public void addVoteCount(long amount) {
 		super.addVoteCount(amount);
-		ElapsedTime elapsedTime = new ElapsedTime("redis");
+		ElapsedTime elapsedTime = new ElapsedTime("Redis message");
 		elapsedTime.start();
-		System.out.println("ici 1");
 		this.messaging.sendAddVoteCount();
 		elapsedTime.endDisplay();
+	}
+
+	@Override
+	public void startVoteParty() {
+		super.startVoteParty();
+		this.messaging.sendHandleVoteParty();
 	}
 
 }

@@ -129,4 +129,9 @@ public class JsonStorage implements IStorage {
 		Logger.info("Impossible to find the player " + username, LogType.WARNING);		
 	}
 
+	@Override
+	public void startVoteParty() {
+		this.setVoteCount(0);
+	}
+
 }

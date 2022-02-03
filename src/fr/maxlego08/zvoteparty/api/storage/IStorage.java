@@ -59,4 +59,9 @@ public interface IStorage extends PlayerManager, Saveable {
 	 */
 	void performCustomVoteAction(String username, String serviceName);
 
+	/**
+	 * Start vote party
+	 */
+	void startVoteParty();
+
 }

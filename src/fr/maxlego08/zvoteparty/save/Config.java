@@ -27,6 +27,7 @@ public class Config implements Saveable {
 	public static long joinGiveVoteMilliSecond = 500;
 	public static long autoSaveSecond = 60 * 15;
 
+	public static String redisChannel = "zvoteparty";
 	public static RedisConfiguration redis = new RedisConfiguration("192.168.10.10", 6379, null, 0,
 			new RedisPoolConfiguration(128, 128, 16));
 

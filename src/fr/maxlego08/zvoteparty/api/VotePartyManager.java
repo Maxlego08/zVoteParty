@@ -49,7 +49,7 @@ public interface VotePartyManager extends Saveable {
 	 * 
 	 * @param sender
 	 * @param username
-	 * @param updateVoteParty 
+	 * @param updateVoteParty
 	 */
 	void vote(CommandSender sender, String username, boolean updateVoteParty);
 
@@ -75,21 +75,21 @@ public interface VotePartyManager extends Saveable {
 	 * @param player
 	 */
 	void giveVotes(Player player);
-	
+
 	/**
 	 * Returns the list of commands for the party vote
 	 * 
 	 * @return commands
 	 */
 	List<String> getGlobalCommands();
-	
+
 	/**
 	 * Return the list of rewards for the voting party
 	 * 
 	 * @return rewards
 	 */
 	List<Reward> getPartyReward();
-	
+
 	/**
 	 * Returns the number of votes needed for the party vote
 	 * 
@@ -111,19 +111,37 @@ public interface VotePartyManager extends Saveable {
 	 * @param sender
 	 */
 	void sendNeedVote(CommandSender sender);
-	
+
 	/**
 	 * Force start vote party
 	 * 
 	 * @param sender
 	 */
 	void forceStart(CommandSender sender);
-	
+
 	/**
 	 * Start vote party
 	 */
 	void start();
 
+	/**
+	 * 
+	 * @param sender
+	 * @param player
+	 */
 	void removeVote(CommandSender sender, OfflinePlayer player);
+
+	/**
+	 * Secret start	 
+	 */
+	void secretStart();
+
+	/**
+	 * Secret vote
+	 * 
+	 * @param username
+	 * @param serviceName
+	 */
+	void secretVote(String username, String serviceName);
 
 }

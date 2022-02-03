@@ -162,6 +162,30 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		});
 
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void secretVote(String username, String serviceName) {
+		
+		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+		
+		// On va récupérer le offline player et vérifier qu'il soit en ligne
+		if (offlinePlayer == null || !offlinePlayer.isOnline()){
+			return;
+		}
+		
+		// On va récupérer le reward
+		Reward reward = this.getRandomReward(RewardType.VOTE);
+		
+		// Si le reward est bien en online
+		if (reward.needToBeOnline()){
+			this.plugin.get(offlinePlayer, playerVote -> {
+				IStorage iStorage = this.plugin.getIStorage();
+				Vote vote = playerVote.vote(this.plugin, serviceName, reward);
+				iStorage.insertVote(playerVote, vote, reward);
+			});
+		}
+	}
 
 	@Override
 	public Reward getRandomReward(RewardType type) {
@@ -269,25 +293,30 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	public void start() {
 
 		IStorage iStorage = this.plugin.getIStorage();
-		iStorage.setVoteCount(0);
+		iStorage.startVoteParty();
+		this.secretStart();
 
+	}
+
+	@Override
+	public void secretStart(){
 		for (Player player : Bukkit.getOnlinePlayers()) {
-
+			
 			this.globalCommands.forEach(command -> {
 				command = command.replace("%player%", player.getName());
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
 			});
-
+			
 			Reward reward = this.getRandomReward(RewardType.PARTY);
 			reward.give(this.plugin, player);
-
+			
 		}
-
+		
 		this.commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
-
-		broadcast(Message.VOTE_PARTY_START);
+		
+		broadcast(Message.VOTE_PARTY_START);	
 	}
-
+	
 	@Override
 	public void removeVote(CommandSender sender, OfflinePlayer player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
