@@ -143,8 +143,8 @@ public class SqlStorage extends ZUtils implements IStorage {
 	}
 
 	@Override
-	public void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer) {
-		this.getPlayer(offlinePlayer.getUniqueId(), consumer);
+	public void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer, boolean forceDatabaseUpdate) {
+		this.getPlayer(offlinePlayer.getUniqueId(), consumer, forceDatabaseUpdate);
 	}
 
 	@Override
@@ -172,8 +172,8 @@ public class SqlStorage extends ZUtils implements IStorage {
 	}
 
 	@Override
-	public void getPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer) {
-		if (this.players.containsKey(uuid)) {
+	public void getPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer, boolean forceDatabaseUpdate) {
+		if (this.players.containsKey(uuid) && !forceDatabaseUpdate) {
 			consumer.accept(Optional.of(this.players.get(uuid)));
 		} else {
 			this.iConnection.asyncFetchPlayer(uuid, consumer, this);

@@ -16,15 +16,16 @@ public interface PlayerManager {
 	 * @param offlinePlayer
 	 * @param consumer
 	 */
-	void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer);
+	void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer, boolean forceDatabaseUpdate);
 
 	/**
 	 * Get player using player's UUID
 	 * 
 	 * @param uuid
 	 * @param consumer
+	 * @param forceDatabaseUpdate 
 	 */
-	void getPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer);
+	void getPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer, boolean forceDatabaseUpdate);
 
 	/**
 	 * Create new player

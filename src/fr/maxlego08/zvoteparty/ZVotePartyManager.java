@@ -164,7 +164,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		this.plugin.get(offlinePlayer, playerVote -> {
 			Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
 			iStorage.insertVote(playerVote, vote, reward);
-		});
+		}, false);
 
 	}
 
@@ -191,7 +191,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 				IStorage iStorage = this.plugin.getIStorage();
 				Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
 				iStorage.insertVote(playerVote, vote, reward);
-			});
+			}, false);
 			return true;
 		}
 
@@ -223,7 +223,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 				IStorage iStorage = this.plugin.getIStorage();
 				iStorage.updateRewards(player.getUniqueId());
 			}
-		});
+		}, true);
 
 	}
 
@@ -349,7 +349,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 			playerVote.removeVote();
 			message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
-		});
+		}, true);
 	}
 
 	@Override
@@ -363,7 +363,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		this.plugin.get(uniqueId, playerVote -> {
 			Vote vote = playerVote.vote(this.plugin, serviceName, reward, true);
 			iStorage.insertVote(playerVote, vote, reward);
-		});
+		}, false);
 		
 	}
 

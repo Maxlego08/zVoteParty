@@ -118,12 +118,12 @@ public class JsonStorage implements IStorage {
 	}
 
 	@Override
-	public void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer) {
+	public void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer, boolean forceDatabaseUpdate) {
 		consumer.accept(this.getPlayer(offlinePlayer.getUniqueId()));
 	}
 
 	@Override
-	public void getPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer) {
+	public void getPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer, boolean forceDatabaseUpdate) {
 		consumer.accept(this.getPlayer(uuid));
 	}
 
@@ -159,7 +159,7 @@ public class JsonStorage implements IStorage {
 				PlayerVote playerVote = optional.get();
 				this.plugin.getPersist().save(playerVote, Folder.PLAYERS, playerVote.getFileName());
 			}
-		});
+		}, false);
 	}
 
 }

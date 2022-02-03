@@ -161,8 +161,8 @@ public class ZVotePartyPlugin extends ZPlugin {
 	 * @param offlinePlayer
 	 * @return {@link PlayerVote}
 	 */
-	public void get(OfflinePlayer offlinePlayer, Consumer<PlayerVote> consumer) {
-		this.get(offlinePlayer.getUniqueId(), consumer);
+	public void get(OfflinePlayer offlinePlayer, Consumer<PlayerVote> consumer, boolean forceDatabaseUpdate) {
+		this.get(offlinePlayer.getUniqueId(), consumer, forceDatabaseUpdate);
 	}
 	
 	/**
@@ -171,11 +171,11 @@ public class ZVotePartyPlugin extends ZPlugin {
 	 * @param offlinePlayer
 	 * @return {@link PlayerVote}
 	 */
-	public void get(UUID uuid, Consumer<PlayerVote> consumer) {
+	public void get(UUID uuid, Consumer<PlayerVote> consumer, boolean forceDatabaseUpdate) {
 		PlayerManager manager = this.getPlayerManager();
 		manager.getPlayer(uuid, optional -> {
 			consumer.accept(optional.isPresent() ? optional.get() : manager.createPlayer(uuid));
-		});
+		}, true);
 	}
 
 }
