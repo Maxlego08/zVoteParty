@@ -37,9 +37,12 @@ public class JsonStorage implements IStorage {
 		this.plugin = plugin;
 	}
 
-	private Optional<PlayerVote> getPlayer(OfflinePlayer offlinePlayer) {
-
-		UUID uniqueId = offlinePlayer.getUniqueId();
+	/**
+	 * 
+	 * @param uniqueId
+	 * @return Optional of PlayerVote
+	 */
+	private Optional<PlayerVote> getPlayer(UUID uniqueId) {
 
 		if (this.players.containsKey(uniqueId))
 			return Optional.of(this.players.get(uniqueId));
@@ -63,8 +66,13 @@ public class JsonStorage implements IStorage {
 
 	@Override
 	public PlayerVote createPlayer(OfflinePlayer offlinePlayer) {
-		PlayerVote playerVote = new ZPlayerVote(offlinePlayer.getUniqueId());
-		players.put(offlinePlayer.getUniqueId(), playerVote);
+		return this.createPlayer(offlinePlayer.getUniqueId());
+	}
+
+	@Override
+	public PlayerVote createPlayer(UUID uuid) {
+		PlayerVote playerVote = new ZPlayerVote(uuid);
+		players.put(uuid, playerVote);
 		this.plugin.getPersist().save(playerVote, Folder.PLAYERS, playerVote.getFileName());
 		return playerVote;
 	}
@@ -111,22 +119,27 @@ public class JsonStorage implements IStorage {
 
 	@Override
 	public void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer) {
-		consumer.accept(this.getPlayer(offlinePlayer));
+		consumer.accept(this.getPlayer(offlinePlayer.getUniqueId()));
+	}
+
+	@Override
+	public void getPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer) {
+		consumer.accept(this.getPlayer(uuid));
 	}
 
 	@Override
 	public Optional<PlayerVote> getSyncPlayer(Player player) {
-		return this.getPlayer(player);
+		return this.getPlayer(player.getUniqueId());
 	}
 
 	@Override
 	public void insertVote(PlayerVote playerVote, Vote vote, Reward reward) {
-		
+
 	}
 
 	@Override
 	public void performCustomVoteAction(String username, String serviceName, UUID uuid) {
-		Logger.info("Impossible to find the player " + username, LogType.WARNING);		
+		Logger.info("Impossible to find the player " + username, LogType.WARNING);
 	}
 
 	@Override

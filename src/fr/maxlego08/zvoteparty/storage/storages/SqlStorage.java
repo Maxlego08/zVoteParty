@@ -106,9 +106,7 @@ public class SqlStorage extends ZUtils implements IStorage {
 
 	@Override
 	public PlayerVote createPlayer(OfflinePlayer offlinePlayer) {
-		PlayerVote playerVote = new ZPlayerVote(offlinePlayer.getUniqueId());
-		players.put(offlinePlayer.getUniqueId(), playerVote);
-		return playerVote;
+		return this.createPlayer(offlinePlayer.getUniqueId());
 	}
 
 	@Override
@@ -146,11 +144,7 @@ public class SqlStorage extends ZUtils implements IStorage {
 
 	@Override
 	public void getPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer) {
-		if (this.players.containsKey(offlinePlayer.getUniqueId())) {
-			consumer.accept(Optional.of(this.players.get(offlinePlayer.getUniqueId())));
-		} else {
-			this.iConnection.asyncFetchPlayer(offlinePlayer, consumer);
-		}
+		this.getPlayer(offlinePlayer.getUniqueId(), consumer);
 	}
 
 	@Override
@@ -175,6 +169,22 @@ public class SqlStorage extends ZUtils implements IStorage {
 	@Override
 	public void startVoteParty() {
 		this.setVoteCount(0);
+	}
+
+	@Override
+	public void getPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer) {
+		if (this.players.containsKey(uuid)) {
+			consumer.accept(Optional.of(this.players.get(uuid)));
+		} else {
+			this.iConnection.asyncFetchPlayer(uuid, consumer);
+		}
+	}
+
+	@Override
+	public PlayerVote createPlayer(UUID uuid) {
+		PlayerVote playerVote = new ZPlayerVote(uuid);
+		players.put(uuid, playerVote);
+		return playerVote;
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.api.storage.RedisSubChannel;
@@ -17,6 +18,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
 public class ServerMessaging extends JedisPubSub {
+
+	private final String SEPARATOR = ";;";
 
 	private final ZVotePartyPlugin plugin;
 	private final RedisStorage storage;
@@ -60,7 +63,7 @@ public class ServerMessaging extends JedisPubSub {
 
 			if (channel.equals(Config.redisChannel)) {
 
-				String[] values = message.split(";;");
+				String[] values = message.split(this.SEPARATOR);
 
 				System.out.println(Arrays.asList(values));
 
@@ -85,8 +88,17 @@ public class ServerMessaging extends JedisPubSub {
 				case ADD_VOTE:
 					String username = values[2];
 					String serviceName = values[3];
-					this.plugin.getManager().secretVote(username, serviceName);
+					if (!this.plugin.getManager().secretVote(username, serviceName)) {
+						this.handleVoteResponseError(uuid, username, serviceName);
+					} else {
+						this.handleVoteResponse(uuid, true, null);
+					}
 					break;
+				case VOTE_RESPONSE:
+					UUID messageId = UUID.fromString(values[2]);
+					boolean isSuccess = Boolean.valueOf(values[3]);
+					String userId = values[4];
+					this.processResponse(messageId, isSuccess, userId);
 				default:
 					break;
 				}
@@ -110,9 +122,9 @@ public class ServerMessaging extends JedisPubSub {
 			try (Jedis jedis = this.client.getPool()) {
 				this.sendingUUID.add(uuid);
 
-				String jMessage = channel.name() + ";;" + uuid.toString();
+				String jMessage = channel.name() + this.SEPARATOR + uuid.toString();
 				if (message != null) {
-					jMessage += ";;" + message;
+					jMessage += this.SEPARATOR + message;
 				}
 
 				jedis.publish(Config.redisChannel, jMessage);
@@ -169,6 +181,89 @@ public class ServerMessaging extends JedisPubSub {
 		// Allows to give the reward if the player is not connected
 		RedisVoteResponse redisVoteResponse = new RedisVoteResponse(messageId, username, serviceName, 1, uuid);
 		this.voteResponses.put(messageId, redisVoteResponse);
+
+	}
+
+	@SuppressWarnings("deprecation")
+	/**
+	 * Allows you to reply to the server that sent the voting request to say
+	 * that the player is not allowed to vote
+	 * 
+	 * @param uuid
+	 * @param username
+	 * @param serviceName
+	 */
+	private void handleVoteResponseError(UUID uuid, String username, String serviceName) {
+
+		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+		this.handleVoteResponse(uuid, false, offlinePlayer != null ? offlinePlayer.getUniqueId().toString() : null);
+
+	}
+
+	/**
+	 * We will return the answer with all the information
+	 * 
+	 * @param uuid
+	 * @param isSuccess
+	 * @param message
+	 */
+	private void handleVoteResponse(UUID uuid, boolean isSuccess, String message) {
+
+		String jMessage = uuid.toString() + this.SEPARATOR + String.valueOf(isSuccess) + this.SEPARATOR + message;
+		this.sendMessage(RedisSubChannel.VOTE_RESPONSE, jMessage);
+
+	}
+
+	/**
+	 * Allows you to perform an action when receiving the voting confirmation
+	 * 
+	 * @param messageId Identifier of the message that sent the request to vote
+	 * @param isSuccess Allows to know if the vote is successful
+	 * @param userId Player's UUID
+	 */
+	private void processResponse(UUID messageId, boolean isSuccess, String userId) {
+
+		RedisVoteResponse redisVoteResponse = this.voteResponses.getOrDefault(messageId, null);
+		System.out.println(messageId +" - " + isSuccess + " - " + userId);
+
+		// If the redis vote response is null, then the messageID is incorrect
+		// or the value is delete
+		if (redisVoteResponse == null) {
+			return;
+		}
+
+		// If the answer is a success, then we delete the value
+		if (isSuccess) {
+			System.out.println("ici je delete !");
+			this.voteResponses.remove(messageId);
+		} else {
+
+			// Otherwise we check that the number of responses corresponds to
+			// the number of servers indicated in the configuration file
+			// We also add the UUID of the player if it is present
+
+			redisVoteResponse.addResponse(userId);
+
+			if (redisVoteResponse.getResponseCount() >= Config.redisServerAmount) {
+
+				// We will check if the UUID of the player exists, if yes then
+				// we will give a reward so that the player can recover it when
+				// he will connect
+
+				// If the player cannot be found, then nothing can be done and
+				// the vote will be lost
+
+				if (redisVoteResponse.getUserId() != null) {
+
+					System.out.println("je suis donc ici !");
+					
+					this.plugin.getManager().voteOffline(redisVoteResponse.getUserId(), redisVoteResponse.getServiceName());
+					
+				}
+
+			}
+
+		}
 
 	}
 

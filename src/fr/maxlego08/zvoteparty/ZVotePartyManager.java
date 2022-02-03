@@ -3,6 +3,7 @@ package fr.maxlego08.zvoteparty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
@@ -347,6 +348,12 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			playerVote.removeVote();
 			message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
 		});
+	}
+
+	@Override
+	public void voteOffline(UUID userId, String serviceName) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

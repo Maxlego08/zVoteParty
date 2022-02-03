@@ -3,9 +3,8 @@ package fr.maxlego08.zvoteparty.api.storage;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
-
-import org.bukkit.OfflinePlayer;
 
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
@@ -49,10 +48,10 @@ public interface IConnection {
 
 	/**
 	 * 
-	 * @param offlinePlayer
+	 * @param uuid
 	 * @param consumer
 	 */
-	void asyncFetchPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer);
+	void asyncFetchPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer);
 
 	/**
 	 * 

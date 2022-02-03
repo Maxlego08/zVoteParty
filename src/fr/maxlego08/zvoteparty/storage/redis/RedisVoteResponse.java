@@ -77,4 +77,11 @@ public class RedisVoteResponse {
 		this.userId = userId;
 	}
 
+	public void addResponse(String userId) {
+		this.responseCount += 1;
+		if (this.userId == null && userId != null && userId.length() == 36) {
+			this.userId = UUID.fromString(userId);
+		}
+	}
+
 }

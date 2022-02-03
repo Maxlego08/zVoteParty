@@ -4,9 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
-
-import org.bukkit.OfflinePlayer;
 
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
@@ -123,9 +122,9 @@ public class ZConnection implements IConnection {
 	}
 
 	@Override
-	public void asyncFetchPlayer(OfflinePlayer offlinePlayer, Consumer<Optional<PlayerVote>> consumer) {
+	public void asyncFetchPlayer(UUID uuid, Consumer<Optional<PlayerVote>> consumer) {
 		this.getAndRefreshConnection(() -> {
-			Thread thread = new Thread(new SelectVotesRunnable(this, offlinePlayer.getUniqueId(), consumer));
+			Thread thread = new Thread(new SelectVotesRunnable(this, uuid, consumer));
 			thread.start();
 		});
 	}

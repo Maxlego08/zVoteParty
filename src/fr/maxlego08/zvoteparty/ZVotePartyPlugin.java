@@ -1,5 +1,6 @@
 package fr.maxlego08.zvoteparty;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.OfflinePlayer;
@@ -161,9 +162,19 @@ public class ZVotePartyPlugin extends ZPlugin {
 	 * @return {@link PlayerVote}
 	 */
 	public void get(OfflinePlayer offlinePlayer, Consumer<PlayerVote> consumer) {
+		this.get(offlinePlayer.getUniqueId(), consumer);
+	}
+	
+	/**
+	 * Get player vote
+	 * 
+	 * @param offlinePlayer
+	 * @return {@link PlayerVote}
+	 */
+	public void get(UUID uuid, Consumer<PlayerVote> consumer) {
 		PlayerManager manager = this.getPlayerManager();
-		manager.getPlayer(offlinePlayer, optional -> {
-			consumer.accept(optional.isPresent() ? optional.get() : manager.createPlayer(offlinePlayer));
+		manager.getPlayer(uuid, optional -> {
+			consumer.accept(optional.isPresent() ? optional.get() : manager.createPlayer(uuid));
 		});
 	}
 

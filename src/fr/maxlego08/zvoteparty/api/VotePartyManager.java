@@ -1,6 +1,7 @@
 package fr.maxlego08.zvoteparty.api;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -138,10 +139,18 @@ public interface VotePartyManager extends Saveable {
 
 	/**
 	 * Secret vote
-	 * 
-	 * @param username
-	 * @param serviceName
+	 *  
+	 * @param username Nickname of the user who voted
+	 * @param serviceName Name of the service where the player voted
 	 */
 	boolean secretVote(String username, String serviceName);
+
+	/**
+	 * Allows you to add a vote in the database
+	 * 
+	 * @param userId Player's UUID
+	 * @param serviceName Name of the service where the player voted
+	 */
+	void voteOffline(UUID userId, String serviceName);
 
 }
