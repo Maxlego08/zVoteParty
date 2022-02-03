@@ -1,7 +1,6 @@
 package fr.maxlego08.zvoteparty.storage.redis;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,8 @@ import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.api.storage.RedisSubChannel;
 import fr.maxlego08.zvoteparty.save.Config;
 import fr.maxlego08.zvoteparty.storage.storages.RedisStorage;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
@@ -64,8 +65,6 @@ public class ServerMessaging extends JedisPubSub {
 			if (channel.equals(Config.redisChannel)) {
 
 				String[] values = message.split(this.SEPARATOR);
-
-				System.out.println(Arrays.asList(values));
 
 				RedisSubChannel subChannel = RedisSubChannel.byName(values[0]);
 				String uuidAsString = values[1];
@@ -217,14 +216,16 @@ public class ServerMessaging extends JedisPubSub {
 	/**
 	 * Allows you to perform an action when receiving the voting confirmation
 	 * 
-	 * @param messageId Identifier of the message that sent the request to vote
-	 * @param isSuccess Allows to know if the vote is successful
-	 * @param userId Player's UUID
+	 * @param messageId
+	 *            Identifier of the message that sent the request to vote
+	 * @param isSuccess
+	 *            Allows to know if the vote is successful
+	 * @param userId
+	 *            Player's UUID
 	 */
 	private void processResponse(UUID messageId, boolean isSuccess, String userId) {
 
 		RedisVoteResponse redisVoteResponse = this.voteResponses.getOrDefault(messageId, null);
-		System.out.println(messageId +" - " + isSuccess + " - " + userId);
 
 		// If the redis vote response is null, then the messageID is incorrect
 		// or the value is delete
@@ -234,7 +235,6 @@ public class ServerMessaging extends JedisPubSub {
 
 		// If the answer is a success, then we delete the value
 		if (isSuccess) {
-			System.out.println("ici je delete !");
 			this.voteResponses.remove(messageId);
 		} else {
 
@@ -255,10 +255,13 @@ public class ServerMessaging extends JedisPubSub {
 
 				if (redisVoteResponse.getUserId() != null) {
 
-					System.out.println("je suis donc ici !");
-					
-					this.plugin.getManager().voteOffline(redisVoteResponse.getUserId(), redisVoteResponse.getServiceName());
-					
+					this.plugin.getManager().voteOffline(redisVoteResponse.getUserId(),
+							redisVoteResponse.getServiceName());
+
+				} else {
+
+					Logger.info("Impossible to find the player " + redisVoteResponse.getUsername(), LogType.WARNING);
+
 				}
 
 			}
