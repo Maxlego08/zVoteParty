@@ -7,12 +7,15 @@ import java.util.UUID;
 
 import fr.maxlego08.zvoteparty.api.storage.IConnection;
 import fr.maxlego08.zvoteparty.save.Config;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
 public class UpdatePlayerRunnable extends ZUtils implements Runnable {
 
-	private final IConnection connection;
+	private final IConnection iConnection;
 	private final UUID uniqueId;
+	private int tryAmount = 0;
 
 	/**
 	 * @param connection
@@ -20,18 +23,18 @@ public class UpdatePlayerRunnable extends ZUtils implements Runnable {
 	 */
 	public UpdatePlayerRunnable(IConnection connection, UUID uniqueId) {
 		super();
-		this.connection = connection;
+		this.iConnection = connection;
 		this.uniqueId = uniqueId;
 	}
 
 	@Override
 	public void run() {
 		try {
-			Connection connection = this.connection.getConnection();
+			Connection connection = this.iConnection.getConnection();
 
 			if (connection == null || connection.isClosed()) {
-				this.connection.connect();
-				connection = this.connection.getConnection();
+				this.iConnection.connect();
+				connection = this.iConnection.getConnection();
 			}
 
 			String request = "UPDATE zvoteparty_votes SET is_reward_give = 1 WHERE player_uuid = ?;";
@@ -45,8 +48,16 @@ public class UpdatePlayerRunnable extends ZUtils implements Runnable {
 			statement.close();
 
 		} catch (SQLException e) {
-			if (Config.enableDebug) {
-				e.printStackTrace();
+			this.tryAmount++;
+			if (this.tryAmount < Config.maxSqlRetryAmoun) {
+				try {
+					this.iConnection.disconnect();
+					this.iConnection.connect();
+					this.run();
+				} catch (SQLException e1) {
+					Logger.info("Impossible to use MySQL storage!", LogType.ERROR);
+					e1.printStackTrace();
+				}
 			}
 		}
 	}

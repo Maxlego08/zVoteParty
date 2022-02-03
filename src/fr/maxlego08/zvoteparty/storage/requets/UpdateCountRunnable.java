@@ -7,11 +7,14 @@ import java.sql.SQLException;
 
 import fr.maxlego08.zvoteparty.api.storage.IConnection;
 import fr.maxlego08.zvoteparty.save.Config;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 
 public class UpdateCountRunnable implements Runnable {
 
-	private final IConnection connection;
+	private final IConnection iConnection;
 	private final long value;
+	private int tryAmount = 0;
 
 	/**
 	 * @param connection
@@ -19,18 +22,18 @@ public class UpdateCountRunnable implements Runnable {
 	 */
 	public UpdateCountRunnable(IConnection connection, long value) {
 		super();
-		this.connection = connection;
+		this.iConnection = connection;
 		this.value = value;
 	}
 
 	@Override
 	public void run() {
 		try {
-			Connection connection = this.connection.getConnection();
+			Connection connection = this.iConnection.getConnection();
 
 			if (connection == null || connection.isClosed()) {
-				this.connection.connect();
-				connection = this.connection.getConnection();
+				this.iConnection.connect();
+				connection = this.iConnection.getConnection();
 			}
 			
 			String selectRequest = "select count(*) as somme from zvoteparty_count";
@@ -64,8 +67,16 @@ public class UpdateCountRunnable implements Runnable {
 			statement.close();
 
 		} catch (SQLException e) {
-			if (Config.enableDebug){			
-				e.printStackTrace();
+			this.tryAmount++;
+			if (this.tryAmount < Config.maxSqlRetryAmoun) {
+				try {
+					this.iConnection.disconnect();
+					this.iConnection.connect();
+					this.run();
+				} catch (SQLException e1) {
+					Logger.info("Impossible to use MySQL storage!", LogType.ERROR);
+					e1.printStackTrace();
+				}
 			}
 		}
 	}

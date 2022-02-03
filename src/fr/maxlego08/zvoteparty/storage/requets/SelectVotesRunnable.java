@@ -19,6 +19,9 @@ import fr.maxlego08.zvoteparty.api.storage.IStorage;
 import fr.maxlego08.zvoteparty.implementations.ZPlayerVote;
 import fr.maxlego08.zvoteparty.implementations.ZReward;
 import fr.maxlego08.zvoteparty.implementations.ZVote;
+import fr.maxlego08.zvoteparty.save.Config;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
 public class SelectVotesRunnable extends ZUtils implements Runnable {
@@ -27,6 +30,7 @@ public class SelectVotesRunnable extends ZUtils implements Runnable {
 	private final UUID uniqueId;
 	private final Consumer<Optional<PlayerVote>> consumer;
 	private final IStorage iStorage;
+	private int tryAmount = 0;
 
 	/**
 	 * @param storage
@@ -78,7 +82,18 @@ public class SelectVotesRunnable extends ZUtils implements Runnable {
 			this.consumer.accept(Optional.of(playerVote));
 
 		} catch (SQLException e) {
-			this.consumer.accept(Optional.empty());
+			this.tryAmount++;
+			if (this.tryAmount < Config.maxSqlRetryAmoun) {
+				try {
+					this.iConnection.disconnect();
+					this.iConnection.connect();
+					this.run();
+				} catch (SQLException e1) {
+					this.consumer.accept(Optional.empty());
+					Logger.info("Impossible to use MySQL storage!", LogType.ERROR);
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 

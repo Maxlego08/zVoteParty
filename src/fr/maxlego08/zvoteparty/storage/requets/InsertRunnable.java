@@ -9,6 +9,8 @@ import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.storage.IConnection;
 import fr.maxlego08.zvoteparty.save.Config;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 
 public class InsertRunnable implements Runnable {
 
@@ -16,6 +18,7 @@ public class InsertRunnable implements Runnable {
 	private final Vote vote;
 	private final Reward reward;
 	private final IConnection iConnection;
+	private int tryAmount = 0;
 
 	/**
 	 * @param playerVote
@@ -63,8 +66,16 @@ public class InsertRunnable implements Runnable {
 			statement.close();
 
 		} catch (SQLException e) {
-			if (Config.enableDebug) {
-				e.printStackTrace();
+			this.tryAmount++;
+			if (this.tryAmount < Config.maxSqlRetryAmoun) {
+				try {
+					this.iConnection.disconnect();
+					this.iConnection.connect();
+					this.run();
+				} catch (SQLException e1) {
+					Logger.info("Impossible to use MySQL storage!", LogType.ERROR);
+					e1.printStackTrace();
+				}
 			}
 		}
 	}

@@ -7,12 +7,16 @@ import java.sql.SQLException;
 
 import fr.maxlego08.zvoteparty.api.storage.IConnection;
 import fr.maxlego08.zvoteparty.api.storage.IStorage;
+import fr.maxlego08.zvoteparty.save.Config;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger;
+import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
 public class SelectVoteCountRunnable extends ZUtils implements Runnable {
 
 	private final IConnection iConnection;
 	private final IStorage iStorage;
+	private int tryAmount = 0;
 
 	/**
 	 * @param iConnection
@@ -40,7 +44,18 @@ public class SelectVoteCountRunnable extends ZUtils implements Runnable {
 			statement.close();
 
 		} catch (SQLException e) {
-			this.iStorage.setVoteCount(0);
+			this.tryAmount++;
+			if (this.tryAmount < Config.maxSqlRetryAmoun) {
+				try {
+					this.iConnection.disconnect();
+					this.iConnection.connect();
+					this.run();
+				} catch (SQLException e1) {
+					this.iStorage.setVoteCount(0);
+					Logger.info("Impossible to use MySQL storage!", LogType.ERROR);
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 
