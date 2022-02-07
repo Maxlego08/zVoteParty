@@ -22,6 +22,7 @@ import fr.maxlego08.zvoteparty.inventory.inventories.InventoryConfig;
 import fr.maxlego08.zvoteparty.inventory.inventories.InventoryDefault;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.listener.listeners.VoteListener;
+import fr.maxlego08.zvoteparty.listener.listeners.VotifierListener;
 import fr.maxlego08.zvoteparty.placeholder.VotePartyExpansion;
 import fr.maxlego08.zvoteparty.placeholder.ZPlaceholderApi;
 import fr.maxlego08.zvoteparty.save.Config;
@@ -116,6 +117,11 @@ public class ZVotePartyPlugin extends ZPlugin {
 			expansion.register();
 		}
 
+		if (this.isEnable(Plugins.VOTIFIER)){
+			this.getLog().log("Hook NuVotifier");
+			this.addListener(new VotifierListener(this));
+		}
+		
 		VersionChecker checker = new VersionChecker(this, 124);
 		checker.useLastVersion();
 

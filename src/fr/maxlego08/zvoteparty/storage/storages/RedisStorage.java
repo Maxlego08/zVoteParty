@@ -33,7 +33,10 @@ public class RedisStorage extends SqlStorage implements IStorage {
 	@Override
 	public void save(Persist persist) {
 		super.save(persist);
-		this.messaging.stop();
+		try {
+			this.messaging.stop();
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
@@ -63,6 +66,10 @@ public class RedisStorage extends SqlStorage implements IStorage {
 	public void startVoteParty() {
 		super.startVoteParty();
 		this.messaging.sendHandleVoteParty();
+	}
+
+	public void setSecretVoteCount(int i) {
+		this.voteCount = 0;
 	}
 
 }

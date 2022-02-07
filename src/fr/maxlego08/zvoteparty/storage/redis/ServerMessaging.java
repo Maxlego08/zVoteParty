@@ -72,6 +72,7 @@ public class ServerMessaging extends JedisPubSub {
 
 				// Allows to verify that the server sending the information does
 				// not receive it.
+
 				if (this.sendingUUID.contains(uuid)) {
 					this.sendingUUID.remove(uuid);
 					return;
@@ -82,6 +83,7 @@ public class ServerMessaging extends JedisPubSub {
 					this.storage.addSecretVoteCount(1);
 					break;
 				case HANDLE_VOTEPARTY:
+					this.storage.setSecretVoteCount(0);
 					this.plugin.getManager().secretStart();
 					break;
 				case ADD_VOTE:
@@ -98,6 +100,7 @@ public class ServerMessaging extends JedisPubSub {
 					boolean isSuccess = Boolean.valueOf(values[3]);
 					String userId = values[4];
 					this.processResponse(messageId, isSuccess, userId);
+					break;
 				default:
 					break;
 				}
