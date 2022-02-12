@@ -58,6 +58,8 @@ public class UpdatePlayerRunnable extends ZUtils implements Runnable {
 					Logger.info("Impossible to use MySQL storage!", LogType.ERROR);
 					e1.printStackTrace();
 				}
+			} else {
+				e.printStackTrace();
 			}
 		}
 	}

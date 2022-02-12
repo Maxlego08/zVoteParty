@@ -77,7 +77,7 @@ public class ZPlayerVote extends ZUtils implements PlayerVote {
 			}
 
 			if (Config.enableTchatVoteAnnonce) {
-				broadcastTchat(Message.VOTE_BROADCAST_TCHAT, "%player%", offlinePlayer.getName());
+				broadcast(Message.VOTE_BROADCAST_TCHAT, "%player%", offlinePlayer.getName());
 			}
 
 			if (reward.needToBeOnline()) {

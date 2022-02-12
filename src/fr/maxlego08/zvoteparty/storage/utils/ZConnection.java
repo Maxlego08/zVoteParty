@@ -72,22 +72,19 @@ public class ZConnection implements IConnection {
 
 	@Override
 	public void connect() throws SQLException {
-
-		if (this.connection != null)
-			return;
-
-		String url = storage.getUrlBase() + host + ":" + port + "/" + dataBase;
-		this.connection = DriverManager.getConnection(url, user, password);
+		String url = this.storage.getUrlBase() + this.host + ":" + this.port + "/" + this.dataBase;
+		this.connection = DriverManager.getConnection(url, this.user, this.password);
 	}
 
 	@Override
 	public void disconnect() {
-		if (this.connection != null)
-			try {
+		if (this.connection != null) {
+			try {			
 				this.connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
 	}
 
 	@Override

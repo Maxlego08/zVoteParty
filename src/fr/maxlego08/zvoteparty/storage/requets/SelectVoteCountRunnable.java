@@ -36,10 +36,14 @@ public class SelectVoteCountRunnable extends ZUtils implements Runnable {
 			String request = "SELECT * FROM zvoteparty_count";
 			PreparedStatement statement = connection.prepareStatement(request);
 			ResultSet resultSet = statement.executeQuery();
-			connection.commit();
 
-			resultSet.next();
-			this.iStorage.setVoteCount(resultSet.getLong("vote"));
+			if (!connection.getAutoCommit()) {
+				connection.commit();
+			}
+
+			if (resultSet.next()) {
+				this.iStorage.setVoteCount(resultSet.getLong("vote"));
+			}
 
 			statement.close();
 
@@ -55,6 +59,8 @@ public class SelectVoteCountRunnable extends ZUtils implements Runnable {
 					Logger.info("Impossible to use MySQL storage!", LogType.ERROR);
 					e1.printStackTrace();
 				}
+			} else {
+				e.printStackTrace();
 			}
 		}
 	}

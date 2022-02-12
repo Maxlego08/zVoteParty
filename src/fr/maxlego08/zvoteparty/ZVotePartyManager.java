@@ -153,7 +153,8 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		Reward reward = this.getRandomReward(RewardType.VOTE);
 		IStorage iStorage = this.plugin.getIStorage();
 
-		// If the redis configuration is active, the reward is online and the user is not connected then we will call redis
+		// If the redis configuration is active, the reward is online and the
+		// user is not connected then we will call redis
 		if (reward.needToBeOnline() && Config.storage.equals(Storage.REDIS) && !offlinePlayer.isOnline()) {
 			iStorage.performCustomVoteAction(offlinePlayer.getName(), serviceName, offlinePlayer.getUniqueId());
 			return;
@@ -283,7 +284,8 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public long getPlayerVoteCount(Player player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
-		// We will retrieve the player in a symmetrical way, we will not search in the database
+		// We will retrieve the player in a symmetrical way, we will not search
+		// in the database
 		Optional<PlayerVote> optional = manager.getSyncPlayer(player);
 		if (optional.isPresent()) {
 			PlayerVote playerVote = optional.get();
@@ -315,10 +317,11 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void secretStart() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-
-			this.globalCommands.forEach(command -> {
-				command = command.replace("%player%", player.getName());
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
+			Bukkit.getScheduler().runTask(this.plugin, () -> {
+				this.globalCommands.forEach(command -> {
+					command = command.replace("%player%", player.getName());
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
+				});
 			});
 
 			Reward reward = this.getRandomReward(RewardType.PARTY);
@@ -326,7 +329,9 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		}
 
-		this.commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
+		Bukkit.getScheduler().runTask(this.plugin, () -> {
+			this.commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
+		});
 
 		broadcast(Message.VOTE_PARTY_START);
 	}
@@ -354,7 +359,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void voteOffline(UUID uniqueId, String serviceName) {
-		
+
 		Reward reward = this.getRandomReward(RewardType.VOTE);
 		IStorage iStorage = this.plugin.getIStorage();
 
@@ -364,7 +369,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			Vote vote = playerVote.vote(this.plugin, serviceName, reward, true);
 			iStorage.insertVote(playerVote, vote, reward);
 		}, false);
-		
+
 	}
 
 }
