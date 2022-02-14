@@ -37,9 +37,10 @@ public class SelectVotesRunnable extends ZUtils implements Runnable {
 	 * @param iConnection
 	 * @param uniqueId
 	 * @param consumer
-	 * @param iStorage 
+	 * @param iStorage
 	 */
-	public SelectVotesRunnable(IConnection iConnection, UUID uniqueId, Consumer<Optional<PlayerVote>> consumer, IStorage iStorage) {
+	public SelectVotesRunnable(IConnection iConnection, UUID uniqueId, Consumer<Optional<PlayerVote>> consumer,
+			IStorage iStorage) {
 		super();
 		this.iConnection = iConnection;
 		this.uniqueId = uniqueId;
@@ -58,7 +59,10 @@ public class SelectVotesRunnable extends ZUtils implements Runnable {
 			PreparedStatement statement = connection.prepareStatement(request);
 			statement.setString(1, this.uniqueId.toString());
 			ResultSet resultSet = statement.executeQuery();
-			connection.commit();
+
+			if (!connection.getAutoCommit()) {
+				connection.commit();
+			}
 
 			while (resultSet.next()) {
 

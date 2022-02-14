@@ -61,7 +61,9 @@ public class InsertRunnable implements Runnable {
 			statement.setLong(7, this.vote.getCreatedAt());
 
 			statement.executeUpdate();
-			connection.commit();
+			if (!connection.getAutoCommit()) {
+				connection.commit();
+			}
 
 			statement.close();
 

@@ -43,7 +43,9 @@ public class UpdatePlayerRunnable extends ZUtils implements Runnable {
 			statement.setString(1, this.uniqueId.toString());
 
 			statement.executeUpdate();
-			connection.commit();
+			if (!connection.getAutoCommit()) {
+				connection.commit();
+			}
 
 			statement.close();
 

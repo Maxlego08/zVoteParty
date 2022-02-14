@@ -35,35 +35,38 @@ public class UpdateCountRunnable implements Runnable {
 				this.iConnection.connect();
 				connection = this.iConnection.getConnection();
 			}
-			
+
 			String selectRequest = "select count(*) as somme from zvoteparty_count";
 			PreparedStatement statementSelect = connection.prepareStatement(selectRequest);
 			ResultSet resultSetSelect = statementSelect.executeQuery();
-			connection.commit();
-			
+
+			if (!connection.getAutoCommit()) {
+				connection.commit();
+			}
+
 			resultSetSelect.next();
 			int value = resultSetSelect.getInt("somme");
-			
+
 			statementSelect.close();
-			
-			if (value < 1){
-				
+
+			if (value < 1) {
+
 				String insertRequest = "insert into zvoteparty_count (vote) values (0);";
 				PreparedStatement statement = connection.prepareStatement(insertRequest);
 				statement.executeUpdate();
 				connection.commit();
 				statement.close();
-				
+
 			}
-			
+
 			String request = "UPDATE zvoteparty_count SET vote = ? where true";
 			PreparedStatement statement = connection.prepareStatement(request);
 
 			statement.setLong(1, this.value);
-			
+
 			statement.executeUpdate();
 			connection.commit();
-			
+
 			statement.close();
 
 		} catch (SQLException e) {
