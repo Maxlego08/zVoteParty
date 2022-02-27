@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
@@ -60,34 +61,39 @@ public class ZPlayerVote extends ZUtils implements PlayerVote {
 	}
 
 	@Override
-	public void vote(String serviceName, Reward reward) {
+	public Vote vote(Plugin plugin, String serviceName, Reward reward, boolean forceStorage) {
 
 		OfflinePlayer offlinePlayer = this.getPlayer();
 
-		if (offlinePlayer.isOnline()) {
-			Player player = offlinePlayer.getPlayer();
-			message(player, Message.VOTE_MESSAGE, "%player%", player.getName());
-		}
-
-		if (Config.enableActionBarVoteAnnonce)
-			broadcast(Message.VOTE_BROADCAST_ACTION, "%player%", offlinePlayer.getName());
-
-		if (Config.enableTchatVoteAnnonce)
-			broadcastTchat(Message.VOTE_BROADCAST_TCHAT, "%player%", offlinePlayer.getName());
-
 		boolean give = false;
-		if (reward.needToBeOnline()) {
+		if (!forceStorage) {
 			if (offlinePlayer.isOnline()) {
-				give = true;
-				reward.give(offlinePlayer);
+				Player player = offlinePlayer.getPlayer();
+				message(player, Message.VOTE_MESSAGE, "%player%", player.getName());
 			}
-		} else {
-			give = true;
-			reward.give(offlinePlayer);
+
+			if (Config.enableActionBarVoteAnnonce) {
+				broadcast(Message.VOTE_BROADCAST_ACTION, "%player%", offlinePlayer.getName());
+			}
+
+			if (Config.enableTchatVoteAnnonce) {
+				broadcast(Message.VOTE_BROADCAST_TCHAT, "%player%", offlinePlayer.getName());
+			}
+
+			if (reward.needToBeOnline()) {
+				if (offlinePlayer.isOnline()) {
+					give = true;
+					reward.give(plugin, offlinePlayer);
+				}
+			} else {
+				give = true;
+				reward.give(plugin, offlinePlayer);
+			}
 		}
 
 		Vote vote = new ZVote(serviceName, reward, give);
 		this.votes.add(vote);
+		return vote;
 	}
 
 	@Override

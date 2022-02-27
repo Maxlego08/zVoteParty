@@ -9,9 +9,6 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.vexsoftware.votifier.model.Vote;
-import com.vexsoftware.votifier.model.VotifierEvent;
-
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
@@ -48,11 +45,5 @@ public class AdapterListener extends ZUtils implements Listener {
 	@EventHandler
 	public void onClose(InventoryCloseEvent event) {
 		template.getListenerAdapters().forEach(adapter -> adapter.onInventoryClose(event, (Player) event.getPlayer()));
-	}
-	
-	@EventHandler
-	public void onVote(VotifierEvent event){
-		Vote vote = event.getVote();
-		template.getListenerAdapters().forEach(adapter -> adapter.onVote(event, vote, vote.getUsername(), vote.getServiceName()));
 	}
 }

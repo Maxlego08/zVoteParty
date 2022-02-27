@@ -26,9 +26,14 @@ rewards:
 party:
   # The amount of votes needed
   votes_needed: 50
-  # The command that will be executed when the number of votes is reached
+  
+  # The command that will be executed when the number of votes is reached for each online players
   global_commands:
-    - "eco give * 100"
+    - "eco give %player% 100"
+    
+  commands:
+    - "eco give * 0.0000000009"  
+    
   # Rewards that players can earn  
   rewards:
     1:
@@ -39,3 +44,11 @@ party:
       percent: 50
       commands:
         - "cr give %player% test"  
+        
+#Database informations
+sql:
+  user: "homestead"
+  password: "secret"
+  port: 3306
+  host: "192.168.10.10"
+  database: "zvoteparty"         

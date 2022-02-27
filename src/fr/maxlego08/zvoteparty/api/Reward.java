@@ -3,6 +3,7 @@ package fr.maxlego08.zvoteparty.api;
 import java.util.List;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 
 public interface Reward {
 
@@ -32,6 +33,6 @@ public interface Reward {
 	 * 
 	 * @param player
 	 */
-	void give(OfflinePlayer player);
+	void give(Plugin plugin, OfflinePlayer player);
 	
 }

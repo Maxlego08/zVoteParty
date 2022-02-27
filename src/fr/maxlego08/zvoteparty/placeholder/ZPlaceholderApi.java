@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
-import fr.maxlego08.zvoteparty.save.Storage;
+import fr.maxlego08.zvoteparty.api.storage.IStorage;
 
 public class ZPlaceholderApi {
 
@@ -114,13 +114,14 @@ public class ZPlaceholderApi {
 	public String onRequest(Player player, String string) {
 
 		VotePartyManager manager = this.plugin.getManager();
+		IStorage iStorage = this.plugin.getIStorage();
 
 		switch (string) {
 
 		case "votes_recorded":
-			return String.valueOf(Storage.voteCount);
+			return String.valueOf(iStorage.getVoteCount());
 		case "votes_required_party":
-			return String.valueOf(manager.getNeedVotes() - Storage.voteCount);
+			return String.valueOf(manager.getNeedVotes() - iStorage.getVoteCount());
 		case "votes_required_total":
 			return String.valueOf(manager.getNeedVotes());
 		case "player_votes":

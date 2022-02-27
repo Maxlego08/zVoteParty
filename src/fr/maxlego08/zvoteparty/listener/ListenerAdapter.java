@@ -11,8 +11,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -26,9 +26,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import com.vexsoftware.votifier.model.Vote;
-import com.vexsoftware.votifier.model.VotifierEvent;
 
 import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
@@ -105,8 +102,5 @@ public abstract class ListenerAdapter extends ZUtils{
 	}
 
 	public void onPlayerWalk(PlayerMoveEvent event, Player player, int i) {
-	}
-
-	public void onVote(VotifierEvent event, Vote vote, String username, String serviceName) {
 	}
 }

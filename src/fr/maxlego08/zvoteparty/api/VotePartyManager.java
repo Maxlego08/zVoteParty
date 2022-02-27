@@ -1,6 +1,7 @@
 package fr.maxlego08.zvoteparty.api;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,7 @@ public interface VotePartyManager extends Saveable {
 	 * @param username
 	 * @param serviceName
 	 */
-	void vote(String username, String serviceName);
+	void vote(String username, String serviceName, boolean updateVoteParty);
 
 	/**
 	 * Allows you to add one to the voteparty
@@ -48,10 +49,10 @@ public interface VotePartyManager extends Saveable {
 	 * Add vote to user
 	 * 
 	 * @param sender
-	 * @param player
-	 * @param updateVoteParty 
+	 * @param username
+	 * @param updateVoteParty
 	 */
-	void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty);
+	void vote(CommandSender sender, String username, boolean updateVoteParty);
 
 	/**
 	 * Add vote to user
@@ -75,21 +76,21 @@ public interface VotePartyManager extends Saveable {
 	 * @param player
 	 */
 	void giveVotes(Player player);
-	
+
 	/**
 	 * Returns the list of commands for the party vote
 	 * 
 	 * @return commands
 	 */
 	List<String> getGlobalCommands();
-	
+
 	/**
 	 * Return the list of rewards for the voting party
 	 * 
 	 * @return rewards
 	 */
 	List<Reward> getPartyReward();
-	
+
 	/**
 	 * Returns the number of votes needed for the party vote
 	 * 
@@ -111,19 +112,45 @@ public interface VotePartyManager extends Saveable {
 	 * @param sender
 	 */
 	void sendNeedVote(CommandSender sender);
-	
+
 	/**
 	 * Force start vote party
 	 * 
 	 * @param sender
 	 */
 	void forceStart(CommandSender sender);
-	
+
 	/**
 	 * Start vote party
 	 */
 	void start();
 
+	/**
+	 * 
+	 * @param sender
+	 * @param player
+	 */
 	void removeVote(CommandSender sender, OfflinePlayer player);
+
+	/**
+	 * Secret start	 
+	 */
+	void secretStart();
+
+	/**
+	 * Secret vote
+	 *  
+	 * @param username Nickname of the user who voted
+	 * @param serviceName Name of the service where the player voted
+	 */
+	boolean secretVote(String username, String serviceName);
+
+	/**
+	 * Allows you to add a vote in the database
+	 * 
+	 * @param userId Player's UUID
+	 * @param serviceName Name of the service where the player voted
+	 */
+	void voteOffline(UUID userId, String serviceName);
 
 }

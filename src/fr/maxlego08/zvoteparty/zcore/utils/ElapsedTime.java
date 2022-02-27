@@ -51,8 +51,9 @@ public class ElapsedTime extends ZUtils {
 
 	public void endDisplay() {
 		this.end();
-		if (Config.enableDebugTime)
+		if (Config.enableDebugTime) {
 			System.out.println("[ElapsedTime] " + name + " -> " + super.format(this.getElapsedTime(), ' '));
+		}
 	}
 
 }

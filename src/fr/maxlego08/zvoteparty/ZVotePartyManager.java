@@ -3,6 +3,7 @@ package fr.maxlego08.zvoteparty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
@@ -22,11 +23,12 @@ import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.api.enums.RewardType;
 import fr.maxlego08.zvoteparty.api.inventory.Inventory;
+import fr.maxlego08.zvoteparty.api.storage.IStorage;
+import fr.maxlego08.zvoteparty.api.storage.Storage;
 import fr.maxlego08.zvoteparty.command.CommandObject;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.loader.RewardLoader;
 import fr.maxlego08.zvoteparty.save.Config;
-import fr.maxlego08.zvoteparty.save.Storage;
 import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
@@ -41,6 +43,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	private final List<Reward> partyRewards = new ArrayList<>();
 	private List<String> globalCommands = new ArrayList<>();
+	private List<String> commands = new ArrayList<>();
 	private long needVote = 50;
 
 	/**
@@ -106,50 +109,94 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void vote(String username, String serviceName) {
+	public void vote(String username, String serviceName, boolean updateVoteParty) {
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
 
+		this.handleVoteParty();
+
 		if (offlinePlayer != null) {
 
-			this.handleVoteParty();
 			this.vote(offlinePlayer, serviceName);
 
-		} else
-			Logger.info("Impossible to find the player " + username, LogType.WARNING);
+		} else {
+			// If the player cannot be found we will call redis
+			IStorage iStorage = this.plugin.getIStorage();
+			iStorage.performCustomVoteAction(username, serviceName, null);
+		}
 
 	}
 
 	@Override
 	public void handleVoteParty() {
 
-		Storage.voteCount++;
+		IStorage iStorage = this.plugin.getIStorage();
+		iStorage.addVoteCount(1);
 
-		if (Storage.voteCount >= this.needVote)
+		if (iStorage.getVoteCount() >= this.needVote) {
 			this.start();
-
-		Storage.getInstance().save(this.plugin.getPersist());
+		}
 
 	}
 
 	@Override
-	public void vote(CommandSender sender, OfflinePlayer player, boolean updateVoteParty) {
+	public void vote(CommandSender sender, String username, boolean updateVoteParty) {
 
-		if (updateVoteParty)
-			this.handleVoteParty();
-
-		this.vote(player, "Serveur Minecraft Vote");
-		message(sender, Message.VOTE_SEND, "%player%", player.getName());
+		this.vote(username, "Serveur Minecraft Vote", updateVoteParty);
+		message(sender, Message.VOTE_SEND, "%player%", username);
 
 	}
 
 	@Override
 	public void vote(OfflinePlayer offlinePlayer, String serviceName) {
 
-		PlayerVote playerVote = this.plugin.get(offlinePlayer);
 		Reward reward = this.getRandomReward(RewardType.VOTE);
-		playerVote.vote(serviceName, reward);
+		IStorage iStorage = this.plugin.getIStorage();
 
+		// If the redis configuration is active, the reward is online and the
+		// user is not connected then we will call redis
+		if (reward.needToBeOnline() && Config.storage.equals(Storage.REDIS) && !offlinePlayer.isOnline()) {
+			iStorage.performCustomVoteAction(offlinePlayer.getName(), serviceName, offlinePlayer.getUniqueId());
+			return;
+		}
+
+		// We will retrieve the PlayerVote object in asymmetric in the database
+		// and execute the vote
+		this.plugin.get(offlinePlayer, playerVote -> {
+			Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
+			iStorage.insertVote(playerVote, vote, reward);
+		}, false);
+
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean secretVote(String username, String serviceName) {
+
+		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+
+		// We will get the offline player and check that it is online
+		if (offlinePlayer == null || !offlinePlayer.isOnline()) {
+			return false;
+		}
+
+		// We'll get the reward
+		Reward reward = this.getRandomReward(RewardType.VOTE);
+
+		// If the reward is online
+		if (reward.needToBeOnline()) {
+
+			// We will retrieve the PlayerVote object in asymmetric in the
+			// database and execute the vote
+			this.plugin.get(offlinePlayer, playerVote -> {
+				IStorage iStorage = this.plugin.getIStorage();
+				Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
+				iStorage.insertVote(playerVote, vote, reward);
+			}, false);
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -157,23 +204,27 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		double percent = ThreadLocalRandom.current().nextDouble(0, 100);
 		Reward reward = randomElement(type == RewardType.VOTE ? this.rewards : this.partyRewards);
-		if (reward.getPercent() <= percent || reward.getPercent() >= 100)
+		if (reward.getPercent() <= percent || reward.getPercent() >= 100) {
 			return reward;
+		}
+
 		return this.getRandomReward(type);
 
 	}
 
 	@Override
 	public void giveVotes(Player player) {
-
-		PlayerVote playerVote = this.plugin.get(player);
-		List<Vote> votes = playerVote.getNeedRewardVotes();
-		if (votes.size() > 0) {
-			schedule(Config.joinGiveVoteMilliSecond, () -> {
-				message(player, Message.VOTE_LATER, "%amount%", votes.size());
-				votes.forEach(e -> e.giveReward(player));
-			});
-		}
+		this.plugin.get(player, playerVote -> {
+			List<Vote> votes = playerVote.getNeedRewardVotes();
+			if (votes.size() > 0) {
+				schedule(Config.joinGiveVoteMilliSecond, () -> {
+					message(player, Message.VOTE_LATER, "%amount%", votes.size());
+					votes.forEach(e -> e.giveReward(this.plugin, player));
+				});
+				IStorage iStorage = this.plugin.getIStorage();
+				iStorage.updateRewards(player.getUniqueId());
+			}
+		}, true);
 
 	}
 
@@ -203,6 +254,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		this.needVote = configuration.getLong("party.votes_needed", 50);
 		this.globalCommands = configuration.getStringList("party.global_commands");
+		this.commands = configuration.getStringList("party.commands");
 
 		configurationSection = configuration.getConfigurationSection("party.rewards.");
 		this.partyRewards.clear();
@@ -232,7 +284,9 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public long getPlayerVoteCount(Player player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
-		Optional<PlayerVote> optional = manager.getPlayer(player);
+		// We will retrieve the player in a symmetrical way, we will not search
+		// in the database
+		Optional<PlayerVote> optional = manager.getSyncPlayer(player);
 		if (optional.isPresent()) {
 			PlayerVote playerVote = optional.get();
 			return playerVote.getVoteCount();
@@ -253,19 +307,31 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 	@Override
 	public void start() {
-		Storage.voteCount = 0;
 
+		IStorage iStorage = this.plugin.getIStorage();
+		iStorage.startVoteParty();
+		this.secretStart();
+
+	}
+
+	@Override
+	public void secretStart() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-
-			this.globalCommands.forEach(command -> {
-				command = command.replace("%player%", player.getName());
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
+			Bukkit.getScheduler().runTask(this.plugin, () -> {
+				this.globalCommands.forEach(command -> {
+					command = command.replace("%player%", player.getName());
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
+				});
 			});
 
 			Reward reward = this.getRandomReward(RewardType.PARTY);
-			reward.give(player);
+			reward.give(this.plugin, player);
 
 		}
+
+		Bukkit.getScheduler().runTask(this.plugin, () -> {
+			this.commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
+		});
 
 		broadcast(Message.VOTE_PARTY_START);
 	}
@@ -273,20 +339,37 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void removeVote(CommandSender sender, OfflinePlayer player) {
 		PlayerManager manager = this.plugin.getPlayerManager();
-		Optional<PlayerVote> optional = manager.getPlayer(player);
-		if (!optional.isPresent()) {
-			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
-			return;
-		}
-		PlayerVote playerVote = optional.get();
+		manager.getPlayer(player, optional -> {
 
-		if (playerVote.getVoteCount() == 0) {
-			message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
-			return;
-		}
-		
-		playerVote.removeVote();
-		message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
+			if (!optional.isPresent()) {
+				message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+				return;
+			}
+			PlayerVote playerVote = optional.get();
+
+			if (playerVote.getVoteCount() == 0) {
+				message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+				return;
+			}
+
+			playerVote.removeVote();
+			message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
+		}, true);
+	}
+
+	@Override
+	public void voteOffline(UUID uniqueId, String serviceName) {
+
+		Reward reward = this.getRandomReward(RewardType.VOTE);
+		IStorage iStorage = this.plugin.getIStorage();
+
+		// We will retrieve the PlayerVote object in asymmetric in the database
+		// and execute the vote
+		this.plugin.get(uniqueId, playerVote -> {
+			Vote vote = playerVote.vote(this.plugin, serviceName, reward, true);
+			iStorage.insertVote(playerVote, vote, reward);
+		}, false);
+
 	}
 
 }
