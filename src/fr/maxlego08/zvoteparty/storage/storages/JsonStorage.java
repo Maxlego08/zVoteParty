@@ -61,7 +61,7 @@ public class JsonStorage implements IStorage {
 				}
 			}
 		}
-		return Optional.empty();
+		return Optional.empty(); 
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class JsonStorage implements IStorage {
 
 	@Override
 	public Optional<PlayerVote> getSyncPlayer(Player player) {
-		return this.getPlayer(player.getUniqueId());
+		return player != null ? this.getPlayer(player.getUniqueId()) : Optional.empty();
 	}
 
 	@Override

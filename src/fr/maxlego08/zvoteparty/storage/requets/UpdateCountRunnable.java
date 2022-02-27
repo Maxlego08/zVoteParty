@@ -54,7 +54,9 @@ public class UpdateCountRunnable implements Runnable {
 				String insertRequest = "insert into zvoteparty_count (vote) values (0);";
 				PreparedStatement statement = connection.prepareStatement(insertRequest);
 				statement.executeUpdate();
-				connection.commit();
+				if (!connection.getAutoCommit()) {
+					connection.commit();
+				}
 				statement.close();
 
 			}
@@ -65,7 +67,9 @@ public class UpdateCountRunnable implements Runnable {
 			statement.setLong(1, this.value);
 
 			statement.executeUpdate();
-			connection.commit();
+			if (!connection.getAutoCommit()) {
+				connection.commit();
+			}
 
 			statement.close();
 
