@@ -459,10 +459,12 @@ public abstract class ZUtils extends MessageUtils {
 	 * @return
 	 */
 	protected <T> T randomElement(List<T> element) {
-		if (element.size() == 0)
+		if (element.size() == 0) {
 			return null;
-		if (element.size() == 1)
+		}
+		if (element.size() == 1) {
 			return element.get(0);
+		}
 		Random random = new Random();
 		return element.get(random.nextInt(element.size() - 1));
 	}
@@ -1046,5 +1048,4 @@ public abstract class ZUtils extends MessageUtils {
 		itemStack.setItemMeta(itemMeta);
 	}
 
-	
 }

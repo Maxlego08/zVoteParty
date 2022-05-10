@@ -151,6 +151,11 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	public void vote(OfflinePlayer offlinePlayer, String serviceName) {
 
 		Reward reward = this.getRandomReward(RewardType.VOTE);
+
+		if (reward == null) {
+			return;
+		}
+
 		IStorage iStorage = this.plugin.getIStorage();
 
 		// If the redis configuration is active, the reward is online and the
@@ -184,7 +189,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		Reward reward = this.getRandomReward(RewardType.VOTE);
 
 		// If the reward is online
-		if (reward.needToBeOnline()) {
+		if (reward != null && reward.needToBeOnline()) {
 
 			// We will retrieve the PlayerVote object in asymmetric in the
 			// database and execute the vote
@@ -203,7 +208,15 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	public Reward getRandomReward(RewardType type) {
 
 		double percent = ThreadLocalRandom.current().nextDouble(0, 100);
-		Reward reward = randomElement(type == RewardType.VOTE ? this.rewards : this.partyRewards);
+
+		List<Reward> rewards = type == RewardType.VOTE ? this.rewards : this.partyRewards;
+
+		if (rewards.size() == 0) {
+			return null;
+		}
+
+		Reward reward = randomElement(rewards);
+
 		if (reward.getPercent() <= percent || reward.getPercent() >= 100) {
 			return reward;
 		}
@@ -237,15 +250,24 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	public void load(Persist persist) {
 
 		YamlConfiguration configuration = this.getConfig();
-		ConfigurationSection configurationSection = configuration.getConfigurationSection("rewards.");
-		Loader<Reward> loader = new RewardLoader();
+		ConfigurationSection configurationSection;
 
 		this.rewards.clear();
+		Loader<Reward> loader = new RewardLoader();
 
-		for (String key : configurationSection.getKeys(false)) {
-			String path = "rewards." + key + ".";
-			Reward reward = loader.load(configuration, path);
-			this.rewards.add(reward);
+		try {
+			configurationSection = configuration.getConfigurationSection("rewards.");
+
+			for (String key : configurationSection.getKeys(false)) {
+				String path = "rewards." + key + ".";
+				Reward reward = loader.load(configuration, path);
+				if (reward != null) {
+					this.rewards.add(reward);
+				}
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 
 		Logger.info("Loaded " + this.rewards.size() + " rewards", LogType.SUCCESS);
@@ -256,13 +278,21 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		this.globalCommands = configuration.getStringList("party.global_commands");
 		this.commands = configuration.getStringList("party.commands");
 
-		configurationSection = configuration.getConfigurationSection("party.rewards.");
 		this.partyRewards.clear();
+		if (configuration.isConfigurationSection("party.rewards.")) {
+			try {
+				configurationSection = configuration.getConfigurationSection("party.rewards.");
 
-		for (String key : configurationSection.getKeys(false)) {
-			String path = "party.rewards." + key + ".";
-			Reward reward = loader.load(configuration, path);
-			this.partyRewards.add(reward);
+				for (String key : configurationSection.getKeys(false)) {
+					String path = "party.rewards." + key + ".";
+					Reward reward = loader.load(configuration, path);
+					if (reward != null) {
+						this.partyRewards.add(reward);
+					}
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 		}
 	}
 
@@ -325,7 +355,9 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 			});
 
 			Reward reward = this.getRandomReward(RewardType.PARTY);
-			reward.give(this.plugin, player);
+			if (reward != null) {
+				reward.give(this.plugin, player);
+			}
 
 		}
 
@@ -361,6 +393,11 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	public void voteOffline(UUID uniqueId, String serviceName) {
 
 		Reward reward = this.getRandomReward(RewardType.VOTE);
+
+		if (reward == null) {
+			return;
+		}
+
 		IStorage iStorage = this.plugin.getIStorage();
 
 		// We will retrieve the PlayerVote object in asymmetric in the database
