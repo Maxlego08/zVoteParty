@@ -125,7 +125,7 @@ public class ZPlaceholderApi {
 		case "votes_required_total":
 			return String.valueOf(manager.getNeedVotes());
 		case "player_votes":
-			return String.valueOf(manager.getPlayerVoteCount(player));
+			return player == null ? null : String.valueOf(manager.getPlayerVoteCount(player));
 
 		}
 
