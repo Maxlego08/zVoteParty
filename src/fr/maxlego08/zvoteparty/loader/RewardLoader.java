@@ -16,8 +16,9 @@ public class RewardLoader implements Loader<Reward> {
 		double percent = configuration.getDouble(path + "percent", 10);
 		List<String> commands = configuration.getStringList(path + "commands");
 		boolean needToBeOnline = configuration.getBoolean(path + "needToBeOnline", false);
+		List<String> messages = configuration.getStringList(path + "broadcast");
 
-		return new ZReward(percent, commands, needToBeOnline);
+		return new ZReward(percent, commands, needToBeOnline, messages);
 	}
 
 	@Override

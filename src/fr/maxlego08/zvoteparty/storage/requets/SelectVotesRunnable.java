@@ -74,7 +74,7 @@ public class SelectVotesRunnable extends ZUtils implements Runnable {
 				long createdAt = resultSet.getLong("created_at");
 
 				List<String> commands = Arrays.asList(commandsAsString.split(";"));
-				Reward reward = new ZReward(rewardPercent, commands, needOnline);
+				Reward reward = new ZReward(rewardPercent, commands, needOnline, new ArrayList<>());
 				Vote vote = new ZVote(serviceName, createdAt, reward, isRewardGive);
 				votes.add(vote);
 

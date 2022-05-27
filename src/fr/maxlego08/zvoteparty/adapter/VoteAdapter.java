@@ -54,9 +54,10 @@ public class VoteAdapter extends TypeAdapter<Vote> {
 
 		Map<String, Object> rewardMap = (Map<String, Object>) keys.get(this.REWARD);
 		List<String> commands = (List<String>) rewardMap.get("commands");
+		List<String> messages = (List<String>) rewardMap.get("messages");
 		Number percent = (Number) rewardMap.get("percent");
 
-		Reward reward = new ZReward(percent.doubleValue(), commands, false);
+		Reward reward = new ZReward(percent.doubleValue(), commands, false, messages);
 
 		String serviceName = (String) keys.get(this.SERVICENAME);
 		boolean isGive = (boolean) keys.get(this.IS_GIVE);

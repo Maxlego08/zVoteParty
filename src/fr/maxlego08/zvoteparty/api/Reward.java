@@ -35,4 +35,11 @@ public interface Reward {
 	 */
 	void give(Plugin plugin, OfflinePlayer player);
 	
+	/**
+	 * Les messages qui vont être envoyé
+	 * 
+	 * @return messages
+	 */
+	List<String> getMessages();
+	
 }

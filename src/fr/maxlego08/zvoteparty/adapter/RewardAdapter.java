@@ -25,6 +25,7 @@ public class RewardAdapter extends TypeAdapter<Reward> {
 
 	private final String PERCENT = "percent";
 	private final String COMMANDS = "commands";
+	private final String MESSAGES = "messages";
 
 	/**
 	 * @param plugin
@@ -48,8 +49,9 @@ public class RewardAdapter extends TypeAdapter<Reward> {
 
 		Number percent = (Number) keys.get(this.PERCENT);
 		List<String> commands = (List<String>) keys.get(this.COMMANDS);
+		List<String> messages = (List<String>) keys.get(this.MESSAGES);
 
-		return new ZReward(percent.doubleValue(), commands, false);
+		return new ZReward(percent.doubleValue(), commands, false, messages);
 	}
 
 	@Override
@@ -64,6 +66,7 @@ public class RewardAdapter extends TypeAdapter<Reward> {
 		
 		serial.put(this.PERCENT, reward.getPercent());
 		serial.put(this.COMMANDS, reward.getCommands());
+		serial.put(this.MESSAGES, reward.getMessages());
 		
 		writer.value(this.plugin.getGson().toJson(serial));
 	}
