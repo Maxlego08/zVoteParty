@@ -6,22 +6,32 @@ rewards:
     percent: 10
     needToBeOnline: false # Player must not be online to receive the reward
     commands:
-      - "bc %player% has just voted"
+      - "eco give %player% 100"
+    broadcast:
+      - "&f%player% &7just won &a$100"
   2:
     percent: 30
     needToBeOnline: true # Player must be online to receive the reward
     commands:
       - "give %player% minecraft:stone 10"
+    broadcast:
+      - "&f%player% &7just won &ax10 stone"      
   3:
     percent: 30
     needToBeOnline: false # Player must not be online to receive the reward
     commands:
-      - "eco give %player% 100"
+      - "eco give %player% 500"
+    broadcast:
+      - "&f%player% &7just won &a$500"      
   4:
     percent: 30
     needToBeOnline: true # Player must be online to receive the reward
     commands:
       - "cr give %player% diamand"
+    broadcast:
+      - "&7&m----------"
+      - "&f%player% &7just won &ax1 diamand"
+      - "&7&m----------"      
       
 party:
   # The amount of votes needed

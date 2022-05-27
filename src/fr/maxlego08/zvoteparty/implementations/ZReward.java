@@ -7,23 +7,27 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 
 import fr.maxlego08.zvoteparty.api.Reward;
+import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
-public class ZReward implements Reward {
+public class ZReward extends ZUtils implements Reward {
 
 	private final double percent;
 	private final List<String> commands;
 	private final boolean needToBeOnline;
+	private final List<String> messages;
 
 	/**
 	 * @param percent
 	 * @param commands
 	 * @param needToBeOnline
+	 * @param messages
 	 */
-	public ZReward(double percent, List<String> commands, boolean needToBeOnline) {
+	public ZReward(double percent, List<String> commands, boolean needToBeOnline, List<String> messages) {
 		super();
 		this.percent = percent;
 		this.commands = commands;
 		this.needToBeOnline = needToBeOnline;
+		this.messages = messages;
 	}
 
 	@Override
@@ -49,6 +53,18 @@ public class ZReward implements Reward {
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 			});
 		});
+
+		Bukkit.getOnlinePlayers().forEach(oPlayer -> {
+			this.messages.forEach(message -> {
+				this.messageWO(oPlayer, papi(message, oPlayer), "%player%", player.getName());
+			});
+		});
+
+	}
+
+	@Override
+	public List<String> getMessages() {
+		return this.messages;
 	}
 
 }
