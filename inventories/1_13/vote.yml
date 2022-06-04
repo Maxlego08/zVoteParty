@@ -42,6 +42,7 @@ items:
         - "&f&l» &7You have &f%zvoteparty_player_votes%&7 votes"
         - ""
         - "&f&l» &dVoteParty &8- &b%zvoteparty_votes_recorded% &8/ &a%zvoteparty_votes_required_total%"
+        - "&f&l» %zvoteparty_votes_progressbar%"        
         - ""
         - "&7&m-------------------------------------"      
     slot: 4

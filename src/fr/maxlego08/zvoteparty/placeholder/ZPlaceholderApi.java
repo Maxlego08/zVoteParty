@@ -9,8 +9,10 @@ import org.bukkit.entity.Player;
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
 import fr.maxlego08.zvoteparty.api.storage.IStorage;
+import fr.maxlego08.zvoteparty.save.Config;
+import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
-public class ZPlaceholderApi {
+public class ZPlaceholderApi extends ZUtils {
 
 	private ZVotePartyPlugin plugin;
 	private final String prefix = "zvoteparty";
@@ -61,11 +63,11 @@ public class ZPlaceholderApi {
 		if (displayName == null)
 			return null;
 
-		final String realPrefix = "%" + prefix + "_";
+		final String realPrefix = "%" + this.prefix + "_";
 
 		String str = removeColor(displayName);
 
-		for (String string : str.split(" "))
+		for (String string : str.split(" ")) {
 			if (string.startsWith(realPrefix) && string.endsWith("%")) {
 
 				String request = string.replace(realPrefix, "");
@@ -75,6 +77,7 @@ public class ZPlaceholderApi {
 				if (replace != null)
 					displayName = displayName.replace(string, replace);
 			}
+		}
 
 		return displayName;
 	}
@@ -96,11 +99,13 @@ public class ZPlaceholderApi {
 	 * @param string
 	 * @return string without color
 	 */
-	private String removeColor(String string) {
-		if (string == null)
+	protected String removeColor(String string) {
+		if (string == null) {
 			return string;
-		for (ChatColor chatColor : ChatColor.values())
+		}
+		for (ChatColor chatColor : ChatColor.values()) {
 			string = string.replace("§" + chatColor.getChar(), "");
+		}
 		return string;
 	}
 
@@ -124,6 +129,8 @@ public class ZPlaceholderApi {
 			return String.valueOf(manager.getNeedVotes() - iStorage.getVoteCount());
 		case "votes_required_total":
 			return String.valueOf(manager.getNeedVotes());
+		case "votes_progressbar":
+			return this.getProgressBar(iStorage.getVoteCount(), manager.getNeedVotes(), Config.progressBar);
 		case "player_votes":
 			return player == null ? null : String.valueOf(manager.getPlayerVoteCount(player));
 

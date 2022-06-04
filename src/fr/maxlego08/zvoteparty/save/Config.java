@@ -2,6 +2,7 @@ package fr.maxlego08.zvoteparty.save;
 
 import fr.maxlego08.zvoteparty.api.storage.Storage;
 import fr.maxlego08.zvoteparty.save.RedisConfiguration.RedisPoolConfiguration;
+import fr.maxlego08.zvoteparty.zcore.utils.ProgressBar;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Persist;
 import fr.maxlego08.zvoteparty.zcore.utils.storage.Saveable;
 
@@ -26,12 +27,14 @@ public class Config implements Saveable {
 
 	public static long joinGiveVoteMilliSecond = 500;
 	public static long autoSaveSecond = 60 * 15;
-
+	
 	public static int redisServerAmount = 2;
 	public static String redisChannel = "zvoteparty";
 	public static RedisConfiguration redis = new RedisConfiguration("192.168.10.10", 6379, null, 0,
 			new RedisPoolConfiguration(128, 128, 16));
 	public static int maxSqlRetryAmoun = 5;
+	
+	public static ProgressBar progressBar = new ProgressBar(20, '|', "§a", "§8");
 
 	/**
 	 * static Singleton instance.
