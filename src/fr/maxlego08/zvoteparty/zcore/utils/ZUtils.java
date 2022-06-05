@@ -42,6 +42,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffectType;
 
+import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
@@ -61,6 +62,40 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 @SuppressWarnings("deprecation")
 public abstract class ZUtils extends MessageUtils {
+	
+	/**
+	 * Create a progress bar
+	 * https://www.spigotmc.org/threads/progress-bars-and-percentages.276020/
+	 * 
+	 * @param l
+	 * @param m
+	 * @param totalBars
+	 * @param symbol
+	 * @param completedColor
+	 * @param notCompletedColor
+	 * @return string
+	 */
+	public String getProgressBar(long l, long m, int totalBars, char symbol, String completedColor,
+			String notCompletedColor) {
+		float percent = (float) l / m;
+		int progressBars = (int) (totalBars * percent);
+
+		return Strings.repeat(completedColor + symbol, progressBars)
+				+ Strings.repeat(notCompletedColor + symbol, totalBars - progressBars);
+	}
+
+	/**
+	 * Create a progress bar
+	 * 
+	 * @param l
+	 * @param m
+	 * @param progressBar
+	 * @return string
+	 */
+	public String getProgressBar(long l, long m, ProgressBar progressBar) {
+		return this.getProgressBar(l, m, progressBar.getLenght(), progressBar.getSymbol(),
+				progressBar.getCompletedColor(), progressBar.getNotCompletedColor());
+	}
 
 	/**
 	 * @param item
