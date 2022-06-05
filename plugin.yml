@@ -2,7 +2,7 @@ name: zVoteParty
 author: Maxlego08
 main: fr.maxlego08.zvoteparty.ZVotePartyPlugin
 softdepend: [PlaceholderAPI, Votifier]
-version: 1.0.1.6
+version: 1.0.1.7
 website: https://groupez.dev/resources/zvoteparty.124
 api-version: 1.13
 commands:
