@@ -102,7 +102,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		}
 
 		if (!Config.enableVoteMessage) {
-			message(player, "§cError in configuration, please contact an administrator.");
+			message(player, "ï¿½cError in configuration, please contact an administrator.");
 		}
 
 	}
@@ -111,7 +111,11 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void vote(String username, String serviceName, boolean updateVoteParty) {
 
-		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+		OfflinePlayer offlinePlayer = Bukkit.getPlayer(username);
+
+		if(offlinePlayer == null) {
+			offlinePlayer = Bukkit.getOfflinePlayer(username);
+		}
 
 		this.handleVoteParty();
 
