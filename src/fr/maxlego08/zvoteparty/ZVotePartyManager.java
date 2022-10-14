@@ -102,7 +102,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		}
 
 		if (!Config.enableVoteMessage) {
-			message(player, "�cError in configuration, please contact an administrator.");
+			message(player, "§cError in configuration, please contact an administrator.");
 		}
 
 	}
