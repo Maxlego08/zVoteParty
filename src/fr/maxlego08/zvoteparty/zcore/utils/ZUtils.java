@@ -501,7 +501,7 @@ public abstract class ZUtils extends MessageUtils {
 			return element.get(0);
 		}
 		Random random = new Random();
-		return element.get(random.nextInt(element.size() - 1));
+		return element.get(random.nextInt(element.size()));
 	}
 
 	/**
