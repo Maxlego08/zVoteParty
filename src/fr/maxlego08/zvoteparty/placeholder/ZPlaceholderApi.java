@@ -5,7 +5,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
@@ -91,22 +90,6 @@ public class ZPlaceholderApi extends ZUtils {
 	public List<String> setPlaceholders(Player player, List<String> lore) {
 		return lore == null ? null
 				: lore.stream().map(e -> e = setPlaceholders(player, e)).collect(Collectors.toList());
-	}
-
-	/**
-	 * Remove color from message
-	 * 
-	 * @param string
-	 * @return string without color
-	 */
-	protected String removeColor(String string) {
-		if (string == null) {
-			return string;
-		}
-		for (ChatColor chatColor : ChatColor.values()) {
-			string = string.replace("§" + chatColor.getChar(), "");
-		}
-		return string;
 	}
 
 	/**

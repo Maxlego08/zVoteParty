@@ -30,9 +30,10 @@ public class PapiUtils {
 		if (itemStack == null)
 			return itemStack;
 
-		if (!usePlaceHolder)
-			usePlaceHolder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
-		
+		if (!this.usePlaceHolder) {
+			this.usePlaceHolder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+		}
+
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
 		if (itemMeta.hasDisplayName()) {
@@ -44,10 +45,11 @@ public class PapiUtils {
 		}
 
 		if (itemMeta.hasLore()) {
-			if (usePlaceHolder)
+			if (this.usePlaceHolder) {
 				itemMeta.setLore(PlaceholderAPI.setPlaceholders(player, itemMeta.getLore()));
-			else
+			} else {
 				itemMeta.setLore(ZPlaceholderApi.getInstance().setPlaceholders(player, itemMeta.getLore()));
+			}
 		}
 
 		itemStack.setItemMeta(itemMeta);
@@ -68,7 +70,7 @@ public class PapiUtils {
 
 		if (!usePlaceHolder)
 			usePlaceHolder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
-		
+
 		if (usePlaceHolder) {
 			return PlaceholderAPI.setPlaceholders(player, placeHolder);
 		} else
