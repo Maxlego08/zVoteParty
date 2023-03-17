@@ -1,6 +1,42 @@
-# Serveur Minecraft Vote
-# https://serveur-minecraft-vote.fr/
+#########################################################################################################################################
+#
+#
+#   Sponsor: https://serveur-minecraft-vote.fr/
+#   5€ gift code on Minecraft Vote Server : ZVOTEPARTY (https://serveur-minecraft-vote.fr/utiliser/un/code/cadeau?code=ZVOTEPARTY)
+#   
+#   Documentation: https://groupez.dev/resources/zvoteparty.124/wiki
+#   Discord: https://discord.groupez.dev/
+# 
+# 
+# ███████╗██╗░░░██╗░█████╗░████████╗███████╗██████╗░░█████╗░██████╗░████████╗██╗░░░██╗
+# ╚════██║██║░░░██║██╔══██╗╚══██╔══╝██╔════╝██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝╚██╗░██╔╝
+# ░░███╔═╝╚██╗░██╔╝██║░░██║░░░██║░░░█████╗░░██████╔╝███████║██████╔╝░░░██║░░░░╚████╔╝░
+# ██╔══╝░░░╚████╔╝░██║░░██║░░░██║░░░██╔══╝░░██╔═══╝░██╔══██║██╔══██╗░░░██║░░░░░╚██╔╝░░
+# ███████╗░░╚██╔╝░░╚█████╔╝░░░██║░░░███████╗██║░░░░░██║░░██║██║░░██║░░░██║░░░░░░██║░░░
+# ╚══════╝░░░╚═╝░░░░╚════╝░░░░╚═╝░░░╚══════╝╚═╝░░░░░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░
+#
+#
+#   Commands and permissions:
+#   - /vote » Open vote invenroy - zvoteparty.vote
+#   - /zvoteparty » Show needed votes for vote party (aliases: /vp, /voteparty) - zvoteparty.use
+#   - /zvoteparty reload » Reload configuration - zvoteparty.reload
+#   - /zvoteparty config » Open ingame configuration - zvoteparty.config
+#   - /zvoteparty version » Show plugin version
+#   - /zvoteparty help » Send commands description and syntax - zvoteparty.help
+#   - /zvoteparty add » Add vote to player - zvoteparty.add
+#   - /zvoteparty startparty » Force launch a Vote Party - zvoteparty.startparty
+#   
+#   Placeholders:
+#   - %zvoteparty_votes_recorded% » Returns the current amount of votes in the Vote Party.   
+#   - %zvoteparty_votes_required_party% » Returns the amount of votes left that are needed for a Vote Party to happen.
+#   - %zvoteparty_votes_required_total% » Returns the total amount of votes needed for a Vote Party to happen.
+#   - %zvoteparty_player_votes% » Returns the total amount of votes a player has.
+#   - %zvoteparty_votes_progressbar% » Return a progress bar for the vote party
+#   
+#   
+#########################################################################################################################################
 
+# Rewards when a player goes to vote
 rewards:
   1:
     percent: 10
@@ -21,8 +57,7 @@ rewards:
     needToBeOnline: false # Player must not be online to receive the reward
     commands:
       - "eco give %player% 500"
-    broadcast:
-      - "&f%player% &7just won &a$500"      
+    broadcast: []   
   4:
     percent: 30
     needToBeOnline: true # Player must be online to receive the reward
@@ -41,10 +76,11 @@ party:
   global_commands:
     - "eco give %player% 100"
     
+  # This command will be executed in the console, you cannot specify a player here
   commands:
     - "eco give * 0.0000000009"  
     
-  # Rewards that players can earn  
+  # Rewards that the player can get randomly 
   rewards:
     1:
       percent: 50
