@@ -7,7 +7,6 @@ import java.util.List;
 import org.bukkit.Material;
 
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
-import fr.maxlego08.zvoteparty.api.inventory.Inventory;
 import fr.maxlego08.zvoteparty.save.Config;
 
 public enum Options {
@@ -78,12 +77,7 @@ public enum Options {
 			Class<Config> classz = Config.class;
 			Field field = classz.getDeclaredField(fieldName);
 			field.set(classz, !(Boolean) field.get(classz));
-			
-			
-			if (this.isToggle() && this == ENABLE_INVENTORY_PRE_RENDER){
-				plugin.getInventoryManager().getInventories().forEach(Inventory::renderPermanentButtons);
-			}
-			
+					
 			Config.getInstance().save(plugin.getPersist());
 			
 			return true;

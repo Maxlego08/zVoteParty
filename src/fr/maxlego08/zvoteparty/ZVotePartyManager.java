@@ -1,5 +1,6 @@
 package fr.maxlego08.zvoteparty;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,23 +14,19 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import fr.maxlego08.menu.api.Inventory;
 import fr.maxlego08.zvoteparty.api.PlayerManager;
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
-import fr.maxlego08.zvoteparty.api.command.Command;
 import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.api.enums.RewardType;
-import fr.maxlego08.zvoteparty.api.inventory.Inventory;
 import fr.maxlego08.zvoteparty.api.storage.IStorage;
 import fr.maxlego08.zvoteparty.api.storage.Storage;
-import fr.maxlego08.zvoteparty.command.CommandObject;
-import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.loader.RewardLoader;
 import fr.maxlego08.zvoteparty.save.Config;
-import fr.maxlego08.zvoteparty.zcore.enums.EnumInventory;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger;
 import fr.maxlego08.zvoteparty.zcore.logger.Logger.LogType;
 import fr.maxlego08.zvoteparty.zcore.utils.loader.Loader;
@@ -60,10 +57,11 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 		try {
 
 			this.plugin.reloadConfig();
-			this.plugin.getInventoryManager().loadInventories();
 			this.loadConfiguration();
 			this.plugin.getSavers().forEach(e -> e.load(this.plugin.getPersist()));
 
+			this.plugin.reloadInventories();
+			
 			message(sender, Message.RELOAD_SUCCESS);
 
 		} catch (Exception e) {
@@ -92,12 +90,12 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		if (Config.enableVoteInventory) {
 
-			Inventory inventory = this.plugin.getInventoryManager().getInventory(InventoryName.VOTE);
-			Command command = CommandObject.of(inventory);
-
-			ZInventoryManager inventoryManager = this.plugin.getZInventoryManager();
-			inventoryManager.createInventory(EnumInventory.INVENTORY_DEFAULT, player, 1, inventory, new ArrayList<>(),
-					command);
+			
+			Optional<Inventory> optional = this.plugin.getInventoryManager().getInventory(InventoryName.VOTE.getName());
+			if (optional.isPresent()){
+				Inventory inventory = optional.get();
+				this.plugin.getInventoryManager().openInventory(player, inventory);
+			} else message(player, "§cErreur with inventory votes !");
 			return;
 		}
 
@@ -253,7 +251,7 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void load(Persist persist) {
 
-		YamlConfiguration configuration = this.getConfig();
+		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(new File(this.plugin.getDataFolder(), "config.yml"));
 		ConfigurationSection configurationSection;
 
 		this.rewards.clear();
