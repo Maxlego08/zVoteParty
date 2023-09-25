@@ -1,14 +1,11 @@
 package fr.maxlego08.zvoteparty;
 
-import java.io.File;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.ServicePriority;
 
-import fr.maxlego08.menu.api.InventoryManager;
-import fr.maxlego08.menu.exceptions.InventoryException;
 import fr.maxlego08.zvoteparty.api.PlayerManager;
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
@@ -23,6 +20,7 @@ import fr.maxlego08.zvoteparty.inventory.inventories.InventoryConfig;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.listener.listeners.VoteListener;
 import fr.maxlego08.zvoteparty.listener.listeners.VotifierListener;
+import fr.maxlego08.zvoteparty.loader.ZMenuLoader;
 import fr.maxlego08.zvoteparty.placeholder.VotePartyExpansion;
 import fr.maxlego08.zvoteparty.placeholder.ZPlaceholderApi;
 import fr.maxlego08.zvoteparty.save.Config;
@@ -43,9 +41,8 @@ import fr.maxlego08.zvoteparty.zcore.utils.plugins.VersionChecker;
  */
 public class ZVotePartyPlugin extends ZPlugin {
 
+	private ZMenuLoader loader;
 	private final VotePartyManager manager = new ZVotePartyManager(this);
-	private InventoryManager inventoryManager;
-
 	private StorageManager storageManager;
 
 	@Override
@@ -116,8 +113,13 @@ public class ZVotePartyPlugin extends ZPlugin {
 			this.addListener(new VotifierListener(this));
 		}
 
+		if (this.isEnable(Plugins.ZMENU)) {
+			this.loader = new ZMenuLoader(this);
+			this.loader.load();
+		}
+
 		reloadInventories();
-		
+
 		VersionChecker checker = new VersionChecker(this, 124);
 		checker.useLastVersion();
 
@@ -143,10 +145,6 @@ public class ZVotePartyPlugin extends ZPlugin {
 	 */
 	public VotePartyManager getManager() {
 		return manager;
-	}
-
-	public InventoryManager getInventoryManager() {
-		return inventoryManager;
 	}
 
 	public PlayerManager getPlayerManager() {
@@ -182,17 +180,12 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 	public void reloadInventories() {
 		if (this.isEnable(Plugins.ZMENU)) {
-			this.inventoryManager = getProvider(InventoryManager.class);
-
-			File file = new File(getDataFolder(), "inventories/" + InventoryName.VOTE.getName() + ".yml");
-			try {
-				this.inventoryManager.deleteInventories(this);
-				this.inventoryManager.loadInventory(this, file);
-			} catch (InventoryException e) {
-				e.printStackTrace();
-			}
-
+			this.loader.reload();
 		}
+	}
+	
+	public ZMenuLoader getLoader() {
+		return loader;
 	}
 
 }

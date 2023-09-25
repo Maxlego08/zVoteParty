@@ -35,7 +35,8 @@ items:
     item:
       material: SKULL_ITEM
       data: 3
-      name: "HEAD&a%player_name%"
+      name: "&a%player_name%"
+      playerHead: "%player%"
       lore:
         - "&7&m-------------------------------------"
         - ""

@@ -14,13 +14,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import fr.maxlego08.menu.api.Inventory;
 import fr.maxlego08.zvoteparty.api.PlayerManager;
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
-import fr.maxlego08.zvoteparty.api.enums.InventoryName;
 import fr.maxlego08.zvoteparty.api.enums.Message;
 import fr.maxlego08.zvoteparty.api.enums.RewardType;
 import fr.maxlego08.zvoteparty.api.storage.IStorage;
@@ -88,14 +86,8 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		}
 
-		if (Config.enableVoteInventory) {
-
-			
-			Optional<Inventory> optional = this.plugin.getInventoryManager().getInventory(InventoryName.VOTE.getName());
-			if (optional.isPresent()){
-				Inventory inventory = optional.get();
-				this.plugin.getInventoryManager().openInventory(player, inventory);
-			} else message(player, "§cErreur with inventory votes !");
+		if (Config.enableVoteInventory && this.plugin.getLoader() != null) {
+			this.plugin.getLoader().open(player);
 			return;
 		}
 
