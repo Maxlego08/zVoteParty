@@ -9,6 +9,7 @@ public enum Plugins {
 	CITIZENS("Citizens"),
 	TRANSLATIONAPI("TranslationAPI"),
 	VOTIFIER("Votifier"),
+	ZMENU("zMenu"),
 	
 	;
 

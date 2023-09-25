@@ -3,7 +3,6 @@ size: 45
 type: VOTE
 items:
   slots:
-    type: NONE_SLOT
     item:
       material: GRAY_STAINED_GLASS_PANE
       name: "&e"
@@ -31,23 +30,22 @@ items:
       - 42
       - 43
       - 44
-  player:
-    type: NONE
+  player:   
     item:
       material: PLAYER_HEAD
-      name: "HEAD&a%player_name%"
+      name: "&a%player_name%"
+      playerHead: "%player%"
       lore:
         - "&7&m-------------------------------------"
         - ""
-        - "&f&l» &7You have &f%zvoteparty_player_votes%&7 votes"
+        - "&f&lÂ» &7You have &f%zvoteparty_player_votes%&7 votes"
         - ""
-        - "&f&l» &dVoteParty &8- &b%zvoteparty_votes_recorded% &8/ &a%zvoteparty_votes_required_total%"
-        - "&f&l» %zvoteparty_votes_progressbar%"        
+        - "&f&lÂ» &dVoteParty &8- &b%zvoteparty_votes_recorded% &8/ &a%zvoteparty_votes_required_total%"
+        - "&f&lÂ» %zvoteparty_votes_progressbar%"        
         - ""
         - "&7&m-------------------------------------"      
     slot: 4
   votes1:
-    type: MESSAGE
     closeInventory: true
     messages:
       - "&fHey &b%player% &fclick here to vote"
@@ -55,11 +53,11 @@ items:
     slot: 20
     item:
       material: HOPPER
-      name: "&eSite &7N°&f1"
+      name: "&eSite &7NÂ»&f1"
       lore:
         - "&7&m-------------------------------------"
         - ""
-        - "&f&l» &7Click to vote on"
+        - "&f&lÂ» &7Click to vote on"
         - "  &bhttps://serveur-minecraft-vote.fr"
         - ""
         - "&9[!] &8You can vote any time"

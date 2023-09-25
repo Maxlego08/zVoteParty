@@ -10,19 +10,17 @@ import fr.maxlego08.zvoteparty.api.PlayerManager;
 import fr.maxlego08.zvoteparty.api.PlayerVote;
 import fr.maxlego08.zvoteparty.api.VotePartyManager;
 import fr.maxlego08.zvoteparty.api.enums.InventoryName;
-import fr.maxlego08.zvoteparty.api.inventory.InventoryManager;
 import fr.maxlego08.zvoteparty.api.storage.IStorage;
 import fr.maxlego08.zvoteparty.api.storage.StorageManager;
 import fr.maxlego08.zvoteparty.command.CommandManager;
 import fr.maxlego08.zvoteparty.command.commands.CommandIndex;
 import fr.maxlego08.zvoteparty.command.commands.CommandVote;
-import fr.maxlego08.zvoteparty.inventory.InventoryLoader;
 import fr.maxlego08.zvoteparty.inventory.ZInventoryManager;
 import fr.maxlego08.zvoteparty.inventory.inventories.InventoryConfig;
-import fr.maxlego08.zvoteparty.inventory.inventories.InventoryDefault;
 import fr.maxlego08.zvoteparty.listener.AdapterListener;
 import fr.maxlego08.zvoteparty.listener.listeners.VoteListener;
 import fr.maxlego08.zvoteparty.listener.listeners.VotifierListener;
+import fr.maxlego08.zvoteparty.loader.ZMenuLoader;
 import fr.maxlego08.zvoteparty.placeholder.VotePartyExpansion;
 import fr.maxlego08.zvoteparty.placeholder.ZPlaceholderApi;
 import fr.maxlego08.zvoteparty.save.Config;
@@ -43,9 +41,8 @@ import fr.maxlego08.zvoteparty.zcore.utils.plugins.VersionChecker;
  */
 public class ZVotePartyPlugin extends ZPlugin {
 
+	private ZMenuLoader loader;
 	private final VotePartyManager manager = new ZVotePartyManager(this);
-	private final InventoryManager inventoryManager = new InventoryLoader(this);
-
 	private StorageManager storageManager;
 
 	@Override
@@ -61,6 +58,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 		this.preEnable();
 
 		this.saveDefaultConfig();
+		this.reloadConfig();
 
 		this.commandManager = new CommandManager(this);
 		this.zInventoryManager = new ZInventoryManager(this);
@@ -74,7 +72,6 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 		/* Inventories */
 
-		this.registerInventory(EnumInventory.INVENTORY_DEFAULT, new InventoryDefault());
 		this.registerInventory(EnumInventory.INVENTORY_CONFIG, new InventoryConfig());
 
 		/* Add Listener */
@@ -95,12 +92,6 @@ public class ZVotePartyPlugin extends ZPlugin {
 		this.storageManager = new ZStorageManager(Config.storage, this);
 		this.storageManager.load(this.getPersist());
 
-		try {
-			this.inventoryManager.loadInventories();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		if (Config.enableVoteCommand) {
 			this.registerCommand("vote", new CommandVote(this));
 		}
@@ -117,11 +108,18 @@ public class ZVotePartyPlugin extends ZPlugin {
 			expansion.register();
 		}
 
-		if (this.isEnable(Plugins.VOTIFIER)){
+		if (this.isEnable(Plugins.VOTIFIER)) {
 			this.getLog().log("Hook NuVotifier");
 			this.addListener(new VotifierListener(this));
 		}
-		
+
+		if (this.isEnable(Plugins.ZMENU)) {
+			this.loader = new ZMenuLoader(this);
+			this.loader.load();
+		}
+
+		reloadInventories();
+
 		VersionChecker checker = new VersionChecker(this, 124);
 		checker.useLastVersion();
 
@@ -149,10 +147,6 @@ public class ZVotePartyPlugin extends ZPlugin {
 		return manager;
 	}
 
-	public InventoryManager getInventoryManager() {
-		return inventoryManager;
-	}
-
 	public PlayerManager getPlayerManager() {
 		return this.storageManager.getIStorage();
 	}
@@ -170,7 +164,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 	public void get(OfflinePlayer offlinePlayer, Consumer<PlayerVote> consumer, boolean forceDatabaseUpdate) {
 		this.get(offlinePlayer.getUniqueId(), consumer, forceDatabaseUpdate);
 	}
-	
+
 	/**
 	 * Get player vote
 	 * 
@@ -182,6 +176,16 @@ public class ZVotePartyPlugin extends ZPlugin {
 		manager.getPlayer(uuid, optional -> {
 			consumer.accept(optional.isPresent() ? optional.get() : manager.createPlayer(uuid));
 		}, true);
+	}
+
+	public void reloadInventories() {
+		if (this.isEnable(Plugins.ZMENU)) {
+			this.loader.reload();
+		}
+	}
+	
+	public ZMenuLoader getLoader() {
+		return loader;
 	}
 
 }
