@@ -40,37 +40,37 @@ public enum Message {
 	DESCRIPTION_HELP("Show commands"), 
 	DESCRIPTION_VOTE("Allows you to open the voting inventory"), 
 	
-	RELOAD_SUCCESS("�aYou have just reloaded the configuration."), 
-	RELOAD_ERROR("�cAn error has occurred, go to the console."), 
+	RELOAD_SUCCESS("§aYou have just reloaded the configuration."), 
+	RELOAD_ERROR("§cAn error has occurred, go to the console."), 
 	
 	VOTE_INFORMATIONS(MessageType.CENTER,
-			"�8�m-+------------------------------+-",
+			"§8§m-+------------------------------+-",
 			"", 
-			"�7Vote pour le serveur �5Serveur name here�7 !", 
+			"§7Vote for the server §5Serveur name here§7 !",
 			"", 
-			"�8�m-+------------------------------+-"),
+			"§8§m-+------------------------------+-"),
 	
-	VOTE_BROADCAST_ACTION(MessageType.ACTION, "�f%player% �7has just voted �8(�b%zvoteparty_votes_recorded%�7/�a%zvoteparty_votes_required_total%�8)"),
-	VOTE_BROADCAST_TCHAT("�f%player% �7has just voted �8(�b%zvoteparty_votes_recorded%�7/�a%zvoteparty_votes_required_total%�8)"),
-	VOTE_MESSAGE("�7You have just voted for the server �5Serveur name�7."),
-	VOTE_LATER("�7You have just received �b%amount% �7votes."),
-	VOTE_SEND("�7You just gave a vote to �f%player%�7"),
-	VOTE_REMOVE_SUCCESS("�aYou have just removed a yours from the �f%player%�a."),
-	VOTE_REMOVE_ERROR("�cImpossible to remove a vote from the �f%player%�c, the player has no vote."),
+	VOTE_BROADCAST_ACTION(MessageType.ACTION, "§f%player% §7has just voted §8(§b%zvoteparty_votes_recorded%§7/§a%zvoteparty_votes_required_total%§8)"),
+	VOTE_BROADCAST_TCHAT("§f%player% §7has just voted §8(§b%zvoteparty_votes_recorded%§7/§a%zvoteparty_votes_required_total%§8)"),
+	VOTE_MESSAGE("§7You have just voted for the server §5Serveur name§7."),
+	VOTE_LATER("§7You have just received §b%amount% §7votes."),
+	VOTE_SEND("§7You just gave a vote to §f%player%§7"),
+	VOTE_REMOVE_SUCCESS("§aYou have just removed a yours from the §f%player%§a."),
+	VOTE_REMOVE_ERROR("§cImpossible to remove a vote from the §f%player%§c, the player has no vote."),
 	VOTE_NEEDED(
-			"�b%zvoteparty_votes_required_party% �fvotes �7needed for the next party !",
-			"�7Serveur Minecraft Vote�8: �fhttps://serveur-minecraft-vote.fr/"
+			"§b%zvoteparty_votes_required_party% §fvotes §7needed for the next party !",
+			"§7Serveur Minecraft Vote§8: §fhttps://serveur-minecraft-vote.fr/"
 			),
 	
 	VOTE_PARTY_START(MessageType.CENTER,
-			"�8�m-+------------------------------+-",
+			"§8§m-+------------------------------+-",
 			"", 
-			"�7Launch of the voting party!", 
+			"§7Launch of the voting party!", 
 			"", 
-			"�8�m-+------------------------------+-"
+			"§8§m-+------------------------------+-"
 			), 
 	
-	VOTE_STARTPARTY("�aYou just launched the voting party."),
+	VOTE_STARTPARTY("§aYou just launched the voting party."),
 	
 	;
 
