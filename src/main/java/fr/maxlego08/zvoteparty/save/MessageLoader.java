@@ -97,7 +97,7 @@ public class MessageLoader extends YamlUtils implements Saveable {
 
 		}
 
-		// Pour avoir directs les news paramètres
+		// Pour avoir directs les news paramÂ§tres
 		this.save(null);
 	}
 

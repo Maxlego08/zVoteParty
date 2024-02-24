@@ -15,7 +15,7 @@ import fr.maxlego08.zvoteparty.zcore.utils.inventory.PaginateInventory;
 public class InventoryConfig extends PaginateInventory<Options> {
 
 	public InventoryConfig() {
-		super("§8zVoteParty - Config %p%/%mp%", 54);
+		super("Â§8zVoteParty - Config %p%/%mp%", 54);
 	}
 
 	@Override
@@ -23,10 +23,10 @@ public class InventoryConfig extends PaginateInventory<Options> {
 
 		boolean isToggle = object.isToggle();
 		ItemBuilder builder = new ItemBuilder(isToggle ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK,
-				"§f" + object.getName());
-		builder.addLine("§f§oStatus: §f" + yesNo(isToggle));
-		builder.addLine("§f§oDescription:");
-		object.getDescriptions().forEach(desc -> builder.addLine(" §7" + desc));
+				"Â§f" + object.getName());
+		builder.addLine("Â§fÂ§oStatus: Â§f" + yesNo(isToggle));
+		builder.addLine("Â§fÂ§oDescription:");
+		object.getDescriptions().forEach(desc -> builder.addLine(" Â§7" + desc));
 		if (isToggle)
 			builder.glow();
 
@@ -34,7 +34,7 @@ public class InventoryConfig extends PaginateInventory<Options> {
 	}
 
 	private String yesNo(boolean b) {
-		return b ? "§aEnable" : "§cDisabled";
+		return b ? "Â§aEnable" : "Â§cDisabled";
 	}
 
 	@Override
@@ -46,10 +46,10 @@ public class InventoryConfig extends PaginateInventory<Options> {
 		boolean isToggle = object.isToggle();
 
 		ItemBuilder builder = new ItemBuilder(isToggle ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK,
-				"§f" + object.getName());
-		builder.addLine("§f§oStatus: §f" + yesNo(isToggle));
-		builder.addLine("§f§oDescription:");
-		object.getDescriptions().forEach(desc -> builder.addLine(" §7" + desc));
+				"Â§f" + object.getName());
+		builder.addLine("Â§fÂ§oStatus: Â§f" + yesNo(isToggle));
+		builder.addLine("Â§fÂ§oDescription:");
+		object.getDescriptions().forEach(desc -> builder.addLine(" Â§7" + desc));
 		if (isToggle)
 			builder.glow();
 

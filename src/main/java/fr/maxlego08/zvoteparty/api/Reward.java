@@ -36,7 +36,7 @@ public interface Reward {
 	void give(Plugin plugin, OfflinePlayer player);
 	
 	/**
-	 * Les messages qui vont être envoyé
+	 * Les messages qui vont Â§tre envoyÂ§
 	 * 
 	 * @return messages
 	 */
