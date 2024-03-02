@@ -34,7 +34,7 @@ public class Config implements Saveable {
 			new RedisPoolConfiguration(128, 128, 16));
 	public static int maxSqlRetryAmoun = 5;
 	
-	public static ProgressBar progressBar = new ProgressBar(20, '|', "งa", "ง8");
+	public static ProgressBar progressBar = new ProgressBar(20, '|', "ยงa", "ยง8");
 
 	/**
 	 * static Singleton instance.

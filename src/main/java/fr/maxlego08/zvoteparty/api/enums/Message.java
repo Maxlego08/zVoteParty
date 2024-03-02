@@ -11,13 +11,13 @@ import fr.maxlego08.zvoteparty.zcore.utils.nms.NMSUtils;
 
 public enum Message {
 
-	PREFIX("§8(§6zVoteParty§8) "),
+	PREFIX("Â§8(Â§6zVotePartyÂ§8) "),
 	
-	INVENTORY_NULL("§cImpossible to find the inventory with the id §6%id%§c."),
-	INVENTORY_CLONE_NULL("§cThe inventory clone is null!"),
-	INVENTORY_OPEN_ERROR("§cAn error occurred with the opening of the inventory §6%id%§c."),
-	INVENTORY_BUTTON_PREVIOUS("§f» §7Previous page"),
-	INVENTORY_BUTTON_NEXT("§f» §7Next page"),
+	INVENTORY_NULL("Â§cImpossible to find the inventory with the id Â§6%id%Â§c."),
+	INVENTORY_CLONE_NULL("Â§cThe inventory clone is null!"),
+	INVENTORY_OPEN_ERROR("Â§cAn error occurred with the opening of the inventory Â§6%id%Â§c."),
+	INVENTORY_BUTTON_PREVIOUS("Â§fÂ§ Â§7Previous page"),
+	INVENTORY_BUTTON_NEXT("Â§fÂ§ Â§7Next page"),
 	
 	TIME_DAY("%02d jour(s) %02d heure(s) %02d minute(s) %02d seconde(s)"),
 	TIME_HOUR("%02d heure(s) %02d minute(s) %02d seconde(s)"),
@@ -25,11 +25,11 @@ public enum Message {
 	TIME_MINUTE("%02d minute(s) %02d seconde(s)"),
 	TIME_SECOND("%02d seconde(s)"),
 	
-	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §a%syntax%"),
-	COMMAND_NO_PERMISSION("§cYou do not have permission to run this command."),
-	COMMAND_NO_CONSOLE("§cOnly one player can execute this command."),
-	COMMAND_NO_ARG("§cImpossible to find the command with its arguments."),
-	COMMAND_SYNTAXE_HELP("§a%syntax% §b» §7%description%"), 
+	COMMAND_SYNTAXE_ERROR("Â§cYou must execute the command like thisÂ§7: Â§a%syntax%"),
+	COMMAND_NO_PERMISSION("Â§cYou do not have permission to run this command."),
+	COMMAND_NO_CONSOLE("Â§cOnly one player can execute this command."),
+	COMMAND_NO_ARG("Â§cImpossible to find the command with its arguments."),
+	COMMAND_SYNTAXE_HELP("Â§a%syntax% Â§bÂ§ Â§7%description%"),
 	
 	DESCRIPTION_VERSION("Show plugin version"),
 	DESCRIPTION_RELOAD("Reload configurations"),
@@ -40,37 +40,37 @@ public enum Message {
 	DESCRIPTION_HELP("Show commands"), 
 	DESCRIPTION_VOTE("Allows you to open the voting inventory"), 
 	
-	RELOAD_SUCCESS("§aYou have just reloaded the configuration."), 
-	RELOAD_ERROR("§cAn error has occurred, go to the console."), 
+	RELOAD_SUCCESS("Â§aYou have just reloaded the configuration."), 
+	RELOAD_ERROR("Â§cAn error has occurred, go to the console."), 
 	
 	VOTE_INFORMATIONS(MessageType.CENTER,
-			"§8§m-+------------------------------+-",
+			"Â§8Â§m-+------------------------------+-",
 			"", 
-			"§7Vote pour le serveur §5Serveur name here§7 !", 
+			"Â§7Vote for the server Â§5Serveur name hereÂ§7 !",
 			"", 
-			"§8§m-+------------------------------+-"),
+			"Â§8Â§m-+------------------------------+-"),
 	
-	VOTE_BROADCAST_ACTION(MessageType.ACTION, "§f%player% §7has just voted §8(§b%zvoteparty_votes_recorded%§7/§a%zvoteparty_votes_required_total%§8)"),
-	VOTE_BROADCAST_TCHAT("§f%player% §7has just voted §8(§b%zvoteparty_votes_recorded%§7/§a%zvoteparty_votes_required_total%§8)"),
-	VOTE_MESSAGE("§7You have just voted for the server §5Serveur name§7."),
-	VOTE_LATER("§7You have just received §b%amount% §7votes."),
-	VOTE_SEND("§7You just gave a vote to §f%player%§7"),
-	VOTE_REMOVE_SUCCESS("§aYou have just removed a yours from the §f%player%§a."),
-	VOTE_REMOVE_ERROR("§cImpossible to remove a vote from the §f%player%§c, the player has no vote."),
+	VOTE_BROADCAST_ACTION(MessageType.ACTION, "Â§f%player% Â§7has just voted Â§8(Â§b%zvoteparty_votes_recorded%Â§7/Â§a%zvoteparty_votes_required_total%Â§8)"),
+	VOTE_BROADCAST_TCHAT("Â§f%player% Â§7has just voted Â§8(Â§b%zvoteparty_votes_recorded%Â§7/Â§a%zvoteparty_votes_required_total%Â§8)"),
+	VOTE_MESSAGE("Â§7You have just voted for the server Â§5Serveur nameÂ§7."),
+	VOTE_LATER("Â§7You have just received Â§b%amount% Â§7votes."),
+	VOTE_SEND("Â§7You just gave a vote to Â§f%player%Â§7"),
+	VOTE_REMOVE_SUCCESS("Â§aYou have just removed a yours from the Â§f%player%Â§a."),
+	VOTE_REMOVE_ERROR("Â§cImpossible to remove a vote from the Â§f%player%Â§c, the player has no vote."),
 	VOTE_NEEDED(
-			"§b%zvoteparty_votes_required_party% §fvotes §7needed for the next party !",
-			"§7Serveur Minecraft Vote§8: §fhttps://serveur-minecraft-vote.fr/"
+			"Â§b%zvoteparty_votes_required_party% Â§fvotes Â§7needed for the next party !",
+			"Â§7Serveur Minecraft VoteÂ§8: Â§fhttps://serveur-minecraft-vote.fr/"
 			),
 	
 	VOTE_PARTY_START(MessageType.CENTER,
-			"§8§m-+------------------------------+-",
+			"Â§8Â§m-+------------------------------+-",
 			"", 
-			"§7Launch of the voting party!", 
+			"Â§7Launch of the voting party!", 
 			"", 
-			"§8§m-+------------------------------+-"
+			"Â§8Â§m-+------------------------------+-"
 			), 
 	
-	VOTE_STARTPARTY("§aYou just launched the voting party."),
+	VOTE_STARTPARTY("Â§aYou just launched the voting party."),
 	
 	;
 

@@ -47,7 +47,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 	}
 
 	/**
-	 * Permet de créer l'inventaire
+	 * Permet de crÂ§er l'inventaire
 	 * 
 	 * @param name
 	 * @return this
@@ -57,7 +57,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 	}
 
 	/**
-	 * Permet de créer l'inventaire
+	 * Permet de crÂ§er l'inventaire
 	 * 
 	 * @param name
 	 * @param size
@@ -74,7 +74,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 	 */
 	private void createDefaultInventory() {
 		if (this.inventory == null)
-			this.inventory = Bukkit.createInventory(null, 54, "§cDefault Inventory");
+			this.inventory = Bukkit.createInventory(null, 54, "Â§cDefault Inventory");
 	}
 
 	/**
@@ -105,7 +105,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 	 * @return
 	 */
 	public ItemButton addItem(int slot, ItemStack item) {
-		// Pour éviter les erreurs, on crée un inventaire
+		// Pour Â§viter les erreurs, on crÂ§e un inventaire
 		createDefaultInventory();
 
 		ItemButton button = new ItemButton(item, slot);
@@ -136,7 +136,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 	}
 
 	/**
-	 * Permet de récupérer tous les items
+	 * Permet de rÂ§cupÂ§rer tous les items
 	 * 
 	 * @return
 	 */
@@ -145,7 +145,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 	}
 
 	/**
-	 * Si le click dans l'inventaire est désactivé (se qui est par default)
+	 * Si le click dans l'inventaire est dÂ§sactivÂ§ (se qui est par default)
 	 * alors il va retourner vrai
 	 * 
 	 * @return vrai ou faux
@@ -164,7 +164,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 	}
 
 	/**
-	 * Permet de récupérer le joueur
+	 * Permet de rÂ§cupÂ§rer le joueur
 	 * 
 	 * @return player
 	 */
@@ -173,7 +173,7 @@ public abstract class VInventory extends ZUtils implements Cloneable {
 	}
 
 	/**
-	 * Permet de récupérer la page
+	 * Permet de rÂ§cupÂ§rer la page
 	 * 
 	 * @return the page
 	 */

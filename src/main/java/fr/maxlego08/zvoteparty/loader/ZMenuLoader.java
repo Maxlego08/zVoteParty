@@ -47,7 +47,7 @@ public class ZMenuLoader extends ZUtils {
 			Inventory inventory = optional.get();
 			this.inventoryManager.openInventory(player, inventory);
 		} else
-			message(player, "§cErreur with inventory votes !");
+			message(player, "Â§cErreur with inventory votes !");
 	}
 
 }
