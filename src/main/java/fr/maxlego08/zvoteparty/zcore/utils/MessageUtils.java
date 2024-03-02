@@ -118,7 +118,7 @@ public abstract class MessageUtils extends LocationUtils {
 
 	protected String getMessage(String message, Object... args) {
 		if (args.length % 2 != 0)
-			System.err.println("Impossible d'appliquer la méthode pour les messages.");
+			System.err.println("Impossible d'appliquer la mÂ§thode pour les messages.");
 		else
 			for (int a = 0; a < args.length; a += 2) {
 				String replace = args[a].toString();
@@ -208,7 +208,7 @@ public abstract class MessageUtils extends LocationUtils {
 		boolean isBold = false;
 
 		for (char c : message.toCharArray()) {
-			if (c == '§') {
+			if (c == 'Â§') {
 				previousCode = true;
 				continue;
 			} else if (previousCode == true) {
