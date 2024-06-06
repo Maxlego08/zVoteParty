@@ -1077,7 +1077,7 @@ public abstract class ZUtils extends MessageUtils {
 	 */
 	public void glow(ItemStack itemStack) {
 		ItemMeta itemMeta = itemStack.getItemMeta();
-		itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+		itemMeta.addEnchant(Enchantment.POWER, 1, true);
 		if (NMSUtils.getNMSVersion() != 1.7)
 			itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		itemStack.setItemMeta(itemMeta);

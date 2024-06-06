@@ -229,7 +229,7 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 	 * @return
 	 */
 	public ItemBuilder glow() {
-		addEnchant(material != Material.BOW ? Enchantment.ARROW_INFINITE : Enchantment.LUCK, 10);
+		addEnchant(material != Material.BOW ? Enchantment.INFINITY : Enchantment.LUCK_OF_THE_SEA, 10);
 		setFlag(ItemFlag.HIDE_ENCHANTS);
 		return this;
 	}

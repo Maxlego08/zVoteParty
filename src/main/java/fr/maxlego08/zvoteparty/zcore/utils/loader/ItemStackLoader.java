@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fr.maxlego08.menu.zcore.utils.Potion;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -11,7 +12,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 
 import fr.maxlego08.zvoteparty.exceptions.ItemEnchantException;
@@ -98,7 +98,7 @@ public class ItemStackLoader extends ZUtils implements Loader<ItemStack> {
 
 		if (isGlowing && NMSUtils.getNMSVersion() != 1.7) {
 
-			meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+			meta.addEnchant(Enchantment.POWER, 1, true);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
 		}
