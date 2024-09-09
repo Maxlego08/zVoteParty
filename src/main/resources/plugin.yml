@@ -1,8 +1,10 @@
 name: zVoteParty
-author: Maxlego08
+authors: 
+  - Maxlego08
+  - Abasing (Zamin Ali)
 main: fr.maxlego08.zvoteparty.ZVotePartyPlugin
 softdepend: [PlaceholderAPI, Votifier, zMenu]
 version: '${project.version}'
-website: https://groupez.dev/resources/zvoteparty.124
+website: https://github.com/Abasing/zVotePartyx/releases
 api-version: 1.20
 commands:
