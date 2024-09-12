@@ -8,19 +8,16 @@ import fr.maxlego08.zvoteparty.zcore.utils.commands.CommandType;
 
 public class CommandStartParty extends VCommand {
 
-	public CommandStartParty(ZVotePartyPlugin plugin) {
-		super(plugin);
-		this.setDescription(Message.DESCRIPTION_STARTPARTY);
-		this.addSubCommand("startparty", "sp");
-		this.setPermission(Permission.ZVOTEPARTY_STARTPARTY);	
-	}
+    public CommandStartParty(ZVotePartyPlugin plugin) {
+        super(plugin);
+        setDescription(Message.DESCRIPTION_STARTPARTY);
+        addSubCommand("startparty", "sp");
+        setPermission(Permission.ZVOTEPARTY_STARTPARTY);    
+    }
 
-	@Override
-	protected CommandType perform(ZVotePartyPlugin plugin) {
-		
-		this.manager.forceStart(this.sender);
-		
-		return CommandType.SUCCESS;
-	}
-
+    @Override
+    protected CommandType perform(ZVotePartyPlugin plugin) {
+        plugin.getManager().forceStart(sender);
+        return CommandType.SUCCESS;
+    }
 }
