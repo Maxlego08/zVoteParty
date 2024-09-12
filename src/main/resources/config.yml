@@ -39,63 +39,68 @@
 
 # Rewards when a player goes to vote
 rewards:
+  # Reward configuration, each reward entry has a unique ID
   1:
     percent: 10
-    needToBeOnline: false # Player must not be online to receive the reward
+    needToBeOnline: false # Player does not need to be online to receive the reward
     commands:
       - "eco give %player% 100"
     broadcast:
       - "&f%player% &7just won &a$100"
+  
   2:
     percent: 30
     needToBeOnline: true # Player must be online to receive the reward
     commands:
       - "give %player% minecraft:stone 10"
     broadcast:
-      - "&f%player% &7just won &ax10 stone"      
+      - "&f%player% &7just won &ax10 stone"
+
   3:
     percent: 30
-    needToBeOnline: false # Player must not be online to receive the reward
+    needToBeOnline: false # Player does not need to be online to receive the reward
     commands:
       - "eco give %player% 500"
-    broadcast: []   
+    broadcast: [] # No broadcast message for this reward
+
   4:
     percent: 30
     needToBeOnline: true # Player must be online to receive the reward
     commands:
-      - "cr give %player% diamand"
+      - "cr give %player% diamond"
     broadcast:
       - "&7&m----------"
-      - "&f%player% &7just won &ax1 diamand"
-      - "&7&m----------"      
-      
+      - "&f%player% &7just won &ax1 diamond"
+      - "&7&m----------"
+
 party:
-  # The amount of votes needed
-  votes_needed: 50
+  # Configuration for party votes
+  votes_needed: 50 # The number of votes required to trigger the party rewards
   
-  # The command that will be executed when the number of votes is reached for each online players
+  # Commands executed when the required number of votes is reached for online players
   global_commands:
     - "eco give %player% 100"
-    
-  # This command will be executed in the console, you cannot specify a player here
+
+  # Commands executed in the console when the required number of votes is reached
   commands:
-    - "eco give * 0.0000000009"  
-    
-  # Rewards that the player can get randomly 
+    - "eco give * 0.0000000009"
+
+  # Rewards configuration for the party votes
   rewards:
     1:
       percent: 50
       commands:
         - "give %player% minecraft:diamond 1"
+        
     2:
       percent: 50
       commands:
-        - "cr give %player% test"  
-        
-#Database informations
+        - "cr give %player% test"
+
+# Database configuration
 sql:
   user: "homestead"
   password: "secret"
   port: 3306
   host: "192.168.10.10"
-  database: "zvoteparty"         
+  database: "zvoteparty"
