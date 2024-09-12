@@ -7,23 +7,25 @@ import fr.maxlego08.zvoteparty.zcore.utils.commands.CommandType;
 
 public class CommandVersion extends VCommand {
 
-	public CommandVersion(ZVotePartyPlugin plugin) {
-		super(plugin);
-		this.setDescription(Message.DESCRIPTION_VERSION);
-		this.addSubCommand("version", "ver", "v");
-	}
+    public CommandVersion(ZVotePartyPlugin plugin) {
+        super(plugin);
+        setDescription(Message.DESCRIPTION_VERSION);
+        addSubCommand("version", "ver", "v");
+    }
 
-	@Override
-	protected CommandType perform(ZVotePartyPlugin plugin) {
-		
-		message(sender, "§aVersion du plugin§7: §2" + plugin.getDescription().getVersion());
-		message(sender, "§aAuteur§7: §2Maxlego08");
-		message(sender, "§aDiscord§7: §2http://discord.groupez.dev/");
-		message(sender, "§aDownload now§7: §2https://groupez.dev/resources/124");
-		message(sender, "§aServeur Minecraft Vote§7: §fhttps://serveur-minecraft-vote.fr/");
-		message(sender, "§aSponsor§7: §chttps://serveur-minecraft-vote.fr/?ref=345");
-		
-		return CommandType.SUCCESS;
-	}
+    @Override
+    protected CommandType perform(ZVotePartyPlugin plugin) {
+        sendVersionInfo(plugin);
+        return CommandType.SUCCESS;
+    }
 
+    private void sendVersionInfo(ZVotePartyPlugin plugin) {
+        String version = plugin.getDescription().getVersion();
+        message(sender, String.format("§aVersion du plugin§7: §2%s", version));
+        message(sender, "§aAuteur§7: §2Maxlego08");
+        message(sender, "§aDiscord§7: §2http://discord.groupez.dev/");
+        message(sender, "§aDownload now§7: §2https://groupez.dev/resources/124");
+        message(sender, "§aServeur Minecraft Vote§7: §fhttps://serveur-minecraft-vote.fr/");
+        message(sender, "§aSponsor§7: §chttps://serveur-minecraft-vote.fr/?ref=345");
+    }
 }
