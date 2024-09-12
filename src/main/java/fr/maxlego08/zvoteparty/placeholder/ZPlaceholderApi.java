@@ -15,111 +15,108 @@ import fr.maxlego08.zvoteparty.zcore.utils.ZUtils;
 
 public class ZPlaceholderApi extends ZUtils {
 
-	private ZVotePartyPlugin plugin;
-	private final String prefix = "zvoteparty";
-	private final Pattern pattern = Pattern.compile("[%]([^%]+)[%]");
+    private ZVotePartyPlugin plugin;
+    private static final String PREFIX = "zvoteparty";
+    private static final Pattern PATTERN = Pattern.compile("%([^%]+)%");
 
-	/**
-	 * Set plugin instance
-	 * 
-	 * @param plugin
-	 */
-	public void setPlugin(ZVotePartyPlugin plugin) {
-		this.plugin = plugin;
-	}
+    // Singleton instance
+    private static volatile ZPlaceholderApi instance;
 
-	/**
-	 * static Singleton instance.
-	 */
-	private static volatile ZPlaceholderApi instance;
+    // Private constructor
+    private ZPlaceholderApi() {
+    }
 
-	/**
-	 * Private constructor for singleton.
-	 */
-	private ZPlaceholderApi() {
-	}
+    /**
+     * Sets the plugin instance.
+     * 
+     * @param plugin the plugin instance
+     */
+    public void setPlugin(ZVotePartyPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-	/**
-	 * Return a singleton instance of ZPlaceholderApi.
-	 */
-	public static ZPlaceholderApi getInstance() {
-		// Double lock for thread safety.
-		if (instance == null) {
-			synchronized (ZPlaceholderApi.class) {
-				if (instance == null) {
-					instance = new ZPlaceholderApi();
-				}
-			}
-		}
-		return instance;
-	}
+    /**
+     * Returns the singleton instance of ZPlaceholderApi.
+     * 
+     * @return the singleton instance
+     */
+    public static ZPlaceholderApi getInstance() {
+        if (instance == null) {
+            synchronized (ZPlaceholderApi.class) {
+                if (instance == null) {
+                    instance = new ZPlaceholderApi();
+                }
+            }
+        }
+        return instance;
+    }
 
-	/**
-	 * 
-	 * @param player
-	 * @param displayName
-	 * @return
-	 */
-	public String setPlaceholders(Player player, String placeholder) {
+    /**
+     * Replaces placeholders in a string with their values.
+     * 
+     * @param player the player context
+     * @param placeholder the string containing placeholders
+     * @return the string with placeholders replaced
+     */
+    public String setPlaceholders(Player player, String placeholder) {
+        if (placeholder == null || !placeholder.contains("%")) {
+            return placeholder;
+        }
 
-		if (placeholder == null || !placeholder.contains("%")) {
-			return placeholder;
-		}
+        Matcher matcher = PATTERN.matcher(placeholder);
+        while (matcher.find()) {
+            String fullPlaceholder = matcher.group(0);
+            String key = matcher.group(1).replace(PREFIX + "_", "");
+            String replacement = onRequest(player, key);
+            if (replacement != null) {
+                placeholder = placeholder.replace(fullPlaceholder, replacement);
+            }
+        }
 
-		final String realPrefix = this.prefix + "_";
+        return placeholder;
+    }
 
-		Matcher matcher = this.pattern.matcher(placeholder);
-		while (matcher.find()) {
-			String stringPlaceholder = matcher.group(0);
-			String regex = matcher.group(1).replace(realPrefix, "");
-			String replace = this.onRequest(player, regex);
-			if (replace != null) {
-				placeholder = placeholder.replace(stringPlaceholder, replace);
-			}
-		}
-		
-		return placeholder;
-	}
+    /**
+     * Replaces placeholders in a list of strings with their values.
+     * 
+     * @param player the player context
+     * @param lore the list of strings containing placeholders
+     * @return the list of strings with placeholders replaced
+     */
+    public List<String> setPlaceholders(Player player, List<String> lore) {
+        return lore == null ? null : lore.stream()
+                .map(line -> setPlaceholders(player, line))
+                .collect(Collectors.toList());
+    }
 
-	/**
-	 * 
-	 * @param player
-	 * @param lore
-	 * @return
-	 */
-	public List<String> setPlaceholders(Player player, List<String> lore) {
-		return lore == null ? null
-				: lore.stream().map(e -> e = setPlaceholders(player, e)).collect(Collectors.toList());
-	}
+    /**
+     * Handles custom placeholder replacements.
+     * 
+     * @param player the player context
+     * @param placeholder the placeholder key
+     * @return the replacement value or null if not handled
+     */
+    private String onRequest(Player player, String placeholder) {
+        if (plugin == null) {
+            return null;
+        }
 
-	/**
-	 * Custom placeholder
-	 * 
-	 * @param player
-	 * @param string
-	 * @return
-	 */
-	public String onRequest(Player player, String string) {
+        VotePartyManager manager = plugin.getManager();
+        IStorage storage = plugin.getIStorage();
 
-		VotePartyManager manager = this.plugin.getManager();
-		IStorage iStorage = this.plugin.getIStorage();
-
-		switch (string) {
-
-		case "votes_recorded":
-			return String.valueOf(iStorage.getVoteCount());
-		case "votes_required_party":
-			return String.valueOf(manager.getNeedVotes() - iStorage.getVoteCount());
-		case "votes_required_total":
-			return String.valueOf(manager.getNeedVotes());
-		case "votes_progressbar":
-			return this.getProgressBar(iStorage.getVoteCount(), manager.getNeedVotes(), Config.progressBar);
-		case "player_votes":
-			return player == null ? null : String.valueOf(manager.getPlayerVoteCount(player));
-
-		}
-
-		return null;
-	}
-
+        switch (placeholder) {
+            case "votes_recorded":
+                return String.valueOf(storage.getVoteCount());
+            case "votes_required_party":
+                return String.valueOf(manager.getNeedVotes() - storage.getVoteCount());
+            case "votes_required_total":
+                return String.valueOf(manager.getNeedVotes());
+            case "votes_progressbar":
+                return getProgressBar(storage.getVoteCount(), manager.getNeedVotes(), Config.progressBar);
+            case "player_votes":
+                return player == null ? null : String.valueOf(manager.getPlayerVoteCount(player));
+            default:
+                return null;
+        }
+    }
 }
