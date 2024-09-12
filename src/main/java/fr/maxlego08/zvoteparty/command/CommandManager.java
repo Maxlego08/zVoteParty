@@ -201,26 +201,24 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 		});
 	}
 
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String str, String[] args) {
+@Override
+public List<String> onTabComplete(CommandSender sender, Command cmd, String str, String[] args) {
+    String cmdName = cmd.getName().toLowerCase();
+    for (VCommand command : commands) {
+        if (command.getSubCommands().contains(cmdName)) {
+            if (args.length == 1 && command.getParent() == null) {
+                return processTab(sender, command, args);
+            }
+        } else if (args.length > 0) {
+            String[] newArgs = Arrays.copyOf(args, args.length - 1);
+            if (canExecute(newArgs, cmdName, command)) {
+                return processTab(sender, command, args);
+            }
+        }
+    }
+    return null;
+}
 
-		for (VCommand command : commands) {
-
-			if (command.getSubCommands().contains(cmd.getName().toLowerCase())) {
-				if (args.length == 1 && command.getParent() == null) {
-					return proccessTab(sender, command, args);
-				}
-			} else {
-				String[] newArgs = Arrays.copyOf(args, args.length - 1);
-				if (newArgs.length >= 1 && command.getParent() != null
-						&& canExecute(newArgs, cmd.getName().toLowerCase(), command)) {
-					return proccessTab(sender, command, args);
-				}
-			}
-		}
-
-		return null;
-	}
 
 	/**
 	 * 
@@ -260,33 +258,24 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 	 * @param vCommand
 	 * @param aliases
 	 */
-	public void registerCommand(String string, VCommand vCommand, String... aliases) {
-		try {
-			Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-			bukkitCommandMap.setAccessible(true);
+public void registerCommand(String string, VCommand vCommand, String... aliases) {
+    try {
+        CommandMap commandMap = ((CraftServer) Bukkit.getServer()).getCommandMap();
+        PluginCommand command = Bukkit.getPluginCommand(string);
+        
+        if (command == null) {
+            command = new PluginCommand(string, this.plugin);
+        }
 
-			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+        command.setExecutor(this);
+        command.setTabCompleter(this);
+        command.setAliases(Arrays.asList(aliases));
 
-			Class<? extends PluginCommand> class1 = PluginCommand.class;
-			Constructor<? extends PluginCommand> constructor = class1.getDeclaredConstructor(String.class,
-					Plugin.class);
-			constructor.setAccessible(true);
+        commands.add(vCommand.addSubCommand(string));
+        vCommand.addSubCommand(aliases);
 
-			List<String> lists = Arrays.asList(aliases);
-
-			PluginCommand command = constructor.newInstance(string, this.plugin);
-			command.setExecutor(this);
-			command.setTabCompleter(this);
-			command.setAliases(lists);
-
-			commands.add(vCommand.addSubCommand(string));
-			vCommand.addSubCommand(aliases);
-
-			commandMap.register(command.getName(), this.plugin.getDescription().getName(), command);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
+        commandMap.register(string, command);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 }
