@@ -13,7 +13,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer; // Adjust the version according to your server
+import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 
 import fr.maxlego08.zvoteparty.ZVotePartyPlugin;
 import fr.maxlego08.zvoteparty.api.enums.Message;
