@@ -323,30 +323,21 @@ public abstract class VCommand extends Arguments {
 	 * @param syntax
 	 * @return generate syntax
 	 */
-	private String generateDefaultSyntax(String syntax) {
+private String generateDefaultSyntax(String syntax) {
+    StringBuilder sb = new StringBuilder(subCommands.get(0));
 
-		String tmpString = subCommands.get(0);
+    if (syntax.isEmpty()) {
+        for (String requireArg : requireArgs) {
+            sb.append(" <").append(requireArg).append(">");
+        }
+        for (String optionalArg : optionalArgs) {
+            sb.append(" [<").append(optionalArg).append(">]");
+        }
+    }
 
-		boolean update = syntax.equals("");
-
-		if (requireArgs.size() != 0 && update)
-			for (String requireArg : requireArgs) {
-				requireArg = "<" + requireArg + ">";
-				syntax += " " + requireArg;
-			}
-		if (optionalArgs.size() != 0 && update)
-			for (String optionalArg : optionalArgs) {
-				optionalArg = "[<" + optionalArg + ">]";
-				syntax += " " + optionalArg;
-			}
-
-		tmpString += syntax;
-
-		if (parent == null)
-			return "/" + tmpString;
-
-		return parent.generateDefaultSyntax(" " + tmpString);
-	}
+    String result = "/" + sb.toString();
+    return parent == null ? result : parent.generateDefaultSyntax(" " + result);
+}
 
 	/**
 	 * Permet de savoir le nombre de parent de façon récursive
@@ -358,46 +349,43 @@ public abstract class VCommand extends Arguments {
 		return parent == null ? defaultParent : parent.parentCount(defaultParent + 1);
 	}
 
-	public CommandType prePerform(ZVotePartyPlugin plugin, CommandSender commandSender, String[] args) {
+public CommandType prePerform(ZVotePartyPlugin plugin, CommandSender commandSender, String[] args) {
+    this.parentCount = parentCount(0);
+    this.argsMaxLength = requireArgs.size() + optionalArgs.size() + parentCount;
+    this.argsMinLength = requireArgs.size() + parentCount;
 
-		// On met à jour le nombre d'argument en fonction du nombre de parent
-		
-		this.parentCount = parentCount(0);
-		this.argsMaxLength = this.requireArgs.size() + this.optionalArgs.size() + this.parentCount;
-		this.argsMinLength = this.requireArgs.size() + this.parentCount;
+    if (syntax == null) {
+        syntax = generateDefaultSyntax("");
+    }
 
-		// On génère le syntax de base s'il y est impossible de la trouver
-		if (this.syntax == null)
-			this.syntax = generateDefaultSyntax("");
+    this.args = args;
+    String defaultString = super.argAsString(0);
 
-		this.args = args;
+    if (defaultString != null) {
+        for (VCommand subCommand : getSubVCommands()) {
+            if (subCommand.getSubCommands().contains(defaultString.toLowerCase())) {
+                return CommandType.CONTINUE;
+            }
+        }
+    }
 
-		String defaultString = super.argAsString(0);
+    if (args.length < argsMinLength || args.length > argsMaxLength) {
+        return CommandType.SYNTAX_ERROR;
+    }
 
-		if (defaultString != null) {
-			for (VCommand subCommand : getSubVCommands()) {
-				if (subCommand.getSubCommands().contains(defaultString.toLowerCase()))
-					return CommandType.CONTINUE;
-			}
-		}
+    this.sender = commandSender;
+    if (sender instanceof Player) {
+        player = (Player) sender;
+    }
 
-		if (argsMinLength != 0 && argsMaxLength != 0
-				&& !(args.length >= argsMinLength && args.length <= argsMaxLength)) {
-			return CommandType.SYNTAX_ERROR;
-		}
+    try {
+        return perform(plugin);
+    } catch (Exception e) {
+        if (Config.enableDebug) e.printStackTrace();
+        return CommandType.SYNTAX_ERROR;
+    }
+}
 
-		this.sender = commandSender;
-		if (sender instanceof Player)
-			player = (Player) commandSender;
-
-		try {
-			return perform(plugin);
-		} catch (Exception e) {
-			if (Config.enableDebug)
-				e.printStackTrace();
-			return CommandType.SYNTAX_ERROR;
-		}
-	}
 
 	/**
 	 * method that allows you to execute the command
@@ -442,9 +430,9 @@ public abstract class VCommand extends Arguments {
 	 * @param strings
 	 * @return
 	 */
-	protected List<String> generateList(String startWith, String... strings) {
-		return generateList(Arrays.asList(strings), startWith);
-	}
+protected List<String> generateList(String startWith, String... strings) {
+    return generateList(Arrays.asList(strings), startWith, Tab.START);
+}
 
 	/**
 	 * Generate list for tab completer
@@ -453,9 +441,9 @@ public abstract class VCommand extends Arguments {
 	 * @param strings
 	 * @return
 	 */
-	protected List<String> generateList(Tab tab, String startWith, String... strings) {
-		return generateList(Arrays.asList(strings), startWith, tab);
-	}
+protected List<String> generateList(Tab tab, String startWith, String... strings) {
+    return generateList(Arrays.asList(strings), startWith, tab);
+}
 
 	/**
 	 * Generate list for tab completer
@@ -464,9 +452,9 @@ public abstract class VCommand extends Arguments {
 	 * @param startWith
 	 * @return
 	 */
-	protected List<String> generateList(List<String> defaultList, String startWith) {
-		return generateList(defaultList, startWith, Tab.START);
-	}
+protected List<String> generateList(List<String> defaultList, String startWith) {
+    return generateList(defaultList, startWith, Tab.START);
+}
 
 	/**
 	 * Generate list for tab completer
@@ -476,15 +464,16 @@ public abstract class VCommand extends Arguments {
 	 * @param tab
 	 * @return
 	 */
-	protected List<String> generateList(List<String> defaultList, String startWith, Tab tab) {
-		List<String> newList = new ArrayList<>();
-		for (String str : defaultList)
-			if (startWith.length() == 0
-					|| (tab.equals(Tab.START) ? str.toLowerCase().startsWith(startWith.toLowerCase())
-							: str.toLowerCase().contains(startWith.toLowerCase())))
-				newList.add(str);
-		return newList.size() == 0 ? null : newList;
-	}
+protected List<String> generateList(List<String> defaultList, String startWith, Tab tab) {
+    List<String> newList = new ArrayList<>();
+    for (String str : defaultList) {
+        boolean matches = startWith.isEmpty() || (tab == Tab.START ? str.toLowerCase().startsWith(startWith.toLowerCase()) : str.toLowerCase().contains(startWith.toLowerCase()));
+        if (matches) {
+            newList.add(str);
+        }
+    }
+    return newList.isEmpty() ? null : newList;
+}
 
 	/**
 	 * @return the subVCommands
