@@ -2,34 +2,25 @@ package fr.maxlego08.zvoteparty.exceptions;
 
 public class ButtonCreateItemStackNullPointerException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ButtonCreateItemStackNullPointerException() {
-		// TODO Auto-generated constructor stub
-	}
+    public ButtonCreateItemStackNullPointerException() {
+        super(); // Calls the default constructor of Exception
+    }
 
-	public ButtonCreateItemStackNullPointerException(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
+    public ButtonCreateItemStackNullPointerException(String message) {
+        super(message); // Passes the message to the Exception constructor
+    }
 
-	public ButtonCreateItemStackNullPointerException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
-	}
+    public ButtonCreateItemStackNullPointerException(Throwable cause) {
+        super(cause); // Passes the cause to the Exception constructor
+    }
 
-	public ButtonCreateItemStackNullPointerException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
+    public ButtonCreateItemStackNullPointerException(String message, Throwable cause) {
+        super(message, cause); // Passes both message and cause to the Exception constructor
+    }
 
-	public ButtonCreateItemStackNullPointerException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-		// TODO Auto-generated constructor stub
-	}
-
+    public ButtonCreateItemStackNullPointerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace); // Passes all parameters to the Exception constructor
+    }
 }
