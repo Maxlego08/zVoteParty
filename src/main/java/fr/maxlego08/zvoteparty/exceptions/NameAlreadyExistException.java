@@ -1,55 +1,56 @@
 package fr.maxlego08.zvoteparty.exceptions;
 
+/**
+ * Exception thrown when a name already exists.
+ */
 public class NameAlreadyExistException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	public NameAlreadyExistException() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Default constructor.
+     */
+    public NameAlreadyExistException() {
+        super(); // Calls the default constructor of Exception
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
-	 */
-	public NameAlreadyExistException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Constructor with a message and cause.
+     * 
+     * @param message The detail message for the exception.
+     * @param cause The cause of the exception.
+     * @param enableSuppression Whether or not suppression is enabled.
+     * @param writableStackTrace Whether or not the stack trace is writable.
+     */
+    public NameAlreadyExistException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace); // Passes all parameters to Exception constructor
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public NameAlreadyExistException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Constructor with a message and cause.
+     * 
+     * @param message The detail message for the exception.
+     * @param cause The cause of the exception.
+     */
+    public NameAlreadyExistException(String message, Throwable cause) {
+        super(message, cause); // Passes both message and cause to Exception constructor
+    }
 
-	/**
-	 * @param message
-	 */
-	public NameAlreadyExistException(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Constructor with a message.
+     * 
+     * @param message The detail message for the exception.
+     */
+    public NameAlreadyExistException(String message) {
+        super(message); // Passes the message to Exception constructor
+    }
 
-	/**
-	 * @param cause
-	 */
-	public NameAlreadyExistException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
-	}
-
+    /**
+     * Constructor with a cause.
+     * 
+     * @param cause The cause of the exception.
+     */
+    public NameAlreadyExistException(Throwable cause) {
+        super(cause); // Passes the cause to Exception constructor
+    }
 }
