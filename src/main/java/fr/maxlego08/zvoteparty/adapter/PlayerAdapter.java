@@ -18,57 +18,54 @@ import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.implementations.ZPlayerVote;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 
+/**
+ * Custom Gson TypeAdapter for serializing and deserializing PlayerVote objects.
+ */
 public class PlayerAdapter extends TypeAdapter<PlayerVote> {
 
-	private final ZPlugin plugin;
+    private final ZPlugin plugin;
+    private final Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
 
-	private final Type seriType = new TypeToken<Map<String, Object>>() {
-	}.getType();
+    private static final String UNIQUEID = "uuid";
+    private static final String VOTES = "votes";
 
-	private final String UNIQUEID = "uuid";
-	private final String VOTES = "votes";
+    /**
+     * Constructs a PlayerAdapter with the specified plugin.
+     *
+     * @param plugin the ZPlugin instance used for Gson operations
+     */
+    public PlayerAdapter(ZPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-	/**
-	 * @param plugin
-	 */
-	public PlayerAdapter(ZPlugin plugin) {
-		super();
-		this.plugin = plugin;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public PlayerVote read(JsonReader reader) throws IOException {
+        if (reader.peek() == JsonToken.NULL) {
+            reader.nextNull();
+            return null;
+        }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public PlayerVote read(JsonReader reader) throws IOException {
+        String raw = reader.nextString();
+        Map<String, Object> keys = this.plugin.getGson().fromJson(raw, mapType);
 
-		if (reader.peek() == JsonToken.NULL) {
-			reader.nextNull();
-			return null;
-		}
+        UUID uuid = UUID.fromString((String) keys.get(UNIQUEID));
+        List<Vote> votes = (List<Vote>) keys.get(VOTES);
 
-		String raw = reader.nextString();
+        return new ZPlayerVote(uuid, votes);
+    }
 
-		Map<String, Object> keys = this.plugin.getGson().fromJson(raw, this.seriType);
+    @Override
+    public void write(JsonWriter writer, PlayerVote playerVote) throws IOException {
+        if (playerVote == null) {
+            writer.nullValue();
+            return;
+        }
 
-		UUID uuid = UUID.fromString((String) keys.get(this.UNIQUEID));
-		List<Vote> votes = (List<Vote>) keys.get(this.VOTES);
+        Map<String, Object> serial = new HashMap<>();
+        serial.put(UNIQUEID, playerVote.getUniqueId().toString());
+        serial.put(VOTES, playerVote.getVotes());
 
-		return new ZPlayerVote(uuid, votes);
-	}
-
-	@Override
-	public void write(JsonWriter writer, PlayerVote playerVote) throws IOException {
-
-		if (playerVote == null) {
-			writer.nullValue();
-			return;
-		}
-
-		Map<String, Object> serial = new HashMap<String, Object>();
-
-		serial.put(this.UNIQUEID, playerVote.getUniqueId());
-		serial.put(this.VOTES, playerVote.getVotes());
-
-		writer.value(this.plugin.getGson().toJson(serial));
-	}
-
+        writer.value(this.plugin.getGson().toJson(serial));
+    }
 }
