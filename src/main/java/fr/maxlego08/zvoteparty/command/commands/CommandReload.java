@@ -8,19 +8,16 @@ import fr.maxlego08.zvoteparty.zcore.utils.commands.CommandType;
 
 public class CommandReload extends VCommand {
 
-	public CommandReload(ZVotePartyPlugin plugin) {
-		super(plugin);
-		this.setDescription(Message.DESCRIPTION_RELOAD);
-		this.addSubCommand("reload", "rl");
-		this.setPermission(Permission.ZVOTEPARTY_RELOAD);
-	}
+    public CommandReload(ZVotePartyPlugin plugin) {
+        super(plugin);
+        setDescription(Message.DESCRIPTION_RELOAD);
+        addSubCommand("reload", "rl");
+        setPermission(Permission.ZVOTEPARTY_RELOAD);
+    }
 
-	@Override
-	protected CommandType perform(ZVotePartyPlugin plugin) {
-		
-		this.manager.reload(this.sender);
-		
-		return CommandType.SUCCESS;
-	}
-
+    @Override
+    protected CommandType perform(ZVotePartyPlugin plugin) {
+        manager.reload(sender);
+        return CommandType.SUCCESS;
+    }
 }
