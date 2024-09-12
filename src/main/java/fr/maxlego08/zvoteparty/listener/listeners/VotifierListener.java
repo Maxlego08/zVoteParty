@@ -11,22 +11,29 @@ import fr.maxlego08.zvoteparty.api.VotePartyManager;
 
 public class VotifierListener implements Listener {
 
-	private final ZVotePartyPlugin plugin;
+    private final ZVotePartyPlugin plugin;
 
-	/**
-	 * @param plugin
-	 */
-	public VotifierListener(ZVotePartyPlugin plugin) {
-		super();
-		this.plugin = plugin;
-	}
+    /**
+     * Constructor to initialize the VotifierListener with the plugin instance.
+     * 
+     * @param plugin The instance of ZVotePartyPlugin
+     */
+    public VotifierListener(ZVotePartyPlugin plugin) {
+        super();
+        this.plugin = plugin;
+    }
 
-	@EventHandler
-	public void onVote(VotifierEvent event) {
-		VotePartyManager manager = this.plugin.getManager();
-		
-		Vote vote = event.getVote();
-		manager.vote(vote.getUsername(), vote.getServiceName(), true);
-	}
-
+    /**
+     * Handles Votifier events by processing votes.
+     * 
+     * @param event The VotifierEvent containing vote information
+     */
+    @EventHandler
+    public void onVote(VotifierEvent event) {
+        VotePartyManager manager = this.plugin.getManager();
+        
+        Vote vote = event.getVote();
+        // Process the vote and update the vote party manager
+        manager.vote(vote.getUsername(), vote.getServiceName(), true);
+    }
 }
