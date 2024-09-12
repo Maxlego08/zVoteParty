@@ -9,20 +9,17 @@ import fr.maxlego08.zvoteparty.zcore.utils.commands.CommandType;
 
 public class CommandConfig extends VCommand {
 
-	public CommandConfig(ZVotePartyPlugin plugin) {
-		super(plugin);
-		this.setDescription(Message.DESCRIPTION_CONFIG);
-		this.addSubCommand("config");
-		this.setPermission(Permission.ZVOTEPARTY_CONFIG);
-		this.setConsoleCanUse(false);
-	}
+    public CommandConfig(ZVotePartyPlugin plugin) {
+        super(plugin);
+        setDescription(Message.DESCRIPTION_CONFIG);
+        addSubCommand("config");
+        setPermission(Permission.ZVOTEPARTY_CONFIG);
+        setConsoleCanUse(false);
+    }
 
-	@Override
-	protected CommandType perform(ZVotePartyPlugin plugin) {
-		
-		this.createInventory(plugin, this.player, EnumInventory.INVENTORY_CONFIG);
-		
-		return CommandType.SUCCESS;
-	}
-
+    @Override
+    protected CommandType perform(ZVotePartyPlugin plugin) {
+        createInventory(plugin, player, EnumInventory.INVENTORY_CONFIG);
+        return CommandType.SUCCESS;
+    }
 }
