@@ -13,74 +13,60 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import fr.maxlego08.zvoteparty.api.Reward;
-import fr.maxlego08.zvoteparty.api.Vote;
 import fr.maxlego08.zvoteparty.implementations.ZReward;
-import fr.maxlego08.zvoteparty.implementations.ZVote;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 
-public class VoteAdapter extends TypeAdapter<Vote> {
+/**
+ * Custom Gson TypeAdapter for serializing and deserializing Reward objects.
+ */
+public class RewardAdapter extends TypeAdapter<Reward> {
 
-	private final ZPlugin plugin;
+    private final ZPlugin plugin;
+    private final Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
 
-	private final Type seriType = new TypeToken<Map<String, Object>>() {
-	}.getType();
+    private static final String PERCENT = "percent";
+    private static final String COMMANDS = "commands";
+    private static final String MESSAGES = "messages";
 
-	private final String SERVICENAME = "servicename";
-	private final String REWARD = "reward";
-	private final String CREATED_AT = "created_at";
-	private final String IS_GIVE = "is_give";
+    /**
+     * Constructs a RewardAdapter with the specified plugin.
+     *
+     * @param plugin the ZPlugin instance used for Gson operations
+     */
+    public RewardAdapter(ZPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-	/**
-	 * @param plugin
-	 */
-	public VoteAdapter(ZPlugin plugin) {
-		super();
-		this.plugin = plugin;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public Reward read(JsonReader reader) throws IOException {
+        if (reader.peek() == JsonToken.NULL) {
+            reader.nextNull();
+            return null;
+        }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Vote read(JsonReader reader) throws IOException {
-		if (reader.peek() == JsonToken.NULL) {
-			reader.nextNull();
-			return null;
-		}
+        String raw = reader.nextString();
+        Map<String, Object> keys = this.plugin.getGson().fromJson(raw, mapType);
 
-		String raw = reader.nextString();
+        Number percent = (Number) keys.get(PERCENT);
+        List<String> commands = (List<String>) keys.get(COMMANDS);
+        List<String> messages = (List<String>) keys.get(MESSAGES);
 
-		Map<String, Object> keys = this.plugin.getGson().fromJson(raw, this.seriType);
+        return new ZReward(percent.doubleValue(), commands, false, messages);
+    }
 
-		Number createdAt = (Number) keys.get(this.CREATED_AT);
+    @Override
+    public void write(JsonWriter writer, Reward reward) throws IOException {
+        if (reward == null) {
+            writer.nullValue();
+            return;
+        }
 
-		Map<String, Object> rewardMap = (Map<String, Object>) keys.get(this.REWARD);
-		List<String> commands = (List<String>) rewardMap.get("commands");
-		List<String> messages = (List<String>) rewardMap.get("messages");
-		Number percent = (Number) rewardMap.get("percent");
+        Map<String, Object> serial = new HashMap<>();
+        serial.put(PERCENT, reward.getPercent());
+        serial.put(COMMANDS, reward.getCommands());
+        serial.put(MESSAGES, reward.getMessages());
 
-		Reward reward = new ZReward(percent.doubleValue(), commands, false, messages);
-
-		String serviceName = (String) keys.get(this.SERVICENAME);
-		boolean isGive = (boolean) keys.get(this.IS_GIVE);
-
-		return new ZVote(serviceName, createdAt.longValue(), reward, isGive);
-	}
-
-	@Override
-	public void write(JsonWriter writer, Vote vote) throws IOException {
-
-		if (vote == null) {
-			writer.nullValue();
-			return;
-		}
-
-		Map<String, Object> serial = new HashMap<String, Object>();
-
-		serial.put(this.SERVICENAME, vote.getServiceName());
-		serial.put(this.REWARD, vote.getReward());
-		serial.put(this.IS_GIVE, vote.rewardIsGive());
-		serial.put(this.CREATED_AT, vote.getCreatedAt());
-
-		writer.value(this.plugin.getGson().toJson(serial));
-	}
-
+        writer.value(this.plugin.getGson().toJson(serial));
+    }
 }
