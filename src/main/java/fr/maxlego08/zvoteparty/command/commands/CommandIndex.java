@@ -7,24 +7,36 @@ import fr.maxlego08.zvoteparty.zcore.utils.commands.CommandType;
 
 public class CommandIndex extends VCommand {
 
-	public CommandIndex(ZVotePartyPlugin plugin) {
-		super(plugin);
-		this.setPermission(Permission.ZVOTEPARTY_USE);
-		this.addSubCommand(new CommandVersion(plugin));
-		this.addSubCommand(new CommandReload(plugin));
-		this.addSubCommand(new CommandHelp(plugin));
-		this.addSubCommand(new CommandAdd(plugin));
-		this.addSubCommand(new CommandRemove(plugin));
-		this.addSubCommand(new CommandConfig(plugin));
-		this.addSubCommand(new CommandStartParty(plugin));
-	}
+    public CommandIndex(ZVotePartyPlugin plugin) {
+        super(plugin);
+        setPermission(Permission.ZVOTEPARTY_USE);
+        registerSubCommands(
+            new CommandVersion(plugin),
+            new CommandReload(plugin),
+            new CommandHelp(plugin),
+            new CommandAdd(plugin),
+            new CommandRemove(plugin),
+            new CommandConfig(plugin),
+            new CommandStartParty(plugin)
+        );
+    }
 
-	@Override
-	protected CommandType perform(ZVotePartyPlugin plugin) {
-		
-		this.manager.sendNeedVote(this.sender);
-		
-		return CommandType.SUCCESS;
-	}
+    @Override
+    protected CommandType perform(ZVotePartyPlugin plugin) {
+        manager.sendNeedVote(sender);
+        return CommandType.SUCCESS;
+    }
 
+    /**
+     * Registers multiple subcommands in a single call.
+     * 
+     * @param commands The subcommands to register
+     * @return this
+     */
+    private VCommand registerSubCommands(VCommand... commands) {
+        for (VCommand command : commands) {
+            addSubCommand(command);
+        }
+        return this;
+    }
 }
