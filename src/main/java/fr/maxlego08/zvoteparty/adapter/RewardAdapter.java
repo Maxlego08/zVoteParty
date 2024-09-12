@@ -16,59 +16,57 @@ import fr.maxlego08.zvoteparty.api.Reward;
 import fr.maxlego08.zvoteparty.implementations.ZReward;
 import fr.maxlego08.zvoteparty.zcore.ZPlugin;
 
+/**
+ * Custom Gson TypeAdapter for serializing and deserializing Reward objects.
+ */
 public class RewardAdapter extends TypeAdapter<Reward> {
 
-	private final ZPlugin plugin;
+    private final ZPlugin plugin;
+    private final Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
 
-	private final Type seriType = new TypeToken<Map<String, Object>>() {
-	}.getType();
+    private static final String PERCENT = "percent";
+    private static final String COMMANDS = "commands";
+    private static final String MESSAGES = "messages";
 
-	private final String PERCENT = "percent";
-	private final String COMMANDS = "commands";
-	private final String MESSAGES = "messages";
+    /**
+     * Constructs a RewardAdapter with the specified plugin.
+     *
+     * @param plugin the ZPlugin instance used for Gson operations
+     */
+    public RewardAdapter(ZPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-	/**
-	 * @param plugin
-	 */
-	public RewardAdapter(ZPlugin plugin) {
-		super();
-		this.plugin = plugin;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public Reward read(JsonReader reader) throws IOException {
+        if (reader.peek() == JsonToken.NULL) {
+            reader.nextNull();
+            return null;
+        }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Reward read(JsonReader reader) throws IOException {
-		if (reader.peek() == JsonToken.NULL) {
-			reader.nextNull();
-			return null;
-		}
+        String raw = reader.nextString();
+        Map<String, Object> keys = this.plugin.getGson().fromJson(raw, mapType);
 
-		String raw = reader.nextString();
-		
-		Map<String, Object> keys = this.plugin.getGson().fromJson(raw, this.seriType);
+        Number percent = (Number) keys.get(PERCENT);
+        List<String> commands = (List<String>) keys.get(COMMANDS);
+        List<String> messages = (List<String>) keys.get(MESSAGES);
 
-		Number percent = (Number) keys.get(this.PERCENT);
-		List<String> commands = (List<String>) keys.get(this.COMMANDS);
-		List<String> messages = (List<String>) keys.get(this.MESSAGES);
+        return new ZReward(percent.doubleValue(), commands, false, messages);
+    }
 
-		return new ZReward(percent.doubleValue(), commands, false, messages);
-	}
+    @Override
+    public void write(JsonWriter writer, Reward reward) throws IOException {
+        if (reward == null) {
+            writer.nullValue();
+            return;
+        }
 
-	@Override
-	public void write(JsonWriter writer, Reward reward) throws IOException {
-		
-		if (reward == null) {
-			writer.nullValue();
-			return;
-		}
-		
-		Map<String, Object> serial = new HashMap<String, Object>();
-		
-		serial.put(this.PERCENT, reward.getPercent());
-		serial.put(this.COMMANDS, reward.getCommands());
-		serial.put(this.MESSAGES, reward.getMessages());
-		
-		writer.value(this.plugin.getGson().toJson(serial));
-	}
+        Map<String, Object> serial = new HashMap<>();
+        serial.put(PERCENT, reward.getPercent());
+        serial.put(COMMANDS, reward.getCommands());
+        serial.put(MESSAGES, reward.getMessages());
 
+        writer.value(this.plugin.getGson().toJson(serial));
+    }
 }
