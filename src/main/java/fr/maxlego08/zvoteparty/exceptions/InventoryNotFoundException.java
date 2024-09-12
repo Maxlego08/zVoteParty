@@ -1,55 +1,56 @@
 package fr.maxlego08.zvoteparty.exceptions;
 
+/**
+ * Exception thrown when an inventory is not found.
+ */
 public class InventoryNotFoundException extends Error {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	public InventoryNotFoundException() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Default constructor.
+     */
+    public InventoryNotFoundException() {
+        super(); // Calls the default constructor of Error
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
-	 */
-	public InventoryNotFoundException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Constructor with a message and a cause.
+     * 
+     * @param message The detail message for the exception.
+     * @param cause The cause of the exception.
+     * @param enableSuppression Whether or not suppression is enabled.
+     * @param writableStackTrace Whether or not the stack trace is writable.
+     */
+    public InventoryNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace); // Passes all parameters to the Error constructor
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public InventoryNotFoundException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Constructor with a message and a cause.
+     * 
+     * @param message The detail message for the exception.
+     * @param cause The cause of the exception.
+     */
+    public InventoryNotFoundException(String message, Throwable cause) {
+        super(message, cause); // Passes both message and cause to the Error constructor
+    }
 
-	/**
-	 * @param message
-	 */
-	public InventoryNotFoundException(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Constructor with a message.
+     * 
+     * @param message The detail message for the exception.
+     */
+    public InventoryNotFoundException(String message) {
+        super(message); // Passes the message to the Error constructor
+    }
 
-	/**
-	 * @param cause
-	 */
-	public InventoryNotFoundException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
-	}
-
+    /**
+     * Constructor with a cause.
+     * 
+     * @param cause The cause of the exception.
+     */
+    public InventoryNotFoundException(Throwable cause) {
+        super(cause); // Passes the cause to the Error constructor
+    }
 }
