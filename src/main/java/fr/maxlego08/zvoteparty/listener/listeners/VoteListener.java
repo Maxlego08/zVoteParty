@@ -9,20 +9,27 @@ import fr.maxlego08.zvoteparty.listener.ListenerAdapter;
 
 public class VoteListener extends ListenerAdapter {
 
-	private final ZVotePartyPlugin plugin;
+    private final ZVotePartyPlugin plugin;
 
-	/**
-	 * @param plugin
-	 */
-	public VoteListener(ZVotePartyPlugin plugin) {
-		super();
-		this.plugin = plugin;
-	}
+    /**
+     * Constructor to initialize the VoteListener with the plugin instance.
+     * 
+     * @param plugin The instance of ZVotePartyPlugin
+     */
+    public VoteListener(ZVotePartyPlugin plugin) {
+        super();
+        this.plugin = plugin;
+    }
 
-	@Override
-	protected void onConnect(PlayerJoinEvent event, Player player) {
-		VotePartyManager manager = this.plugin.getManager();
-		manager.giveVotes(player);
-	}
-	
+    /**
+     * Handles player join events by giving votes to the player.
+     * 
+     * @param event The PlayerJoinEvent
+     * @param player The player who joined the game
+     */
+    @Override
+    protected void onConnect(PlayerJoinEvent event, Player player) {
+        VotePartyManager manager = this.plugin.getManager();
+        manager.giveVotes(player);
+    }
 }
