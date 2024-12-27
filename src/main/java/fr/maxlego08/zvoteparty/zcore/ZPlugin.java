@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import fr.maxlego08.menu.zcore.utils.nms.NmsVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Listener;
@@ -79,7 +80,7 @@ public abstract class ZPlugin extends JavaPlugin {
 		this.gson = getGsonBuilder().create();
 		this.persist = new Persist(this);
 
-		boolean isNew = NmsVersion.nmsVersion.isNewMaterial();
+		boolean isNew = NmsVersion.nmsVersion.getVersion() >= NmsVersion.V_1_13.getVersion();
 		for (String file : files) {
 			if (isNew) {
 				if (!new File(getDataFolder() + "/inventories/" + file + ".yml").exists())

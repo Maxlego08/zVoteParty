@@ -173,7 +173,7 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 		this.commands.forEach(command -> {
 			if (isValid(command, commandString)
 					&& (command.getPermission() == null || hasPermission(sender, command.getPermission()))) {
-				message(sender, Message.COMMAND_SYNTAXE_HELP, command.getSyntax(), command.getDescription());
+				message(sender, Message.COMMAND_SYNTAX_HELP, command.getSyntax(), command.getDescription());
 			}
 		});
 	}

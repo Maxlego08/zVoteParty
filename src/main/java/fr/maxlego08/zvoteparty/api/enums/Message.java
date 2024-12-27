@@ -25,11 +25,11 @@ public enum Message {
 	TIME_MINUTE("%02d minute(s) %02d seconde(s)"),
 	TIME_SECOND("%02d seconde(s)"),
 	
-	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §a%syntax%"),
+	COMMAND_SYNTAX_ERROR("§cYou must execute the command like this§7: §a%syntax%"),
 	COMMAND_NO_PERMISSION("§cYou do not have permission to run this command."),
 	COMMAND_NO_CONSOLE("§cOnly one player can execute this command."),
 	COMMAND_NO_ARG("§cImpossible to find the command with its arguments."),
-	COMMAND_SYNTAXE_HELP("§a%syntax% §b§ §7%description%"),
+	COMMAND_SYNTAX_HELP("§a%syntax% §b§ §7%description%"),
 	
 	DESCRIPTION_VERSION("Show plugin version"),
 	DESCRIPTION_RELOAD("Reload configurations"),

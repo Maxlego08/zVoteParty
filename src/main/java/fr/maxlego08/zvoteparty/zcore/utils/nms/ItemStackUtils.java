@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.maxlego08.menu.zcore.utils.nms.NmsVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
@@ -92,7 +93,7 @@ public class ItemStackUtils {
 			if (NMS_VERSION == 1.11D || NMS_VERSION == 1.12D) {
 				Constructor<?> localConstructor = localClass2.getConstructor(new Class[] { localClass1 });
 				localObject2 = localConstructor.newInstance(new Object[] { localObject1 });
-			} else if (NmsVersion.nmsVersion.isNewMaterial()) {
+			} else if (NmsVersion.nmsVersion.getVersion() >= NmsVersion.V_1_13.getVersion()) {
 				localObject2 = localClass2.getMethod("a", new Class[] { localClass1 }).invoke(null,
 						new Object[] { localObject1 });
 			} else {
