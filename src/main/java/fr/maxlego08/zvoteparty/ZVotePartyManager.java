@@ -341,12 +341,12 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 	@Override
 	public void secretStart() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			Bukkit.getScheduler().runTask(this.plugin, () -> {
-				this.globalCommands.forEach(command -> {
-					command = command.replace("%player%", player.getName());
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
-				});
-			});
+
+			ZVotePartyPlugin.getScheduler().runNextTick(task ->
+					this.globalCommands.forEach(command -> {
+						command = command.replace("%player%", player.getName());
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
+					}));
 
 			Reward reward = this.getRandomReward(RewardType.PARTY);
 			if (reward != null) {
@@ -355,9 +355,9 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
 
 		}
 
-		Bukkit.getScheduler().runTask(this.plugin, () -> {
-			this.commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
-		});
+		ZVotePartyPlugin.getScheduler().runNextTick(task ->
+				this.commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command))
+		);
 
 		broadcast(Message.VOTE_PARTY_START);
 	}

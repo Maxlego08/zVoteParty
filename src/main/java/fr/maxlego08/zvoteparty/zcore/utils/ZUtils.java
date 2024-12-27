@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -401,7 +400,7 @@ public abstract class ZUtils extends MessageUtils {
 				}
 
 				tmpCount++;
-				Bukkit.getScheduler().runTask(plugin, runnable);
+				ZVotePartyPlugin.getScheduler().runNextTick(task -> runnable.run());
 
 			}
 		}, 0, delay);
@@ -483,7 +482,7 @@ public abstract class ZUtils extends MessageUtils {
 					runnable.accept(this, false);
 					return;
 				}
-				Bukkit.getScheduler().runTask(plugin, () -> runnable.accept(this, true));
+				ZVotePartyPlugin.getScheduler().runNextTick(task -> runnable.accept(this, true));
 			}
 		}, delay, delay);
 	}
@@ -970,8 +969,8 @@ public abstract class ZUtils extends MessageUtils {
 	 * 
 	 * @param runnable
 	 */
-	protected void runAsync(Plugin plugin, Runnable runnable) {
-		Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
+	protected void runAsync(Runnable runnable) {
+		ZVotePartyPlugin.getScheduler().runAsync(task -> runnable.run());
 	}
 
 	/**
@@ -1077,7 +1076,7 @@ public abstract class ZUtils extends MessageUtils {
 	 */
 	public void glow(ItemStack itemStack) {
 		ItemMeta itemMeta = itemStack.getItemMeta();
-		itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+		itemMeta.addEnchant(Enchantment.POWER, 1, true);
 		if (NMSUtils.getNMSVersion() != 1.7)
 			itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		itemStack.setItemMeta(itemMeta);

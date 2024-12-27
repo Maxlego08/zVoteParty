@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -180,7 +179,9 @@ public class ZInventoryManager extends ListenerAdapter {
 				.collect(Collectors.toList()).iterator();
 		while (iterator.hasNext()) {
 			VInventory inventory = iterator.next();
-			Bukkit.getScheduler().runTask(this.plugin, () -> createInventory(inventory, inventory.getPlayer()));
+
+			ZVotePartyPlugin.getScheduler().runAtEntity(inventory.getPlayer(), task ->
+					createInventory(inventory, inventory.getPlayer()));
 		}
 	}
 
