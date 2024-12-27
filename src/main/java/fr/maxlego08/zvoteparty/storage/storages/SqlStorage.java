@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -65,7 +64,7 @@ public class SqlStorage extends ZUtils implements IStorage {
 		int port = plugin.getConfig().getInt("sql.port");
 		this.iConnection = new ZConnection(storage, user, password, host, dataBase, port);
 
-		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+		ZVotePartyPlugin.getScheduler().runAsync(task -> {
 
 			try {
 				this.iConnection.connect();

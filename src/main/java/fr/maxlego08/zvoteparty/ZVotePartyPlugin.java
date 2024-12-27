@@ -3,6 +3,8 @@ package fr.maxlego08.zvoteparty;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import com.tcoded.folialib.FoliaLib;
+import com.tcoded.folialib.impl.PlatformScheduler;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.ServicePriority;
 
@@ -44,11 +46,14 @@ public class ZVotePartyPlugin extends ZPlugin {
 	private ZMenuLoader loader;
 	private final VotePartyManager manager = new ZVotePartyManager(this);
 	private StorageManager storageManager;
+	private static PlatformScheduler scheduler;
 
 	@Override
 	public void onEnable() {
 
 		ZPlaceholderApi.getInstance().setPlugin(this);
+
+		scheduler = new FoliaLib(this).getScheduler();
 
 		/* Register inventories */
 
@@ -183,7 +188,11 @@ public class ZVotePartyPlugin extends ZPlugin {
 			this.loader.reload();
 		}
 	}
-	
+
+    public static PlatformScheduler getScheduler() {
+        return scheduler;
+    }
+
 	public ZMenuLoader getLoader() {
 		return loader;
 	}
