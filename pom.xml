@@ -61,6 +61,10 @@
                                     <pattern>org.json</pattern>
                                     <shadedPattern>fr.maxlego08.zvoteparty.libs.org.json</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.tcoded.folialib</pattern>
+                                    <shadedPattern>fr.maxlego08.zvoteparty.libs.folialib</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -130,7 +134,7 @@
         <dependency>
             <groupId>com.github.Maxlego08</groupId>
             <artifactId>zMenu-API</artifactId>
-            <version>09a24e6b5d</version>
+            <version>1.0.3.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -144,6 +148,12 @@
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.technicallycoded</groupId>
+            <artifactId>FoliaLib</artifactId>
+            <version>0.4.3</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

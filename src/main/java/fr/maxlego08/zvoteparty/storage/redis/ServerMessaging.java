@@ -120,7 +120,7 @@ public class ServerMessaging extends JedisPubSub {
 	 */
 	private UUID sendMessage(RedisSubChannel channel, String message) {
 		final UUID uuid = UUID.randomUUID();
-		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+		ZVotePartyPlugin.getScheduler().runAsync(task -> {
 			try (Jedis jedis = this.client.getPool()) {
 				this.sendingUUID.add(uuid);
 

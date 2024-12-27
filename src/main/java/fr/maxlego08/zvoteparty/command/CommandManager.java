@@ -140,7 +140,7 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 		if (command.getPermission() == null || hasPermission(sender, command.getPermission())) {
 
 			if (command.runAsync) {
-				super.runAsync(this.plugin, () -> {
+				super.runAsync(() -> {
 					CommandType returnType = command.prePerform(this.plugin, sender, strings);
 					if (returnType == CommandType.SYNTAX_ERROR)
 						message(sender, Message.COMMAND_SYNTAXE_ERROR, "%syntax%", command.getSyntax());
