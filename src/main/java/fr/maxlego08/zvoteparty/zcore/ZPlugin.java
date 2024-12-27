@@ -79,7 +79,7 @@ public abstract class ZPlugin extends JavaPlugin {
 		this.gson = getGsonBuilder().create();
 		this.persist = new Persist(this);
 
-		boolean isNew = NMSUtils.isNewVersion();
+		boolean isNew = NmsVersion.nmsVersion.isNewMaterial();
 		for (String file : files) {
 			if (isNew) {
 				if (!new File(getDataFolder() + "/inventories/" + file + ".yml").exists())

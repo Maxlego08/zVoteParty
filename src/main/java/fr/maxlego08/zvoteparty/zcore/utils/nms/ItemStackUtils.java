@@ -92,7 +92,7 @@ public class ItemStackUtils {
 			if (NMS_VERSION == 1.11D || NMS_VERSION == 1.12D) {
 				Constructor<?> localConstructor = localClass2.getConstructor(new Class[] { localClass1 });
 				localObject2 = localConstructor.newInstance(new Object[] { localObject1 });
-			} else if (NMSUtils.isNewVersion()) {
+			} else if (NmsVersion.nmsVersion.isNewMaterial()) {
 				localObject2 = localClass2.getMethod("a", new Class[] { localClass1 }).invoke(null,
 						new Object[] { localObject1 });
 			} else {
