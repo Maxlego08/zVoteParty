@@ -62,15 +62,21 @@ public enum Message {
 			"§7Serveur Minecraft Vote§8: §fhttps://serveur-minecraft-vote.fr/"
 			),
 	
-	VOTE_PARTY_START(MessageType.CENTER,
-			"§8§m-+------------------------------+-",
-			"", 
-			"§7Launch of the voting party!", 
-			"", 
-			"§8§m-+------------------------------+-"
-			), 
-	
-	VOTE_STARTPARTY("§aYou just launched the voting party."),
+    VOTE_PARTY_START(MessageType.CENTER,
+            "§8§m-+------------------------------+-",
+            "",
+            "§7Launch of the voting party!",
+            "",
+            "§8§m-+------------------------------+-"
+    ),
+    NOT_ELIGIBLE_PARTY(MessageType.CENTER,
+            "§8§m-+------------------------------+-",
+            "",
+            "§cYou didn’t vote, so you aren’t eligible for the Vote Party rewards!",
+            "",
+            "§8§m-+------------------------------+-"
+    ),
+    VOTE_STARTPARTY("§aYou just launched the voting party.");
 	
 	;
 

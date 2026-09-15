@@ -21,6 +21,8 @@ public class Config implements Saveable {
 	public static boolean enableVoteMessage = true;
 	public static boolean enableInventoryPreRender = false;
 	public static boolean enableOpenSyncInventory = false;
+	// New flag to restrict rewards only to voters
+    public static boolean only_voters_rewards = true;
 
 	public static boolean enableActionBarVoteAnnonce = true;
 	public static boolean enableTchatVoteAnnonce = false;

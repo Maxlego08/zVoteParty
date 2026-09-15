@@ -6,7 +6,7 @@
 
     <groupId>fr.maxlego08.zvoteparty</groupId>
     <artifactId>zVoteParty</artifactId>
-    <version>1.1.0.4</version>
+    <version>1.1.0.5</version>
     <packaging>jar</packaging>
 
     <name>zVoteParty-${project.version}</name>
@@ -105,7 +105,7 @@
         <repository>
             <id>groupez-releases</id>
             <name>GroupeZ Repository</name>
-            <url>https://repo.groupez.dev/releases</url>
+            <url>https://repo.groupez.dev/#/releases/fr/maxlego08/menu/zmenu-api/1.1.0.2</url>
         </repository>
         <repository>
             <id>faststats-releases</id>
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.21-R0.1-SNAPSHOT</version>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

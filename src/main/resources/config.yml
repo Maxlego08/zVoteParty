@@ -80,6 +80,9 @@ party:
   # This command will be executed in the console, you cannot specify a player here
   commands:
     - "eco give * 0.0000000009"  
+  # Sound to be played after Vote Party is triggered.
+  # Sound: <SOUND>:<VOLUME>:<PITCH> - Name of the sound to play. A list of available sounds is found here: https://docs.andre601.ch/Spigot-Sounds/sounds/1.21.x/1.21.4/
+  Sound: UI_TOAST_CHALLENGE_COMPLETE:1:2
     
   # Rewards that the player can get randomly 
   rewards:
