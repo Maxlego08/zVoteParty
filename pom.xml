@@ -6,7 +6,7 @@
 
     <groupId>fr.maxlego08.zvoteparty</groupId>
     <artifactId>zVoteParty</artifactId>
-    <version>1.1.0.5</version>
+    <version>1.2.0.0</version>
     <packaging>jar</packaging>
 
     <name>zVoteParty-${project.version}</name>
@@ -65,6 +65,10 @@
                                     <pattern>com.tcoded.folialib</pattern>
                                     <shadedPattern>fr.maxlego08.zvoteparty.libs.folialib</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>dev.faststats</pattern>
+                                    <shadedPattern>fr.maxlego08.zvoteparty.libs.faststats</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -102,6 +106,11 @@
             <id>groupez-releases</id>
             <name>GroupeZ Repository</name>
             <url>https://repo.groupez.dev/#/releases/fr/maxlego08/menu/zmenu-api/1.1.0.2</url>
+        </repository>
+        <repository>
+            <id>faststats-releases</id>
+            <name>FastStats Repository</name>
+            <url>https://repo.faststats.dev/releases</url>
         </repository>
     </repositories>
 
@@ -158,6 +167,12 @@
             <groupId>com.github.technicallycoded</groupId>
             <artifactId>FoliaLib</artifactId>
             <version>0.4.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.faststats.metrics</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>0.30.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

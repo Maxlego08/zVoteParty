@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import com.tcoded.folialib.FoliaLib;
 import com.tcoded.folialib.impl.PlatformScheduler;
+import dev.faststats.bukkit.BukkitContext;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.ServicePriority;
 
@@ -46,6 +47,9 @@ public class ZVotePartyPlugin extends ZPlugin {
 	private ZMenuLoader loader;
 	private final VotePartyManager manager = new ZVotePartyManager(this);
 	private StorageManager storageManager;
+	private final BukkitContext context = new BukkitContext.Factory(this, "72e55c83caa66448c930122a51999c5f")
+			.metrics(dev.faststats.Metrics.Factory::create)
+			.create();
 	private static PlatformScheduler scheduler;
 
 	@Override
@@ -129,6 +133,7 @@ public class ZVotePartyPlugin extends ZPlugin {
 		checker.useLastVersion();
 
 		new Metrics(this, 12543);
+		this.context.ready();
 
 		this.postEnable();
 	}
@@ -139,6 +144,8 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 		this.getSavers().forEach(saver -> saver.save(this.getPersist()));
 		this.storageManager.save(this.getPersist());
+
+		this.context.shutdown();
 
 		this.postDisable();
 	}
