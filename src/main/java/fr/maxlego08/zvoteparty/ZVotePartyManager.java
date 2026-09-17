@@ -156,58 +156,20 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
     }
 
     @Override
-    public void secretStart() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-    
-        boolean eligible = true;
-            // Check if only voters should receive rewards
-            if (Config.only_voters_rewards) {
-                long votes = this.plugin.getPlayerManager().getSyncPlayer(player)
-                                .map(PlayerVote::getVoteCount)
-                                .orElse(0L);
-                if (votes == 0) eligible = false;
-            }
-    
-            if (eligible) {
-                // Rewards and global commands for eligible players
-                ZVotePartyPlugin.getScheduler().runNextTick(task ->
-                    this.globalCommands.forEach(command -> {
-                        if (command == null || command.trim().isEmpty()) return;
-                        command = command.replace("%player%", player.getName());
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.papi(command, player));
-                })
-                );
-    
-                if (!this.partySound.isEmpty()) {
-                    try {
-                        String[] parts = this.partySound.split(":");
-                        String soundName = parts[0].toUpperCase();
-                        float volume = parts.length > 1 ? Float.parseFloat(parts[1]) : 1.0f;
-                        float pitch = parts.length > 2 ? Float.parseFloat(parts[2]) : 1.0f;
-                        player.playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
-                    } catch (Exception ignored) {}
-                }
-    
-                Reward reward = getRandomReward(RewardType.PARTY);
-                if (reward != null) reward.give(this.plugin, player);
-    
-        } else {
-                // Non-voter feedback
-                message(player, Message.NOT_ELIGIBLE_PARTY);
-                // Optional sound for non-eligible players
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 0.5f);
-            }
+    public boolean secretVote(String username, String serviceName) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+        if (offlinePlayer == null || !offlinePlayer.isOnline()) return false;
+
+        Reward reward = getRandomReward(RewardType.VOTE);
+        if (reward != null && reward.needToBeOnline()) {
+            this.plugin.get(offlinePlayer, playerVote -> {
+                IStorage iStorage = this.plugin.getIStorage();
+                Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
+                iStorage.insertVote(playerVote, vote, reward);
+            }, false);
+            return true;
         }
-    
-        // Execute party commands for all eligible players
-        ZVotePartyPlugin.getScheduler().runNextTick(task ->
-            this.commands.forEach(command -> {
-                if (command == null || command.trim().isEmpty()) return;
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-            })
-        );
-    
-        broadcast(Message.VOTE_PARTY_START);
+        return false;
     }
 
     @Override
@@ -283,6 +245,23 @@ public class ZVotePartyManager extends YamlUtils implements VotePartyManager {
     public void secretStart() {
         for (Player player : Bukkit.getOnlinePlayers()) {
 
+            // Check if only voters should receive rewards
+            boolean eligible = true;
+            if (Config.only_voters_rewards) {
+                int votes = this.plugin.getPlayerManager().getSyncPlayer(player)
+                        .map(PlayerVote::getVoteCount)
+                        .orElse(0);
+                if (votes == 0) eligible = false;
+            }
+
+            if (!eligible) {
+                // Non-voter feedback
+                message(player, Message.NOT_ELIGIBLE_PARTY);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 0.5f);
+                continue;
+            }
+
+            // Rewards and global commands for eligible players
             ZVotePartyPlugin.getScheduler().runNextTick(task ->
                     this.globalCommands.forEach(command -> {
                         if (command == null || command.trim().isEmpty()) return;
